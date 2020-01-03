@@ -3,6 +3,7 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/contento/.oh-my-zsh"
+export PROJECT_HOME=/home/contento/projects
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -21,7 +22,7 @@ ZSH_THEME="agnoster"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+ HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -102,8 +103,15 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# alias - python
 #alias python='python3'
 #alias pip='pip3'
+
+# alias - tmux 
+alias tmux="TERM=screen-256color-bce tmux"
+alias tm="tmux new-session"
+alias tl="tmux list-sessions"
+alias ta="tmux attach -t"
 
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
