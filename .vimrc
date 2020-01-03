@@ -4,7 +4,6 @@ set shiftwidth=4
 syntax on
 filetype plugin indent on
 set term=screen-256color
-colorscheme PaperColor
 
 set autoindent
 set bg=dark
@@ -78,9 +77,12 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme='powerlineish'
 
+" Plug 'chriskempson/base16-vim'
+" colorscheme base16-default-dark 
+
 Plug 'tpope/vim-surround'
 
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim' , {'branch': 'release'}
 
 call plug#end()
 
