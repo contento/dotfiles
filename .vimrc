@@ -35,6 +35,7 @@ set softtabstop=4
 set undolevels=1000
 set nrformats-=octal
 set vb
+set t_vb= 
 
 highlight ColorColumn ctermbg=black
 set colorcolumn=80
