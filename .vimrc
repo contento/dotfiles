@@ -84,6 +84,8 @@ Plug 'tpope/vim-surround'
 
 Plug 'neoclide/coc.nvim' , {'branch': 'release'}
 
+Plug 'editorconfig/editorconfig-vim'
+
 call plug#end()
 
 " # << Vim-Plug
