@@ -35,12 +35,19 @@ set softtabstop=4
 set undolevels=1000
 set nrformats-=octal
 set vb
+set t_vb= 
 
 highlight ColorColumn ctermbg=black
 set colorcolumn=80
 
 " >>> Vim-Plug 
 " # https://github.com/junegunn/vim-plug
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 call plug#begin('~/.vim/plugged')
 
