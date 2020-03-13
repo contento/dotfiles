@@ -33,9 +33,9 @@ POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=''
 POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=''
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%F{white}"
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%F{white} "
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator dir dir_writable_joined)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time
-                                    vcs background_jobs_joined time)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv_joined root_indicator dir dir_writable_joined)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode_joined command_execution_time
+                                    vcs background_jobs_joined time_joined)
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="clear"
 POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND="clear"
 POWERLEVEL9K_VCS_MODIFIED_FOREGROUND="yellow"
