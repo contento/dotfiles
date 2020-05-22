@@ -129,21 +129,6 @@ alias tm="tmux new-session"
 alias tl="tmux list-sessions"
 alias ta="tmux attach -t"
 
-# prompt_end() {
-#  if [[ -n $CURRENT_BG ]]; then
-#      print -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
-#  else
-#      print -n "%{%k%}"
-#  fi
-#
-#  print -n "%{%f%}"
-#  CURRENT_BG='' 
-#
-#  #Adds the new line and ➜ as the start character.
-#  printf "\n ▶"; # ➜
-# }
-
-
 ## >>> conda initialize >>>
 ## !! Contents within this block are managed by 'conda init' !!
 #__conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
