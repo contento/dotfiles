@@ -120,8 +120,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # alias - python
-#alias python='python3'
-#alias pip='pip3'
+alias python='python3'
+alias pip='pip3'
 
 # alias - tmux 
 alias tmux="TERM=screen-256color-bce tmux"
