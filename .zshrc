@@ -145,16 +145,27 @@ alias ta="tmux attach -t"
 ## <<< conda initialize <<<
 #
 
-# JMeter
-JMETER_INSTALL=~/apache-jmeter-5.2.1
+# >>> JMeter >>>
 
-export JMETER_HOME=~/apache-jmeter
-[ ! -d $JMETER_HOME ] && ln -s $JMETER_INSTALL $JMETER_HOME 
+if [[ ! "$OSTYPE" == "darwin"* ]] then
+    # OSX doesn't require these variables for JMeter to work
+    # To install jmeter use:
+    #   brew install jmeter
+    JMETER_INSTALL=~/apache-jmeter-5.2.1
 
-export JMETER_BIN=$JMETER_HOME/bin
+    export JMETER_HOME=~/apache-jmeter
+    [ ! -d $JMETER_HOME ] && ln -s $JMETER_INSTALL $JMETER_HOME 
 
-# PATH
+    export JMETER_BIN=$JMETER_HOME/bin
+fi
+
+# <<< JMeter <<<
+
+# >>> PATH >>>
+
 export PATH="$PATH:/opt/mssql-tools/bin"
+
+# <<< PATH <<<
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
