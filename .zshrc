@@ -157,3 +157,5 @@ export JMETER_BIN=$JMETER_HOME/bin
 export PATH="$PATH:/opt/mssql-tools/bin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PAGER="most"
