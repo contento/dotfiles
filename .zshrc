@@ -87,7 +87,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git ssh-agent httpie tmux zsh-autosuggestions vi-mode)
 
-zstyle :omz:plugins:ssh-agent identities id_rsa-micronotes # id_rsa-contento
+[ -f ~/.ssh/id_rsa-micronotes ] && zstyle :omz:plugins:ssh-agent identities id_rsa-micronotes # id_rsa-contento
 zstyle :omz:plugins:ssh-agent lifetime 168h 
 
 ZSH_DISABLE_COMPFIX=true
