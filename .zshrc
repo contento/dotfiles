@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -9,11 +16,14 @@ export PROJECT_HOME=$HOME/projects
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# powerlevel9k => 
-#   git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-ZSH_THEME="powerlevel9k/powerlevel9k"
+# powerlevel10k => 
+# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # >>>> PowerLevel9K >>> 
+
+# Leaving 9K settings for now
 
 POWERLEVEL9K_MODE='nerdfont-complete'
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -24,12 +34,6 @@ POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon virtualenv root_indicator dir dir_writable)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode command_execution_time vcs background_jobs time)
-
-# mavam's Configuration
-# https://github.com/Powerlevel9k/powerlevel9k/wiki/Show-Off-Your-Config#mavams-configuration
-
-# dritter's Configuration
-# https://github.com/Powerlevel9k/powerlevel9k/wiki/Show-Off-Your-Config#mavams-configuration
 
 # <<<< PowerLevel9K  <<<< 
 
@@ -87,7 +91,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git ssh-agent httpie tmux zsh-autosuggestions vi-mode)
 
-[ -f ~/.ssh/id_rsa-micronotes ] && zstyle :omz:plugins:ssh-agent identities id_rsa-micronotes # id_rsa-contento
+[ -f ~/.ssh/id_rsa-contento ] && zstyle :omz:plugins:ssh-agent identities id_rsa-contento
 zstyle :omz:plugins:ssh-agent lifetime 168h 
 
 ZSH_DISABLE_COMPFIX=true
@@ -129,22 +133,6 @@ alias tm="tmux new-session"
 alias tl="tmux list-sessions"
 alias ta="tmux attach -t"
 
-## >>> conda initialize >>>
-## !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-#if [ $? -eq 0 ]; then
-#    eval "$__conda_setup"
-#else
-#    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
-#        . "$HOME/anaconda3/etc/profile.d/conda.sh"
-#    else
-#        export PATH="$HOME/anaconda3/bin:$PATH"
-#    fi
-#fi
-#unset __conda_setup
-## <<< conda initialize <<<
-#
-
 # >>> JMeter >>>
 
 if [[ ! "$OSTYPE" == "darwin"* ]] then
@@ -170,3 +158,6 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PAGER="most"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
