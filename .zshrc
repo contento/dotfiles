@@ -62,8 +62,8 @@ if [[ ! "$OSTYPE" == "darwin"* ]] then
     JMETER_INSTALL=~/apache-jmeter-5.2.1
 
     export JMETER_HOME=~/apache-jmeter
-    [ ! -d $JMETER_HOME ] && ln -s $JMETER_INSTALL $JMETER_HOME 
-
+    [[ ! -d $JMETER_HOME && -d $JMETER_INSTALL ]] && ln -s $JMETER_INSTALL $JMETER_HOME
+ 
     export JMETER_BIN=$JMETER_HOME/bin
 fi
 
