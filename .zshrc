@@ -78,6 +78,7 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PAGER="most"
+export EDITOR=vim
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
