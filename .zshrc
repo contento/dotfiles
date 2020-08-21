@@ -1,12 +1,5 @@
 # >>>> PowerLevel10K >>> 
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 export ZSH="$HOME/.oh-my-zsh"
 export PROJECT_HOME=$HOME/projects
 
@@ -40,9 +33,16 @@ plugins=(git ssh-agent httpie tmux zsh-autosuggestions vi-mode)
 [ -f ~/.ssh/id_rsa-contento ] && zstyle :omz:plugins:ssh-agent identities id_rsa-contento
 zstyle :omz:plugins:ssh-agent lifetime 168h 
 
-ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+ZSH_DISABLE_COMPFIX=true
 # alias - python
 alias python='python3'
 alias pip='pip3'
