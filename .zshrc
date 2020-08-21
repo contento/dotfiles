@@ -1,4 +1,4 @@
-# >>>> PowerLevel10K >>> 
+# >>>> PowerLevel10K >>>
 
 export ZSH="$HOME/.oh-my-zsh"
 export PROJECT_HOME=$HOME/projects
@@ -16,7 +16,7 @@ POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon virtualenv root_indicator dir dir_writable)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode command_execution_time vcs background_jobs time)
 
-# <<<< PowerLevel10K <<<< 
+# <<<< PowerLevel10K <<<<
 
 HYPHEN_INSENSITIVE="true"
 
@@ -31,7 +31,7 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(git ssh-agent httpie tmux zsh-autosuggestions vi-mode)
 
 [ -f ~/.ssh/id_rsa-contento ] && zstyle :omz:plugins:ssh-agent identities id_rsa-contento
-zstyle :omz:plugins:ssh-agent lifetime 168h 
+zstyle :omz:plugins:ssh-agent lifetime 168h
 
 source $ZSH/oh-my-zsh.sh
 
@@ -47,7 +47,7 @@ ZSH_DISABLE_COMPFIX=true
 alias python='python3'
 alias pip='pip3'
 
-# alias - tmux 
+# alias - tmux
 alias tmux="TERM=screen-256color-bce tmux"
 alias tm="tmux new-session"
 alias tl="tmux list-sessions"
@@ -63,7 +63,7 @@ if [[ ! "$OSTYPE" == "darwin"* ]] then
 
     export JMETER_HOME=~/apache-jmeter
     [[ ! -d $JMETER_HOME && -d $JMETER_INSTALL ]] && ln -s $JMETER_INSTALL $JMETER_HOME
- 
+
     export JMETER_BIN=$JMETER_HOME/bin
 fi
 
