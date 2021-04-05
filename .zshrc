@@ -34,11 +34,10 @@ alias ta="tmux attach -t"
 
 # >>> PATH >>>
 
-export PATH="$PATH:/opt/mssql-tools/bin"
+[ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
+[ -d ~/.cargo/bin ]         && export PATH="$PATH:$HOME/.cargo/bin"
 
 # <<< PATH <<<
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PAGER="most"
 export EDITOR=vim
