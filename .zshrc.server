@@ -43,3 +43,5 @@ export PROJECT_HOME=$HOME/projects
 eval "$(starship init zsh)"
 eval "$(ssh-agent -s)"
 
+[ -f ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
