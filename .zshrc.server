@@ -43,5 +43,9 @@ export PROJECT_HOME=$HOME/projects
 eval "$(starship init zsh)"
 eval "$(ssh-agent -s)"
 
-[ -f ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
+[ -f ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh  ] && source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
+[ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
+
 
