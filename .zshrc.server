@@ -14,7 +14,7 @@ ZSH_DISABLE_COMPFIX=true
 # History
 HISTSIZE=1000
 SAVEHIST=1000
-HISTFILE=$ZSHPATH/.zsh_history
+HISTFILE=$ZSH_PATH/.zsh_history
 HIST_STAMPS="yyyy-mm-dd"
 
 # alias - ls
