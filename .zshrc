@@ -18,8 +18,13 @@ HISTFILE=$ZSH_PATH/.zsh_history
 HIST_STAMPS="yyyy-mm-dd"
 
 # alias - ls
-la='ls -la'
-ll='ls -l'
+# https://github.com/Peltoche/lsd#installation
+if type lsd > /dev/null; then alias ls='lsd'; fi;
+
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lt='ls --tree'
 
 # alias - python
 alias python='python3'
@@ -40,7 +45,7 @@ export PROJECT_HOME=$HOME/projects
 [ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
 [ -d ~/.cargo/bin ]         && export PATH="$PATH:$HOME/.cargo/bin"
 
-# curl -fsSL https://starship.rs/install.sh | bash
+# curl -fsSL https://starship.rs/install.sh | sh
 eval "$(starship init zsh)"
 
 eval "$(ssh-agent -s)"
