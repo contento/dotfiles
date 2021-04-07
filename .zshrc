@@ -1,6 +1,9 @@
-# Gonzalo Contento :-)
+# (-: 
+#     Gonzalo Contento 
+# :-)
 
-CONFIG_PATH=~/.config
+# See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+[ ! -n "${XDG_CONFIG_HOME:+1} ] && export XDG_CONFIG_HOME=$HOME/.config
 
 setopt histignorealldups sharehistory
 
@@ -9,7 +12,7 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
 # Zsh
-export ZSH_PATH=$CONFIG_PATH/zsh
+export ZSH_PATH=$XDG_CONFIG_HOME/zsh
 export UPDATE_ZSH_DAYS=13
 ZSH_DISABLE_COMPFIX=true
 
