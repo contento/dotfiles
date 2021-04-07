@@ -1,3 +1,5 @@
+# Gonzalo Contento :-)
+
 CONFIG_PATH=~/.config
 
 setopt histignorealldups sharehistory
