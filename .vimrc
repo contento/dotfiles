@@ -89,7 +89,7 @@ let g:airline_theme='powerlineish'
 
 Plug 'tpope/vim-surround'
 
-# Plug 'neoclide/coc.nvim' , {'branch': 'release'}
+" Plug 'neoclide/coc.nvim' , {'branch': 'release'}
 
 Plug 'editorconfig/editorconfig-vim'
 
