@@ -3,7 +3,7 @@
 # :-)
 
 # See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-[ ! -n "${XDG_CONFIG_HOME:+1} ] && export XDG_CONFIG_HOME=$HOME/.config
+[ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/.config
 
 setopt histignorealldups sharehistory
 
