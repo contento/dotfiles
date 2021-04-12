@@ -61,4 +61,11 @@ eval "$(ssh-agent -s)"
 # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
 [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
-
+# System Info 
+if type pfetch > /dev/null; then 
+	pfetch
+else 
+	if type neofetch > /dev/null; then
+		neofetch
+	fi
+fi;
