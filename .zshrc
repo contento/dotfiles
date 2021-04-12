@@ -6,6 +6,7 @@
 [ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/.config
 
 setopt histignorealldups sharehistory
+setopt auto_cd
 
 HYPHEN_INSENSITIVE="true"
 ENABLE_CORRECTION="true"
