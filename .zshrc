@@ -23,6 +23,9 @@ SAVEHIST=1000
 HISTFILE=$ZSH_PATH/.zsh_history
 HIST_STAMPS="yyyy-mm-dd"
 
+# fonts
+# https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode
+
 # alias - ls
 # https://github.com/Peltoche/lsd#installation
 if type lsd > /dev/null; then alias ls='lsd'; fi;
@@ -42,7 +45,8 @@ alias tm="tmux new-session"
 alias tl="tmux list-sessions"
 alias ta="tmux attach -t"
 
-if type batcat > /dev/null; then alias cat='batcat'; fi;
+# https://github.com/sharkdp/bat
+if type bat > /dev/null; then alias cat='bat'; fi;
 
 export PAGER="most"
 export EDITOR=vim
@@ -65,6 +69,7 @@ eval "$(ssh-agent -s)"
 
 # System Info 
 if type pfetch > /dev/null; then 
+	# https://github.com/dylanaraps/pfetch
 	pfetch
 else 
 	if type neofetch > /dev/null; then
