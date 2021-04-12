@@ -42,6 +42,8 @@ alias tm="tmux new-session"
 alias tl="tmux list-sessions"
 alias ta="tmux attach -t"
 
+if type batcat > /dev/null; then alias cat='batcat'; fi;
+
 export PAGER="most"
 export EDITOR=vim
 export PROJECT_HOME=$HOME/projects
