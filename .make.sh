@@ -6,17 +6,25 @@ dir=~/dotfiles
 olddir=~/dotfiles_old
 files=".bashrc .vimrc .zshrc .gitconfig .tmux.conf"
 
-echo "Creating $olddir for backup of any existing dotfiles in ~"
+declare -A dotfiles_map
+dotfiles_map[".bashrc"]=".bashrc"
+dotfiles_map[".vimrc"]=".vimrc"
+dotfiles_map[".zshenv"]=".zshenv"
+dotfiles_map[".zshrc"]=".config/zsh/.zhrc"
+dotfiles_map[".tmux"]=".config/tmux/.tmux"
+
+echo "Moving existing dotfiles from ~ to $olddir ..."
 mkdir -p $olddir
-echo "...complete."
 
-echo "Changing to the $dir directory"
-cd $dir
-echo "...complete."
-
-for file in $files; do
-    echo "Moving existing dotfiles from ~ to $olddir"
-    mv ~/$file ~/dotfiles_old/
-    echo "Creating symlink to $file in home directory."
-    ln -s $dir/$file ~/$file
+for file in "${dotfiles_map[@]}"; do
+    echo - Moving ~/$file ~/dotfiles_old/
+    # echo mv ~/$file ~/dotfiles_old/
 done
+
+echo "Copying files ..."
+for file in "${dotfiles_map[@]}"; do
+    echo - Copying ~/$file ./${dotfiles_map[$file]}
+done
+
+# echo "Creating symlink to $file in home directory."
+# ln -s $dir/$file ~/$file
