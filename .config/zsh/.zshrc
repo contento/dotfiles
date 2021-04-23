@@ -1,9 +1,6 @@
 # (-: 
-#     Gonzalo Contento 
+#     https://conten.to
 # :-)
-
-# See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-[ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/.config
 
 setopt histignorealldups sharehistory
 setopt auto_cd
@@ -13,8 +10,6 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
 # Zsh
-export ZSH_PATH=$XDG_CONFIG_HOME/zsh
-export UPDATE_ZSH_DAYS=13
 ZSH_DISABLE_COMPFIX=true
 
 # History
@@ -47,10 +42,6 @@ alias ta="tmux attach -t"
 
 # https://github.com/sharkdp/bat
 if type bat > /dev/null; then alias cat='bat'; fi;
-
-export PAGER="most"
-export EDITOR=vim
-export PROJECT_HOME=$HOME/projects
 
 # PATH 
 
