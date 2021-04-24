@@ -5,21 +5,23 @@
 #     https://conten.to
 # :-)
 
+DOTCONFIG=".config"
+
 # See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-[ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/.config
+[ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/$DOTCONFIG
 
 dir=$HOME/dotfiles
 backup_dir="$dir/backup/old-dotfiles$(date +"%Y-%m-%d.%H.%M")"
 
 declare -A dotfiles_map 
 # [key]=relative-location
-dotfiles_map[".bashrc"]=".bashrc"
-dotfiles_map[".zshenv"]=".zshenv"
-dotfiles_map[".zshrc"]=".config/zsh/.zshrc"
-dotfiles_map[".tmux.conf"]=".config/tmux/.tmux.conf"
-dotfiles_map[".vimrc"]=".config/vim/vimrc"
+dotfiles_map[".bashrc"]=""
+dotfiles_map[".zshenv"]=""
+dotfiles_map[".zshrc"]="$DOTCONFIG/zsh"
+dotfiles_map[".tmux.conf"]="$DOTCONFIG/tmux"
+dotfiles_map[".vimrc"]="$DOTCONFIG/vim"
 
-echo "Creating .config directories ..."
+echo "Creating $DOTCONFIG directories ..."
 mkdir -p "$HOME/${dotfiles_map[".zshrc"]}"
 mkdir -p "$HOME/${dotfiles_map[".tmux.conf"]}"
 mkdir -p "$HOME/${dotfiles_map[".vimrc"]}"
@@ -40,3 +42,6 @@ for key in "${!dotfiles_map[@]}"; do
     echo "- Copying $source -> $destination"
     cp --force $source $destination
 done
+
+# rename .vimrc (special case)
+mv "$HOME/$DOTCONFIG/vim/.vimrc" "$HOME/$DOTCONFIG/vim/vimrc"
