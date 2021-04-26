@@ -5,43 +5,34 @@
 #     https://conten.to
 # :-)
 
-DOTCONFIG=".config"
-
 # See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-[ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/$DOTCONFIG
+[ ! -n "${XDG_CONFIG_HOME:+1}" ] && export XDG_CONFIG_HOME=$HOME/.config
 
-dir=$HOME/dotfiles
-backup_dir="$dir/backup/old-dotfiles$(date +"%Y-%m-%d.%H.%M")"
+dotfiles_dir=$(pwd)
 
-declare -A dotfiles_map 
-# [key]=relative-location
-dotfiles_map[".bashrc"]="."
-dotfiles_map[".zshenv"]="."
-dotfiles_map[".zshrc"]="$DOTCONFIG/zsh"
-dotfiles_map[".tmux.conf"]="$DOTCONFIG/tmux"
-dotfiles_map[".vimrc"]="$DOTCONFIG/vim"
-
-echo "Creating $DOTCONFIG directories ..."
-mkdir -p "$HOME/${dotfiles_map[".zshrc"]}"
-mkdir -p "$HOME/${dotfiles_map[".tmux.conf"]}"
-mkdir -p "$HOME/${dotfiles_map[".vimrc"]}"
-
+# Backing up
 echo "Moving existing dot files from $HOME to $backup_dir ..."
-mkdir -p $backup_dir
-for key in "${!dotfiles_map[@]}"; do
-    source="$HOME/$key"
+
+dotfiles_list=".bashrc .zshenv .zshrc .tmux.conf .vimrc"
+backup_dir="$dotfiles_dir/backup/old-dotfiles$(date +"%Y-%m-%d.%H.%M")"
+[ ! -d $backup_dir ] && mkdir -p $backup_dir
+
+for file in $dotfiles_list; do
+    source="$HOME/$file"
     echo "- Moving $source"
-    mv $source $backup_dir
+    [ -f $source ] && mv $source $backup_dir
 done
 
+# Making sure .config folders exist
+echo "Creating $XDG_CONFIG_HOME directories ..."
+dotconfig_dirs="zsh tmux vim"
+for dir in $dotconfig_dirs; do
+    config_dir="$XDG_CONFIG_HOME/dir"
+    [ ! -d $config_dir ] && mkdir -p $config_dir
+done
+
+# Using own copy
 echo "Copying files ..."
-for key in "${!dotfiles_map[@]}"; do
-    location="${dotfiles_map[$key]}"
-    source="$location/$key"
-    destination="$HOME/$location/$key"
-    echo "- Copying $source -> $destination"
-    cp --force $source $destination
-done
-
-# rename .vimrc (special case)
-[ -f "$HOME/$DOTCONFIG/vim/.vimrc" ] && mv "$HOME/$DOTCONFIG/vim/.vimrc" "$HOME/$DOTCONFIG/vim/vimrc"
+cp --force "$dotfiles_dir/.bashrc"              "$HOME"
+cp --force "$dotfiles_dir/.zshenv"              "$HOME"
+cp --force --recursive "$dotfiles_dir/.config"  "$HOME"
