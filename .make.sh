@@ -15,8 +15,8 @@ backup_dir="$dir/backup/old-dotfiles$(date +"%Y-%m-%d.%H.%M")"
 
 declare -A dotfiles_map 
 # [key]=relative-location
-dotfiles_map[".bashrc"]=""
-dotfiles_map[".zshenv"]=""
+dotfiles_map[".bashrc"]="."
+dotfiles_map[".zshenv"]="."
 dotfiles_map[".zshrc"]="$DOTCONFIG/zsh"
 dotfiles_map[".tmux.conf"]="$DOTCONFIG/tmux"
 dotfiles_map[".vimrc"]="$DOTCONFIG/vim"
@@ -37,8 +37,8 @@ done
 echo "Copying files ..."
 for key in "${!dotfiles_map[@]}"; do
     location="${dotfiles_map[$key]}"
-    source="./$location"
-    destination="$HOME/$location"
+    source="$location/$key"
+    destination="$HOME/$location/$key"
     echo "- Copying $source -> $destination"
     cp --force $source $destination
 done
