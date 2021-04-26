@@ -49,7 +49,7 @@ if type bat > /dev/null; then alias cat='bat'; fi;
 [ -d ~/.cargo/bin ]         && export PATH="$PATH:$HOME/.cargo/bin"
 
 # curl -fsSL https://starship.rs/install.sh | sh
-eval "$(starship init zsh)"
+if type starship > /dev/null; then eval "$(starship init zsh)"; fi;
 
 eval "$(ssh-agent -s)"
 
