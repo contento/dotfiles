@@ -14,9 +14,8 @@ export EDITOR=vim
 
 export PROJECT_HOME=$HOME/projects
 
-# Vim
-# export VIMINIT='let $MYVIMRC = !has("nvim") ? "$XDG_CONFIG_HOME/vim/vimrc" : "$XDG_CONFIG_HOME/nvim/init.vim" | so $MYVIMRC'
-export VIMINIT="$XDG_CONFIG_HOME/vim/vimrc"
+# https://blog.joren.ga/tools/vim-xdg
+export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
 
 # Rust Cargo 
 [ -f $HOME/.cargo/env ] && source "$HOME/.cargo/env"

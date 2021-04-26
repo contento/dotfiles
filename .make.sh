@@ -44,4 +44,4 @@ for key in "${!dotfiles_map[@]}"; do
 done
 
 # rename .vimrc (special case)
-mv "$HOME/$DOTCONFIG/vim/.vimrc" "$HOME/$DOTCONFIG/vim/vimrc"
+[ -f "$HOME/$DOTCONFIG/vim/.vimrc" ] && mv "$HOME/$DOTCONFIG/vim/.vimrc" "$HOME/$DOTCONFIG/vim/vimrc"
