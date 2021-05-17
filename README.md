@@ -4,10 +4,16 @@ Linux dot files
 
 ## References
 
-- [wesdoyle/dotfiles](https://github.com/wesdoyle/dotfiles.git)
+* [wesdoyle/dotfiles](https://github.com/wesdoyle/dotfiles.git)
 
-## Execute
+## Installing Dependencies
 
-    cd dotfiles
-    chmod +x .make.sh
-    ./make sh
+    pushd $HOME/dotfiles
+    chmod +x install-base.sh && ./install-base.sh
+    popd
+
+## Install dot files
+
+    pushd $HOME/dotfiles
+    chmod +x .make.sh && ./.make.sh
+    popd
