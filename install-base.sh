@@ -9,6 +9,8 @@ sudo apt install -y git vim tmux most \
     zsh neofetch lsd ranger mc bat fonts-firacode \
     python3 python3-pip cargo golang nodejs npm
 
+curl -fsSL https://starship.rs/install.sh | sh
+
 # ZSH - Auto Suggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
 
