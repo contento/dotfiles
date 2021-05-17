@@ -5,8 +5,8 @@
 #     https://conten.to
 # :-)
 # base packages
-sudo apt install -y git vim tmux most \
-    zsh neofetch lsd ranger mc bat fonts-firacode \
+sudo apt install -y git vim tmux most pandoc w3m lynx \
+    zsh neofetch ranger mc bat fonts-firacode \
     python3 python3-pip cargo golang nodejs npm
 
 curl -fsSL https://starship.rs/install.sh | sh
