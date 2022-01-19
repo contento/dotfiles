@@ -6,6 +6,11 @@ Linux dot files
 
 * [wesdoyle/dotfiles](https://github.com/wesdoyle/dotfiles.git)
 
+## Notes
+
+* You my need to start the SSH Agent `eval $(ssh-agent)' and add your SSH keys
+
+
 ## Installing Dependencies
 
     pushd $HOME/dotfiles
