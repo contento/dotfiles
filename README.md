@@ -22,3 +22,7 @@ Linux dot files
     pushd $HOME/dotfiles
     chmod +x .make.sh && ./.make.sh
     popd
+
+# Additional Notes
+
+[Notes.md](./Notes.md)
