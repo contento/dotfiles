@@ -22,8 +22,19 @@ git clone https://github.com/dylanaraps/pfetch.git
 sudo install pfetch/pfetch /usr/local/bin/
 
 # lsd
-appv=0.20.1
-# appcpu=arm
+appv=0.21.0
 appcpu=amd
+# appcpu=arm
 wget -q https://github.com/Peltoche/lsd/releases/download/${appv}/lsd_${appv}_${appcpu}64.deb
 sudo dpkg -i lsd_${appv}_${appcpu}64.deb
+
+# lf
+
+appv=r26
+appcpu=amd
+# appcpu=arm
+
+wget https://github.com/gokcehan/lf/releases/download/${appv}/lf-linux-${appcpu}64.tar.gz -O lf-linux-${appcpu}64.tar.gz
+tar xvf lf-linux-${appcpu}64.tar.gz
+chmod +x lf
+sudo mv lf /usr/local/bin
