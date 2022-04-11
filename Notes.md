@@ -13,6 +13,7 @@ sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo ap
 # Install Dependencies and Tools
 
 ```bash
+sudo apt install -y curl
 sudo apt install -y nodejs
 sudo apt install -y npm
 sudo apt install -y tmux
