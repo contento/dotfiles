@@ -32,6 +32,12 @@ for app in ${apps[@]}; do
     eval "$PK_CMD_INSTALL $app"
 done
 
+# fira code - Mac
+if [[ $OS -eq 'Darwing' ]]; then
+    brew tap homebrew/cask-fonts
+    brew install --cask font-fira-code
+fi
+
 curl -fsSL https://starship.rs/install.sh | sh
 
 # ZSH - Auto Suggestions
