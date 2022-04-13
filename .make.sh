@@ -1,7 +1,7 @@
 #!/bin/bash
 # .make.sh
 
-# (-: 
+# (-:
 #     https://conten.to
 # :-)
 
@@ -33,6 +33,6 @@ done
 
 # Using own copy
 echo "Copying files ..."
-cp --force "$dotfiles_dir/.bashrc"              "$HOME"
-cp --force "$dotfiles_dir/.zshenv"              "$HOME"
-cp --force --recursive "$dotfiles_dir/.config"  "$HOME"
+cp -f "$dotfiles_dir/.bashrc"              "$HOME"
+cp -f "$dotfiles_dir/.zshenv"              "$HOME"
+cp -f -R "$dotfiles_dir/.config"  "$HOME"

@@ -4,10 +4,33 @@
 # (-:
 #     https://conten.to
 # :-)
-# base packages
-sudo apt install -y git vim tmux most pandoc w3m lynx \
-    zsh neofetch ranger mc bat fonts-firacode \
-    python3 python3-pip cargo golang nodejs npm
+
+OS="$(uname)"
+
+# base apps/packages
+case $OS in
+'Linux')
+    PK_CMD_INSTALL='sudo apt install -y'
+    ;;
+'Darwin')
+    PK_CMD_INSTALL='brew install'
+    ;;
+*)
+    echo "$OS is not supported by this script!"
+    exit
+    ;;
+esac
+
+echo "[ $OS ->  $PK_CMD_INSTALL ]"
+
+apps=(
+    "git vim tmux most pandoc w3m lynx"
+    "zsh neofetch ranger mc bat fonts-firacode"
+    "python3 python3-pip cargo golang nodejs npm"
+)
+for app in ${apps[@]}; do
+    eval "$PK_CMD_INSTALL $app"
+done
 
 curl -fsSL https://starship.rs/install.sh | sh
 
@@ -22,19 +45,25 @@ git clone https://github.com/dylanaraps/pfetch.git
 sudo install pfetch/pfetch /usr/local/bin/
 
 # lsd
-appv=0.21.0
-appcpu=amd
-# appcpu=arm
-wget -q https://github.com/Peltoche/lsd/releases/download/${appv}/lsd_${appv}_${appcpu}64.deb
-sudo dpkg -i lsd_${appv}_${appcpu}64.deb
+if [[ $OS -eq 'Darwing' ]]; then
+    brew install lsd
+else
+    appv=0.21.0
+    appcpu=amd
+    # appcpu=arm
+    wget -q https://github.com/Peltoche/lsd/releases/download/${appv}/lsd_${appv}_${appcpu}64.deb
+    sudo dpkg -i lsd_${appv}_${appcpu}64.deb
+fi
 
 # lf
+if [[ $OS -eq 'Darwing' ]]; then
+else
+    appv=r26
+    appcpu=amd
+    # appcpu=arm
 
-appv=r26
-appcpu=amd
-# appcpu=arm
-
-wget https://github.com/gokcehan/lf/releases/download/${appv}/lf-linux-${appcpu}64.tar.gz -O lf-linux-${appcpu}64.tar.gz
-tar xvf lf-linux-${appcpu}64.tar.gz
-chmod +x lf
-sudo mv lf /usr/local/bin
+    wget https://github.com/gokcehan/lf/releases/download/${appv}/lf-linux-${appcpu}64.tar.gz -O lf-linux-${appcpu}64.tar.gz
+    tar xvf lf-linux-${appcpu}64.tar.gz
+    chmod +x lf
+    sudo mv lf /usr/local/bin
+fi
