@@ -23,8 +23,16 @@ sudo apt install -y ranger
 sudo apt install -y mc
 sudo apt install -y neofetch
 sudo apt install -y git
-# sudo apt install -y bat
+sudo apt install -y bat
 
+```
+
+## bat
+You mayt need to create a link for `bat` see [bat and Ubuntu](https://github.com/sharkdp/bat#on-ubuntu-using-apt)
+
+```bash
+# check your $PATH
+ln -s /usr/bin/batcat /usr/local/bin/
 ```
 
 ## Snaps [ OPTIONAL ]
