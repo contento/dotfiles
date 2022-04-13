@@ -32,7 +32,7 @@ You mayt need to create a link for `bat` see [bat and Ubuntu](https://github.com
 
 ```bash
 # check your $PATH
-sudo ln -s /usr/bin/batcat /usr/local/bin/
+sudo ln -s /usr/bin/batcat /usr/local/bin/bat
 ```
 
 ## Snaps [ OPTIONAL ]
