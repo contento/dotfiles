@@ -28,12 +28,12 @@ apps=(
     "zsh neofetch ranger mc bat fonts-firacode"
     "python3 python3-pip cargo golang nodejs npm"
 )
-for app in ${apps[@]}; do
+for app in "${apps[@]}"; do
     eval "$PK_CMD_INSTALL $app"
 done
 
 # fira code - Mac
-if [[ $OS -eq 'Darwing' ]]; then
+if [[ $OS = 'Darwing' ]]; then
     brew tap homebrew/cask-fonts
     brew install --cask font-fira-code
 fi
@@ -50,9 +50,9 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh
 git clone https://github.com/dylanaraps/pfetch.git
 sudo install pfetch/pfetch /usr/local/bin/
 
-# lsd
-if [[ $OS -eq 'Darwing' ]]; then
-    brew install lsd
+# lsd, bpytop
+if [[ $OS = 'Darwing' ]]; then
+    brew install lsd bpytop
 else
     appv=0.21.0
     appcpu=amd
@@ -62,8 +62,7 @@ else
 fi
 
 # lf
-if [[ $OS -eq 'Darwing' ]]; then
-else
+if ! [[ $OS = 'Darwing' ]]; then
     appv=r26
     appcpu=amd
     # appcpu=arm
