@@ -1,4 +1,4 @@
-# (-: 
+# (-:
 #     https://conten.to
 # :-)
 
@@ -43,10 +43,10 @@ alias ta="tmux attach -t"
 # https://github.com/sharkdp/bat
 if type bat > /dev/null; then alias cat='bat'; fi;
 
-# PATH 
+# PATH
 
 [ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
-[ -d ~/.cargo/bin ]         && export PATH="$PATH:$HOME/.cargo/bin"
+[ -d /opt/homebrew/bin ]    && export PATH="$PATH:/opt/homebrew/bin"
 
 # curl -fsSL https://starship.rs/install.sh | sh
 if type starship > /dev/null; then eval "$(starship init zsh)"; fi;
@@ -58,11 +58,11 @@ eval "$(ssh-agent -s)"
 # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
 [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
-# System Info 
-if type pfetch > /dev/null; then 
+# System Info
+if type pfetch > /dev/null; then
 	# https://github.com/dylanaraps/pfetch
 	pfetch
-else 
+else
 	if type neofetch > /dev/null; then
 		neofetch
 	fi
