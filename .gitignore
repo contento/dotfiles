@@ -1,2 +1,4 @@
 *.log
 **/backup
+**/.DS_Store
+**/pfetch
