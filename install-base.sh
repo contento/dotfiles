@@ -6,13 +6,15 @@
 # :-)
 
 OS="$(uname)"
+OS_DARWIN="Darwin"
+OS_LINUX="Linux"
 
 # base apps/packages
 case $OS in
-'Linux')
+$OS_LINUX)
     PK_CMD_INSTALL='sudo apt install -y'
     ;;
-'Darwin')
+$OS_DARWIN)
     PK_CMD_INSTALL='brew install'
     ;;
 *)
@@ -33,7 +35,7 @@ for app in "${apps[@]}"; do
 done
 
 # fira code - Mac
-if [[ $OS = 'Darwing' ]]; then
+if [[ $OS = $OS_DARWIN ]]; then
     brew tap homebrew/cask-fonts
     brew install --cask font-fira-code
 fi
@@ -51,7 +53,7 @@ git clone https://github.com/dylanaraps/pfetch.git
 sudo install pfetch/pfetch /usr/local/bin/
 
 # lsd, bpytop
-if [[ $OS = 'Darwing' ]]; then
+if [[ $OS = $OS_DARWIN ]]; then
     brew install lsd bpytop
 else
     appv=0.21.0
@@ -62,7 +64,7 @@ else
 fi
 
 # lf
-if ! [[ $OS = 'Darwing' ]]; then
+if ! [[ $OS = $OS_DARWIN ]]; then
     appv=r26
     appcpu=amd
     # appcpu=arm
