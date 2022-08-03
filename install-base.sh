@@ -28,7 +28,7 @@ echo "[ $OS ->  $PK_CMD_INSTALL ]"
 apps=(
     "git vim tmux most pandoc w3m lynx"
     "zsh neofetch ranger mc bat fonts-firacode"
-    "python3 python3-pip cargo golang nodejs npm"
+    "python3 python3-pip cargo golang nodejs npm nala"
 )
 for app in "${apps[@]}"; do
     eval "$PK_CMD_INSTALL $app"
