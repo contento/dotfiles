@@ -62,12 +62,12 @@ set softtabstop=4
 set undolevels=1000
 set nrformats-=octal
 set vb
-set t_vb= 
+set t_vb=
 
 highlight ColorColumn ctermbg=black
 set colorcolumn=80
 
-" >>> Vim-Plug 
+" >>> Vim-Plug
 " # https://github.com/junegunn/vim-plug
 
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -98,7 +98,11 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
+Plug 'editorconfig/editorconfig-vim'
+
 Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 
 Plug 'scrooloose/syntastic'
 let g:syntastic_python_flake8_args = "--ignore=E501 --max-complexity 10"
@@ -110,15 +114,6 @@ let g:ctrlp_cmd = 'CtrlP'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme='powerlineish'
-
-" Plug 'chriskempson/base16-vim'
-" colorscheme base16-default-dark 
-
-Plug 'tpope/vim-surround'
-
-" Plug 'neoclide/coc.nvim' , {'branch': 'release'}
-
-Plug 'editorconfig/editorconfig-vim'
 
 call plug#end()
 
