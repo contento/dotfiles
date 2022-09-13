@@ -27,7 +27,7 @@ done
 echo "Creating $XDG_CONFIG_HOME directories ..."
 dotconfig_dirs="zsh tmux vim"
 for dir in $dotconfig_dirs; do
-    config_dir="$XDG_CONFIG_HOME/dir"
+    config_dir="$XDG_CONFIG_HOME/$dir"
     [ ! -d "$config_dir" ] && mkdir -p "$config_dir"
 done
 
