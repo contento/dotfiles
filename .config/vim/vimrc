@@ -31,6 +31,8 @@ set shiftwidth=4
 syntax on
 filetype plugin indent on
 set term=screen-256color
+set encoding=UTF-8
+set guifont=Fira\ Code\ Regular\ 11
 
 set autoindent
 set bg=dark
@@ -83,6 +85,7 @@ map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
 Plug 'ryanoasis/vim-devicons'
+let g:webdevicons_enable_nerdtree = 1
 
 Plug 'scrooloose/nerdcommenter'
 " Add spaces after comment delimiters by default
@@ -115,7 +118,9 @@ let g:ctrlp_cmd = 'CtrlP'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme='powerlineish'
+let g:airline_theme='minimalist'
+" let g:airline_theme='powerlineish'
+let g:airline_powerline_fonts = 1
 
 call plug#end()
 
