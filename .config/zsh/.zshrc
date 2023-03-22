@@ -45,8 +45,7 @@ if type bat > /dev/null; then alias cat='bat'; fi;
 
 # PATH
 
-[ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
-[ -d /opt/homebrew/bin ]    && export PATH="$PATH:/opt/homebrew/bin"
+[ -d /opt/homebrew/bin ]    && export PATH="/opt/homebrew/bin:$PATH"
 
 # curl -fsSL https://starship.rs/install.sh | sh
 if type starship > /dev/null; then eval "$(starship init zsh)"; fi;
