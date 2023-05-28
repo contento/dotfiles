@@ -44,8 +44,9 @@ alias ta="tmux attach -t"
 if type bat > /dev/null; then alias cat='bat'; fi;
 
 # PATH
-
-[ -d /opt/homebrew/bin ]    && export PATH="/opt/homebrew/bin:$PATH"
+[ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
+[ -d /opt/homebrew/bin ]    && export PATH="$PATH:/opt/homebrew/bin"
+[ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
 
 # curl -fsSL https://starship.rs/install.sh | sh
 if type starship > /dev/null; then eval "$(starship init zsh)"; fi;
