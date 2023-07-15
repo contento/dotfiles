@@ -14,9 +14,15 @@ You my need to start the SSH Agent and add your SSH keys
 eval $(ssh-agent)
 ```
 
+## install nala
+
+```bash
+sudo apt install -y nala 
+```
+
 ## Installing ZSH
 
-sudo nala install zsh -y 
+sudo nala install -y zsh 
 zsh
 # and ...
 chsh -s $(which zsh)
