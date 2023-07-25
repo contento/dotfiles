@@ -8,13 +8,9 @@ Linux dot files
 
 ## Notes
 
-You my need to start the SSH Agent and add your SSH keys
+See [Notes.md](./Notes.md)
 
-```bash
-eval $(ssh-agent)
-```
-
-## install nala
+## Installing [nala](https://github.com/volitank/nala)
 
 ```bash
 sudo apt install -y nala 
@@ -22,28 +18,24 @@ sudo apt install -y nala
 
 ## Installing ZSH
 
+```bash
 sudo nala install -y zsh 
 zsh
 # and ...
 chsh -s $(which zsh)
 logout
+```
 
-## Installing Dependencies
+## Installing 
 
 ```bash
 pushd $HOME/dotfiles
+
+# software 
 chmod +x install-base.sh && ./install-base.sh
-popd
-```
 
-## Running 'dotfiles'
-
-```bash
-pushd $HOME/dotfiles
+# configuration files
 chmod +x .make.sh && ./.make.sh
+
 popd
 ```
-
-## Additional Notes
-
-[Notes.md](./Notes.md)
