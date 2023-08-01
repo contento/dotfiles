@@ -18,6 +18,13 @@ sudo apt update -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 sudo apt install nala
 ```
 
+## Installing flatpak
+
+```shell
+sudo nala install flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+
 ## ZSH
 
 ```bash
@@ -113,21 +120,24 @@ usermod --shell /bin/bash --home /home/$username $username
 chown -R $username:$username /home/$username
 # cp /etc/skel/.* /home/$username/
 ```
-
-## Installing tigervnc
-
-[Install and Configure TigerVNC](https://computingforgeeks.com/install-and-configure-tigervnc-vnc-server-on-debian/)
+## Installing xfce
 
 ```shell
 # Do you need a desktop manager?
 sudo nala install xfce4
 
 # Do you need a display manager
-sudo nala install lightdm
+# [DONE by xfce4] sudo nala install lightdm
 
 # graphics?
 sudo systemctl set-default graphical.target
+```
 
+## Installing tigervnc
+
+[Install and Configure TigerVNC](https://computingforgeeks.com/install-and-configure-tigervnc-vnc-server-on-debian/)
+
+```shell
 # tigervnc
 sudo nala install tigervnc-standalone-server tigervnc-common tightvncserver
 
@@ -141,7 +151,6 @@ vncserver -localhost no
 vncserver -list 
 
 vncserver -kill :1
-
 ```
 
 Add the following to `~/.vnc/xstartup`
