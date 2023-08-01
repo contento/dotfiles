@@ -89,7 +89,7 @@ stat -c '%a %n' ~/.ssh
 
 * [Pling](https://www.pling.com/)
 
-## Create a user
+## Creating a user
 
 ```shell
 username=[USER]
@@ -114,7 +114,39 @@ chown -R $username:$username /home/$username
 # cp /etc/skel/.* /home/$username/
 ```
 
-## Install RealVNC - Debian
+## Installing x11vnc
+
+```shell
+# Do you need a desktop manager?
+sudo nala install xfce4
+
+# Do you need a display manager
+sudo nala install lightdm
+
+sudo nala install x11vnc
+sudo x11vnc -storepasswd {{password}} /etc/x11vnc.pass
+sudo vim /etc/systemd/system/x11vnc.service
+```
+
+Add the following to `/etc/systemd/system/x11vnc.service`
+
+```shell
+[Unit]
+Description="x11vnc"
+Requires=display-manager.service
+After=display-manager.service
+
+[Service]
+ExecStart=/usr/bin/x11vnc -xkb -noxrecord -noxfixes -noxdamage -display :0 -auth guess -rfbauth /etc/x11vnc.pass
+ExecStop=/usr/bin/killall x11vnc
+Restart=on-failure
+Restart-sec=2
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Installing RealVNC - Debian
 
 ```shell
 # Replace with the actual version (and/or use apt)
