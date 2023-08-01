@@ -26,8 +26,8 @@ esac
 echo "[ $OS ->  $PK_CMD_INSTALL ]"
 
 apps=(
-    "git vim tmux most pandoc w3m lynx"
-    "zsh neofetch ranger mc bat fonts-firacode"
+    "net-tools git vim tmux most pandoc w3m lynx"
+    "zsh neofetch ranger mc bat fonts-firacode lsd"
     "python3 python3-pip cargo golang nodejs npm"
 )
 for app in "${apps[@]}"; do
@@ -55,17 +55,11 @@ sudo install pfetch/pfetch /usr/local/bin/
 # lsd, bpytop
 if [[ $OS = "$OS_DARWIN" ]]; then
     brew install lsd bpytop
-else
-    appv=0.21.0
-    appcpu=amd
-    # appcpu=arm
-    wget -q https://github.com/Peltoche/lsd/releases/download/${appv}/lsd_${appv}_${appcpu}64.deb
-    sudo dpkg -i lsd_${appv}_${appcpu}64.deb
 fi
 
 # lf
 if ! [[ $OS = "$OS_DARWIN" ]]; then
-    appv=r26
+    appv=r30
     appcpu=amd
     # appcpu=arm
 
