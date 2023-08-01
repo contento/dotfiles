@@ -68,7 +68,11 @@ Check the Agent
 eval `ssh-agent -s`
 ```
 
-## SSH Config
+### Copy your key
+
+ ssh-copy-id -i ~/.ssh/id_rsa-{{ID}}.pub {{user}}@url
+
+### SSH Config
 
 Located at `~/.ssh/config`
 
@@ -81,7 +85,7 @@ Host ID
     AddKeysToAgent yes
 ```
 
-## ~/.ssh
+### ~/.ssh
 
 All .ssh files in Linux should use the attribute 600
 
