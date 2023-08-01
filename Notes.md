@@ -114,7 +114,9 @@ chown -R $username:$username /home/$username
 # cp /etc/skel/.* /home/$username/
 ```
 
-## Installing x11vnc
+## Installing tigervnc
+
+[Install and Configure TigerVNC](https://computingforgeeks.com/install-and-configure-tigervnc-vnc-server-on-debian/)
 
 ```shell
 # Do you need a desktop manager?
@@ -123,27 +125,39 @@ sudo nala install xfce4
 # Do you need a display manager
 sudo nala install lightdm
 
-sudo nala install x11vnc
-sudo x11vnc -storepasswd {{password}} /etc/x11vnc.pass
-sudo vim /etc/systemd/system/x11vnc.service
+# graphics?
+sudo systemctl set-default graphical.target
+
+# tigervnc
+sudo nala install tigervnc-standalone-server tigervnc-common tightvncserver
+
+# add password
+vncpasswd
+
+# start the server
+vncserver -localhost no
+
+# show list - See which PORT!
+vncserver -list 
+
+vncserver -kill :1
+
 ```
 
-Add the following to `/etc/systemd/system/x11vnc.service`
+Add the following to `~/.vnc/xstartup`
 
 ```shell
-[Unit]
-Description="x11vnc"
-Requires=display-manager.service
-After=display-manager.service
+# XFCE !!
+#!/bin/bash
+xrdb $HOME/.Xresources
+startxfce4 &
+```
 
-[Service]
-ExecStart=/usr/bin/x11vnc -xkb -noxrecord -noxfixes -noxdamage -display :0 -auth guess -rfbauth /etc/x11vnc.pass
-ExecStop=/usr/bin/killall x11vnc
-Restart=on-failure
-Restart-sec=2
+```shell
+sudo chmod u+x  ~/.vnc/xstartup 
+sudo chmod 777 ~/.vnc/xstartup
 
-[Install]
-WantedBy=multi-user.target
+vncserver
 ```
 
 ## Installing RealVNC - Debian
