@@ -143,7 +143,10 @@ sudo systemctl set-default graphical.target
 
 ```shell
 # tigervnc
-sudo nala install tigervnc-standalone-server tigervnc-common tightvncserver
+sudo nala install tigervnc-standalone-server tigervnc-common
+
+# you may need to install also
+sudo nala install xterm
 
 # add password
 vncpasswd
@@ -160,17 +163,48 @@ vncserver -kill :1
 Add the following to `~/.vnc/xstartup`
 
 ```shell
-# XFCE !!
 #!/bin/bash
-xrdb $HOME/.Xresources
+[ -x /etc/vnc/startup  ] && exec /etc/vnc/xstartup
+[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+exec /bin/sh /etc/xdg/xfce4/xinitrc
 startxfce4 &
 ```
 
 ```shell
 sudo chmod u+x  ~/.vnc/xstartup 
-sudo chmod 777 ~/.vnc/xstartup
+sudo chmod 777  ~/.vnc/xstartup
 
 vncserver
+```
+
+### Running as a service
+
+Create to '/etc/systemd/system/vncserver@.service'
+
+```shell
+[Unit]
+Description=Start TightVNC server at startup
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=contento
+Group=contento
+WorkingDirectory=/home/contento
+
+PIDFile=/home/contento/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1920x1080 :%i
+ExecStop=/usr/bin/vncserver -kill :%i
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```shell
+sudo systemctl enable vncserver@1.service 
 ```
 
 ## Installing RealVNC - Debian
