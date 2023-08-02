@@ -143,7 +143,7 @@ sudo systemctl set-default graphical.target
 
 ```shell
 # tigervnc
-sudo nala install tigervnc-standalone-server tigervnc-common
+sudo nala install tigervnc-standalone-server tigervnc-common dbus-x11
 
 # you may need to install also
 sudo nala install xterm
@@ -169,7 +169,8 @@ Add the following to `~/.vnc/xstartup`
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
 exec /bin/sh /etc/xdg/xfce4/xinitrc
-startxfce4 &
+etc/X11/Xsession /usr/bin/startxfce4 &
+# [???] startxfce4 &
 ```
 
 ```shell
@@ -178,6 +179,13 @@ sudo chmod 777  ~/.vnc/xstartup
 
 vncserver
 ```
+
+### Securing VNC
+
+```shell
+ssh -L 15901:127.0.0.1:5901 -C -N {{user}}@{{url}}
+# connect using vnc://127.0.0.1:15901
+```shell
 
 ### Running as a service
 
