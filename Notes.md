@@ -176,11 +176,11 @@ sudo chmod 777  ~/.vnc/xstartup
 ```shell
 ssh -L 15901:127.0.0.1:5901 -C -N {{user}}@{{url}}
 # connect using vnc://127.0.0.1:15901
-```shell
+```
 
 ### Running as a service
 
-Create to '/etc/systemd/system/vncserver@.service'
+Create '/etc/systemd/system/vncserver@.service'
 
 ```shell
 [Unit]
@@ -203,8 +203,17 @@ ExecStop=/usr/bin/vncserver -kill :%i
 WantedBy=multi-user.target
 ```
 
+Start and Set to autostart
+
 ```shell
-sudo systemctl enable vncserver@1.service 
+# just in case
+sudo systemctl  daemon-reload
+
+sudo systemctl start vncserver@1.service 
+sudo systemctl enable vncserver@1.service
+
+# why not?
+sudo systemctl autostart vncserver@1.service 
 ```
 
 ## Installing RealVNC - Debian
