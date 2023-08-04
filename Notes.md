@@ -150,14 +150,6 @@ sudo nala install xterm
 
 # add password
 vncpasswd
-
-# start the server
-vncserver -localhost no
-
-# show list - See which PORT!
-vncserver -list 
-
-vncserver -kill :1
 ```
 
 Add the following to `~/.vnc/xstartup`
@@ -166,21 +158,20 @@ Add the following to `~/.vnc/xstartup`
 #!/bin/bash
 [ -x /etc/vnc/startup  ] && exec /etc/vnc/xstartup
 [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
+
+vncconfig -iconic &
 exec /bin/sh /etc/xdg/xfce4/xinitrc
-etc/X11/Xsession /usr/bin/startxfce4 &
-# [???] startxfce4 &
 ```
 
 ```shell
 sudo chmod u+x  ~/.vnc/xstartup 
 sudo chmod 777  ~/.vnc/xstartup
-
-vncserver
 ```
 
-### Securing VNC
+### Securing VNC [Optional but recommended]
 
 ```shell
 ssh -L 15901:127.0.0.1:5901 -C -N {{user}}@{{url}}
@@ -204,7 +195,8 @@ WorkingDirectory=/home/contento
 
 PIDFile=/home/contento/.vnc/%H:%i.pid
 ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
-ExecStart=/usr/bin/vncserver -depth 24 -geometry 1920x1080 :%i
+# change to "-localhost yes" if you intend to force SSH !!!
+ExecStart=/usr/bin/vncserver :%i -localhost no -depth 32 -geometry 1920x1080
 ExecStop=/usr/bin/vncserver -kill :%i
 
 [Install]
