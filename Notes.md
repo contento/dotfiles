@@ -184,7 +184,7 @@ Create '/etc/systemd/system/vncserver@.service'
 
 ```shell
 [Unit]
-Description=Start TightVNC server at startup
+Description=Start TigerVNC server at startup
 After=syslog.target network.target
 
 [Service]
