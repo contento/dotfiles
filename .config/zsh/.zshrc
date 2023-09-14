@@ -45,7 +45,6 @@ if type bat > /dev/null; then alias cat='bat'; fi;
 if type bat > /dev/null; then alias catp='bat -pp'; fi;
 
 # PATH
-[ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
 [ -d /opt/homebrew/bin ]    && export PATH="$PATH:/opt/homebrew/bin"
 [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
 
