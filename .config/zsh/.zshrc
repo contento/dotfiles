@@ -42,6 +42,7 @@ alias ta="tmux attach -t"
 
 # https://github.com/sharkdp/bat
 if type bat > /dev/null; then alias cat='bat'; fi;
+if type bat > /dev/null; then alias catp='bat -pp'; fi;
 
 # PATH
 [ -d /opt/mssql-tools/bin ] && export PATH="$PATH:/opt/mssql-tools/bin"
