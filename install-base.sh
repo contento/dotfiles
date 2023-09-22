@@ -1,70 +1,80 @@
 #!/bin/bash
 # .make.sh
 
-# (-:
-#     https://conten.to
-# :-)
-
+# Define Constants
 OS="$(uname)"
 OS_DARWIN="Darwin"
 OS_LINUX="Linux"
 
-# base apps/packages
-case $OS in
-"$OS_LINUX")
-    PK_CMD_INSTALL='sudo apt install -y'
-    ;;
-"$OS_DARWIN")
-    PK_CMD_INSTALL='brew install'
-    ;;
-*)
-    echo "$OS is not supported by this script!"
-    exit
-    ;;
-esac
+install_base_apps() {
+    local apps=(
+        "net-tools git vim tmux most pandoc w3m lynx"
+        "zsh neofetch ranger mc bat fonts-firacode lsd"
+        "python3 python3-pip cargo golang nodejs npm"
+    )
 
-echo "[ $OS ->  $PK_CMD_INSTALL ]"
+    for app in "${apps[@]}"; do
+        eval "$PK_CMD_INSTALL $app"
+    done
+}
 
-apps=(
-    "net-tools git vim tmux most pandoc w3m lynx"
-    "zsh neofetch ranger mc bat fonts-firacode lsd"
-    "python3 python3-pip cargo golang nodejs npm"
-)
-for app in "${apps[@]}"; do
-    eval "$PK_CMD_INSTALL $app"
-done
-
-# fira code - Mac
-if [[ $OS = "$OS_DARWIN" ]]; then
+install_mac_specific() {
     brew tap homebrew/cask-fonts
     brew install --cask font-fira-code
-fi
-
-curl -fsSL https://starship.rs/install.sh | sh
-
-# ZSH - Auto Suggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
-
-# ZSH - Highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
-
-# pfetch
-git clone https://github.com/dylanaraps/pfetch.git
-sudo install pfetch/pfetch /usr/local/bin/
-
-# lsd, bpytop
-if [[ $OS = "$OS_DARWIN" ]]; then
     brew install lsd bpytop
-fi
+}
 
-# lf
-if ! [[ $OS = "$OS_DARWIN" ]]; then
+install_linux_specific() {
     appv=r30
-    appcpu=amd
-    # appcpu=arm
+    appcpu=amd  # or arm
 
-    wget https://github.com/gokcehan/lf/releases/download/${appv}/lf-linux-${appcpu}64.tar.gz -O lf-linux-${appcpu}64.tar.gz
-    tar xvf lf-linux-${appcpu}64.tar.gz
+    local download_file="lf-linux-${appcpu}64.tar.gz"
+
+    wget "https://github.com/gokcehan/lf/releases/download/${appv}/${download_file}" -O "$download_file"
+    tar xvf "$download_file"
     chmod +x lf
     sudo mv lf /usr/local/bin
-fi
+    
+    # Remove downloaded file
+    rm "$download_file"
+}
+
+setup_environment() {
+    # Starship
+    yes | curl -fsSL https://starship.rs/install.sh | sh
+
+    # ZSH Auto Suggestions
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
+
+    # ZSH Highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
+
+    # pfetch
+    git clone https://github.com/dylanaraps/pfetch.git
+    sudo install pfetch/pfetch /usr/local/bin/
+    
+    # Remove cloned pfetch directory
+    rm -r pfetch
+}
+
+# Main logic
+case $OS in
+    "$OS_LINUX")
+        PK_CMD_INSTALL='sudo apt install -y'
+        echo "[ $OS ->  $PK_CMD_INSTALL ]"
+        install_base_apps
+        install_linux_specific
+        ;;
+    "$OS_DARWIN")
+        PK_CMD_INSTALL='brew install'
+        echo "[ $OS ->  $PK_CMD_INSTALL ]"
+        install_base_apps
+        install_mac_specific
+        ;;
+    *)
+        echo "$OS is not supported by this script!"
+        exit 1
+        ;;
+esac
+
+setup_environment
