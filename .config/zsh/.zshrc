@@ -1,69 +1,92 @@
-# (-:
-#     https://conten.to
-# :-)
+#!/bin/zsh  # This looks like a zsh configuration, so we specify zsh as the interpreter
 
-setopt histignorealldups sharehistory
-setopt auto_cd
+# Function to set basic zsh options
+setup_zsh_options() {
+  setopt histignorealldups sharehistory
+  setopt auto_cd
+  ZSH_DISABLE_COMPFIX=true
+}
 
-HYPHEN_INSENSITIVE="true"
-ENABLE_CORRECTION="true"
-COMPLETION_WAITING_DOTS="true"
+# Function to set up history
+setup_history() {
+  HISTSIZE=1000
+  SAVEHIST=1000
+  HISTFILE=$ZSH_PATH/.zsh_history
+  HIST_STAMPS="yyyy-mm-dd"
+}
 
-# Zsh
-ZSH_DISABLE_COMPFIX=true
+# Function to set up aliases
+setup_aliases() {
+  # lsd aliases
+  if type lsd > /dev/null; then 
+    alias ls='lsd'
+  fi
 
-# History
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=$ZSH_PATH/.zsh_history
-HIST_STAMPS="yyyy-mm-dd"
+  alias l='ls -l'
+  alias la='ls -a'
+  alias lla='ls -la'
+  alias lt='ls --tree'
 
-# fonts
-# https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode
+  # Python aliases
+  alias python='python3'
+  alias pip='pip3'
 
-# alias - ls
-# https://github.com/Peltoche/lsd#installation
-if type lsd > /dev/null; then alias ls='lsd'; fi;
+  # Tmux aliases
+  alias tmux="TERM=screen-256color-bce tmux"
+  alias tm="tmux new-session"
+  alias tl="tmux list-sessions"
+  alias ta="tmux attach -t"
+}
 
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
+# Function to find an alternative to 'cat'
+setup_cat_alternative() {
+  local alternatives=("batcat" "bat")
+  for alt in "${alternatives[@]}"; do
+    if type "$alt" > /dev/null; then
+      alias cat="$alt"
+      alias catp="$alt -pp"
+      break
+    fi
+  done
+}
 
-# alias - python
-alias python='python3'
-alias pip='pip3'
+# Function to set up PATH
+setup_path() {
+  [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
+  [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
+}
 
-# alias - tmux
-alias tmux="TERM=screen-256color-bce tmux"
-alias tm="tmux new-session"
-alias tl="tmux list-sessions"
-alias ta="tmux attach -t"
+# Function to set up additional tools
+setup_additional_tools() {
+  # Initialize Starship prompt if available
+  if type starship > /dev/null; then 
+    eval "$(starship init zsh)"
+  fi
 
-# https://github.com/sharkdp/bat
-if type bat > /dev/null; then alias cat='bat'; fi;
-if type bat > /dev/null; then alias catp='bat -pp'; fi;
+  # Initialize zsh-autosuggestions if available
+  [ -f ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+  
+  # Initialize zsh-syntax-highlighting if available
+  [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
-# PATH
-[ -d /opt/homebrew/bin ]    && export PATH="$PATH:/opt/homebrew/bin"
-[ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
+  # Initialize ssh-agent
+  eval "$(ssh-agent -s)"
+}
 
-# curl -fsSL https://starship.rs/install.sh | sh
-if type starship > /dev/null; then eval "$(starship init zsh)"; fi;
+# Function to show system info
+show_system_info() {
+  if type pfetch > /dev/null; then
+    pfetch
+  elif type neofetch > /dev/null; then
+    neofetch
+  fi
+}
 
-eval "$(ssh-agent -s)"
-
-# git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
-[ -f ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh  ] && source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-# git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
-[ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
-
-# System Info
-if type pfetch > /dev/null; then
-	# https://github.com/dylanaraps/pfetch
-	pfetch
-else
-	if type neofetch > /dev/null; then
-		neofetch
-	fi
-fi;
+# Execute all setup functions
+setup_zsh_options
+setup_history
+setup_aliases
+setup_cat_alternative
+setup_path
+setup_additional_tools
+show_system_info
