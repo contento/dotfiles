@@ -41,7 +41,7 @@ install_linux_specific() {
 
 setup_environment() {
     # Starship
-    yes | curl -fsSL https://starship.rs/install.sh | sh
+    yes | curl -fsSL https://starship.rs/install.sh | sh -s -- --bin-dir /usr/local/bin --force
 
     # ZSH Auto Suggestions
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
@@ -54,7 +54,7 @@ setup_environment() {
     sudo install pfetch/pfetch /usr/local/bin/
     
     # Remove cloned pfetch directory
-    rm -r pfetch
+    rm -rf pfetch
 }
 
 # Main logic
