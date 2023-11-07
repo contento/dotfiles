@@ -18,7 +18,7 @@ setup_history() {
 # Function to set up aliases
 setup_aliases() {
   # lsd aliases
-  if type lsd > /dev/null; then 
+  if type lsd >/dev/null; then
     alias ls='lsd'
   fi
 
@@ -42,7 +42,7 @@ setup_aliases() {
 setup_cat_alternative() {
   local alternatives=("batcat" "bat")
   for alt in "${alternatives[@]}"; do
-    if type "$alt" > /dev/null; then
+    if type "$alt" >/dev/null; then
       alias cat="$alt"
       alias catp="$alt -pp"
       break
@@ -53,19 +53,25 @@ setup_cat_alternative() {
 # Function to set up PATH
 setup_path() {
   [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
+
   [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
+
+  # CUDA
+  cuda_version=11.8
+  [ -d "/usr/local/cuda-$cuda_version/bin" ] && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
+  [ -d "/usr/local/cuda-$cuda_version/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
 }
 
 # Function to set up additional tools
 setup_additional_tools() {
   # Initialize Starship prompt if available
-  if type starship > /dev/null; then 
+  if type starship >/dev/null; then
     eval "$(starship init zsh)"
   fi
 
   # Initialize zsh-autosuggestions if available
   [ -f ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-  
+
   # Initialize zsh-syntax-highlighting if available
   [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
@@ -75,9 +81,9 @@ setup_additional_tools() {
 
 # Function to show system info
 show_system_info() {
-  if type pfetch > /dev/null; then
+  if type pfetch >/dev/null; then
     pfetch
-  elif type neofetch > /dev/null; then
+  elif type neofetch >/dev/null; then
     neofetch
   fi
 }
