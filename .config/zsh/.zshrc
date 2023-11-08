@@ -77,6 +77,7 @@ setup_additional_tools() {
 
   # Initialize ssh-agent
   eval "$(ssh-agent -s)"
+  eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
 }
 
 # Function to show system info

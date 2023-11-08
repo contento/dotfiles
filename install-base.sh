@@ -11,6 +11,7 @@ install_base_apps() {
         "net-tools git vim tmux most pandoc w3m lynx"
         "zsh neofetch ranger mc bat fonts-firacode lsd"
         "python3 python3-pip cargo golang nodejs npm"
+        "keychain"
     )
 
     for app in "${apps[@]}"; do
@@ -25,7 +26,7 @@ install_mac_specific() {
 }
 
 install_linux_specific() {
-    appv=r30
+    appv=r31
     appcpu=amd  # or arm
 
     local download_file="lf-linux-${appcpu}64.tar.gz"
@@ -34,7 +35,7 @@ install_linux_specific() {
     tar xvf "$download_file"
     chmod +x lf
     sudo mv lf /usr/local/bin
-    
+
     # Remove downloaded file
     rm "$download_file"
 }
@@ -52,7 +53,7 @@ setup_environment() {
     # pfetch
     git clone https://github.com/dylanaraps/pfetch.git
     sudo install pfetch/pfetch /usr/local/bin/
-    
+
     # Remove cloned pfetch directory
     rm -rf pfetch
 }
