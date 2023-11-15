@@ -75,8 +75,7 @@ setup_additional_tools() {
   # Initialize zsh-syntax-highlighting if available
   [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
-  # Initialize ssh-agent
-  eval "$(ssh-agent -s)"
+  # Initialize ssh-agent and use keychain to manage keys
   eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
 }
 
