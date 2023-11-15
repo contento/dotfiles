@@ -11,7 +11,7 @@ install_base_apps() {
         "net-tools git vim tmux most pandoc w3m lynx"
         "zsh neofetch ranger mc bat fonts-firacode lsd"
         "python3 python3-pip cargo golang nodejs npm"
-        "keychain wakeonlan font-delugia-complete"
+        "keychain wakeonlan"
     )
 
     for app in "${apps[@]}"; do
@@ -22,7 +22,7 @@ install_base_apps() {
 install_mac_specific() {
     brew tap homebrew/cask-fonts
     brew install --cask font-fira-code
-    brew install lsd bpytop
+    brew install lsd bpytop font-delugia-complete
 }
 
 install_linux_specific() {
