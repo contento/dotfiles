@@ -36,6 +36,10 @@ setup_aliases() {
   alias tm="tmux new-session"
   alias tl="tmux list-sessions"
   alias ta="tmux attach -t"
+
+  # Eza - lz aliases
+  # ---- Eza (better ls) -----
+  alias lz="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 }
 
 # Function to find an alternative to 'cat'
@@ -77,6 +81,9 @@ setup_additional_tools() {
 
   # Initialize ssh-agent and use keychain to manage keys
   eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
+
+  # Initialize fzf
+  eval "$(fzf --zsh)"
 }
 
 # Function to show system info

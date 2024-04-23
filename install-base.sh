@@ -11,7 +11,7 @@ install_base_apps() {
         "net-tools git vim tmux most pandoc w3m lynx"
         "zsh neofetch ranger mc bat fonts-firacode lsd"
         "python3 python3-pip cargo golang nodejs npm"
-        "keychain wakeonlan"
+        "keychain wakeonlan fzf fd eza tldr"
     )
 
     for app in "${apps[@]}"; do
