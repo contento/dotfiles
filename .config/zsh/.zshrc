@@ -40,6 +40,9 @@ setup_aliases() {
   # Eza - lz aliases
   # ---- Eza (better ls) -----
   alias lz="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+
+  # xoxide aliases
+  alias cd="z"
 }
 
 # Function to find an alternative to 'cat'
@@ -84,6 +87,9 @@ setup_additional_tools() {
 
   # Initialize fzf
   eval "$(fzf --zsh)"
+
+  # ---- Zoxide (better cd) ----
+  eval "$(zoxide init zsh)"
 }
 
 # Function to show system info
@@ -98,8 +104,8 @@ show_system_info() {
 # Execute all setup functions
 setup_zsh_options
 setup_history
-setup_aliases
 setup_cat_alternative
 setup_path
 setup_additional_tools
+setup_aliases
 show_system_info
