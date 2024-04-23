@@ -27,7 +27,7 @@ install_mac_specific() {
 
 install_linux_specific() {
     appv=r31
-    appcpu=amd  # or arm
+    appcpu=amd # or arm
 
     local download_file="lf-linux-${appcpu}64.tar.gz"
 
@@ -38,6 +38,10 @@ install_linux_specific() {
 
     # Remove downloaded file
     rm "$download_file"
+
+    # brew
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 }
 
 setup_environment() {
@@ -60,22 +64,22 @@ setup_environment() {
 
 # Main logic
 case $OS in
-    "$OS_LINUX")
-        PK_CMD_INSTALL='sudo apt install -y'
-        echo "[ $OS ->  $PK_CMD_INSTALL ]"
-        install_base_apps
-        install_linux_specific
-        ;;
-    "$OS_DARWIN")
-        PK_CMD_INSTALL='brew install'
-        echo "[ $OS ->  $PK_CMD_INSTALL ]"
-        install_base_apps
-        install_mac_specific
-        ;;
-    *)
-        echo "$OS is not supported by this script!"
-        exit 1
-        ;;
+"$OS_LINUX")
+    PK_CMD_INSTALL='sudo apt install -y'
+    echo "[ $OS ->  $PK_CMD_INSTALL ]"
+    install_base_apps
+    install_linux_specific
+    ;;
+"$OS_DARWIN")
+    PK_CMD_INSTALL='brew install'
+    echo "[ $OS ->  $PK_CMD_INSTALL ]"
+    install_base_apps
+    install_mac_specific
+    ;;
+*)
+    echo "$OS is not supported by this script!"
+    exit 1
+    ;;
 esac
 
 setup_environment
