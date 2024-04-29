@@ -42,6 +42,8 @@ install_linux_specific() {
     # brew
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+    brew install fzf fd eza tldr zoxide
 }
 
 setup_environment() {

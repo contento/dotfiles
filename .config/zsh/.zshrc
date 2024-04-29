@@ -1,5 +1,10 @@
 #!/bin/zsh  # This looks like a zsh configuration, so we specify zsh as the interpreter
 
+# Define Constants
+OS="$(uname)"
+OS_DARWIN="Darwin"
+OS_LINUX="Linux"
+
 # Function to set basic zsh options
 setup_zsh_options() {
   setopt histignorealldups sharehistory
@@ -92,6 +97,15 @@ setup_additional_tools() {
   eval "$(zoxide init zsh)"
 }
 
+setup_additional_tools_linux() {
+  # ---- brew
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+}
+
+setup_additional_tools_mac() {
+  # brew ???
+}
+
 # Function to show system info
 show_system_info() {
   if type pfetch >/dev/null; then
@@ -107,5 +121,19 @@ setup_history
 setup_cat_alternative
 setup_path
 setup_additional_tools
+
+case $OS in
+"$OS_LINUX")
+  setup_additional_tools_linux
+  ;;
+"$OS_DARWIN")
+  setup_additional_tools_mac
+  ;;
+*)
+  echo "$OS is not supported by this script!"
+  exit 1
+  ;;
+esac
+
 setup_aliases
 show_system_info
