@@ -1,32 +1,55 @@
 #!/bin/bash
 # .make.sh
 
-# Define Constants
-OS="$(uname)"
-OS_DARWIN="Darwin"
-OS_LINUX="Linux"
+install_brew() {
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        # Linux
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        # Mac OSX
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    else
+        echo "Unsupported $OSTYPE for brew installation"
+        exit 1
+    fi
+}
 
-install_base_apps() {
-    local apps=(
-        "net-tools git vim tmux most pandoc w3m lynx"
-        "zsh neofetch ranger mc bat fonts-firacode lsd"
+install_brew_apps() {
+    local brew_apps=(
+        "zsh git vim tmux most pandoc w3m lynx"
+        "neofetch ranger mc bat lsd bpytop"
         "python3 python3-pip cargo golang nodejs npm"
         "keychain wakeonlan fzf fd eza tldr zoxide"
+        # fonts
+        "font-delugia-complete"
     )
 
-    for app in "${apps[@]}"; do
-        eval "$PK_CMD_INSTALL $app"
+    local cask_brew_apps=(
+        fonts-firacode
+    )
+
+    for app in "${brew_apps[@]}"; do
+        if brew list "$app" &>/dev/null; then
+            brew install "$app"
+        fi
     done
 }
 
 install_mac_specific() {
     brew tap homebrew/cask-fonts
+
     brew install --cask font-fira-code
-    brew install lsd bpytop font-delugia-complete
+    for app in "${cask_brew_apps[@]}"; do
+        if brew list "$app" &>/dev/null; then
+            brew install "$app"
+        fi
+    done
 }
 
 install_linux_specific() {
-    appv=r31
+    # lf
+    appv=r32
     appcpu=amd # or arm
 
     local download_file="lf-linux-${appcpu}64.tar.gz"
@@ -36,14 +59,17 @@ install_linux_specific() {
     chmod +x lf
     sudo mv lf /usr/local/bin
 
-    # Remove downloaded file
     rm "$download_file"
 
-    # brew
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    # native apps
 
-    brew install fzf fd eza tldr zoxide
+    local native_apps=(
+        "net-tools"
+    )
+
+    for app in "${native_apps[@]}"; do
+        eval "sudo apt install -y $app"
+    done
 }
 
 setup_environment() {
@@ -64,24 +90,20 @@ setup_environment() {
     rm -rf pfetch
 }
 
+###############################################
 # Main logic
-case $OS in
-"$OS_LINUX")
-    PK_CMD_INSTALL='sudo apt install -y'
-    echo "[ $OS ->  $PK_CMD_INSTALL ]"
-    install_base_apps
+
+install_brew
+
+install_brew_apps
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     install_linux_specific
-    ;;
-"$OS_DARWIN")
-    PK_CMD_INSTALL='brew install'
-    echo "[ $OS ->  $PK_CMD_INSTALL ]"
-    install_base_apps
+elif [[ "$OSTYPE" == "darwin"* ]]; then
     install_mac_specific
-    ;;
-*)
-    echo "$OS is not supported by this script!"
+else
+    echo "Unsupported $OSTYPE for brew installation"
     exit 1
-    ;;
-esac
+fi
 
 setup_environment

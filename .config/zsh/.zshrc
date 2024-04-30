@@ -1,10 +1,5 @@
 #!/bin/zsh  # This looks like a zsh configuration, so we specify zsh as the interpreter
 
-# Define Constants
-OS="$(uname)"
-OS_DARWIN="Darwin"
-OS_LINUX="Linux"
-
 # Function to set basic zsh options
 setup_zsh_options() {
   setopt histignorealldups sharehistory
@@ -122,18 +117,14 @@ setup_cat_alternative
 setup_path
 setup_additional_tools
 
-case $OS in
-"$OS_LINUX")
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   setup_additional_tools_linux
-  ;;
-"$OS_DARWIN")
+elif [[ "$OSTYPE" == "darwin"* ]]; then
   setup_additional_tools_mac
-  ;;
-*)
-  echo "$OS is not supported by this script!"
+else
+  echo "Unsupported $OSTYPE"
   exit 1
-  ;;
-esac
+fi
 
 setup_aliases
 show_system_info
