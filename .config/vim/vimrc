@@ -46,6 +46,7 @@ set linebreak
 set nobackup
 set noerrorbells
 set nolist
+set nopaste
 set noswapfile
 set novb
 set nowrap
