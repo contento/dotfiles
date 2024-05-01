@@ -32,7 +32,8 @@ syntax on
 filetype plugin indent on
 set term=screen-256color
 set encoding=UTF-8
-set guifont=Fira\ Code\ Regular\ 11
+" set guifont=Fira\ Code\ Regular\ 11
+set guifont=Delugia\ Regular\ 11
 
 set autoindent
 set bg=dark

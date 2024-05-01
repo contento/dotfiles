@@ -19,14 +19,12 @@ install_brew_apps() {
     local brew_apps=(
         "zsh git vim tmux most pandoc w3m lynx"
         "neofetch ranger mc bat lsd bpytop"
-        "python3 python3-pip cargo golang nodejs npm"
+        "python3 python3-pip cargo golang"
         "keychain wakeonlan fzf fd eza tldr zoxide"
-        # fonts
-        "font-delugia-complete"
-    )
-
-    local cask_brew_apps=(
-        fonts-firacode
+        ###############################################
+        # removed but can be installed
+        # "nodejs npm yarn"
+        ###############################################
     )
 
     for app in "${brew_apps[@]}"; do
@@ -37,20 +35,22 @@ install_brew_apps() {
 }
 
 install_mac_specific() {
+    local cask_brew_apps=(
+        "font-delugia-complete font-fira-code font-fira-code-nerd-font"
+    )
     brew tap homebrew/cask-fonts
 
-    brew install --cask font-fira-code
     for app in "${cask_brew_apps[@]}"; do
         if brew list "$app" &>/dev/null; then
-            brew install "$app"
+            brew install --cask "$app"
         fi
     done
 }
 
 install_linux_specific() {
-    # lf
-    appv=r32
-    appcpu=amd # or arm
+    # lf ========================================
+    local appv=r32
+    local appcpu=amd # or arm
 
     local download_file="lf-linux-${appcpu}64.tar.gz"
 
@@ -61,15 +61,27 @@ install_linux_specific() {
 
     rm "$download_file"
 
-    # native apps
+    # native apps ========================================
 
     local native_apps=(
-        "net-tools"
+        "net-tools fonts-firacode"
     )
 
     for app in "${native_apps[@]}"; do
         eval "sudo apt install -y $app"
     done
+
+    # delugia font ========================================
+    local appv="v2111.01.2"
+    local target="delugia-complete"
+    local download_file="${target}.zip"
+    wget "https://github.com/adam7/delugia-code/releases/download/${appv}/${download_file}" -O "$download_file"
+    unzip -o "$download_file"
+    sudo rm -r /user/share/fonts/"${target}"
+    sudo mv -f "${target}" /usr/share/fonts/
+    sudo fc-cache -f -v
+    rm "$download_file"
+
 }
 
 setup_environment() {
