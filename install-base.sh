@@ -21,7 +21,7 @@ install_brew_apps() {
         "neofetch ranger mc bat lsd bpytop"
         "python3 python3-pip cargo golang"
         "keychain wakeonlan fzf fd eza tldr zoxide"
-        "atui yazi"
+        "atuin yazi"
         ###############################################
         # removed but can be installed
         # "nodejs npm yarn"
@@ -78,7 +78,7 @@ install_linux_specific() {
     local download_file="${target}.zip"
     wget "https://github.com/adam7/delugia-code/releases/download/${appv}/${download_file}" -O "$download_file"
     unzip -o "$download_file"
-    sudo rm -r /user/share/fonts/"${target}"
+    sudo rm -r /usr/share/fonts/"${target}"
     sudo mv -f "${target}" /usr/share/fonts/
     sudo fc-cache -f -v
     rm "$download_file"
