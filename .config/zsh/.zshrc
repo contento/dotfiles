@@ -86,12 +86,14 @@ setup_additional_tools() {
   # Initialize ssh-agent and use keychain to manage keys
   eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
 
-
   # Initialize fzf
   eval "$(fzf --zsh)"
 
   # Initialize zoxide
   eval "$(zoxide init zsh)"
+
+  #  initialize atuin
+  eval "$(atuin init zsh)"
 }
 
 setup_additional_tools_linux() {

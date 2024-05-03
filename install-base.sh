@@ -21,6 +21,7 @@ install_brew_apps() {
         "neofetch ranger mc bat lsd bpytop"
         "python3 python3-pip cargo golang"
         "keychain wakeonlan fzf fd eza tldr zoxide"
+        "atui yazi"
         ###############################################
         # removed but can be installed
         # "nodejs npm yarn"
