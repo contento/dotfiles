@@ -10,6 +10,13 @@ Linux dot files
 
 See [Notes.md](./Notes.md)
 
+## Installing Git
+
+```bash
+sudo apt install -y git 
+eval $(ssh-agent)
+```
+
 ## Installing [nala](https://github.com/volitank/nala)
 
 ```bash
