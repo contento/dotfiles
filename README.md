@@ -13,7 +13,7 @@ See [Notes.md](./Notes.md)
 ## Installing Git
 
 ```bash
-sudo apt install -y git 
+sudo apt install -y curl git 
 eval $(ssh-agent)
 ```
 
