@@ -4,32 +4,28 @@
 install_brew() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Linux
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
         # Mac OSX
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         echo "Unsupported $OSTYPE for brew installation"
-        exit 1
     fi
 }
 
 install_brew_apps() {
     local brew_apps=(
-        "zsh git vim tmux most pandoc w3m lynx"
-        "neofetch ranger mc bat lsd bpytop"
-        "python3 python3-pip cargo golang"
-        "keychain wakeonlan fzf fd eza tldr zoxide"
-        "atuin yazi"
-        ###############################################
-        # removed but can be installed
-        # "nodejs npm yarn"
-        ###############################################
+        zsh git vim tmux most pandoc w3m lynx
+        neofetch ranger mc bat lsd bpytop
+        python3 python3-pip cargo golang
+        keychain wakeonlan fzf fd eza tldr zoxide
+        atuin yazi
     )
 
     for app in "${brew_apps[@]}"; do
-        if brew list "$app" &>/dev/null; then
+        echo "**** Trying to install $app ..."
+        if ! brew list "$app" &>/dev/null; then
             brew install "$app"
         fi
     done
@@ -37,18 +33,23 @@ install_brew_apps() {
 
 install_mac_specific() {
     local cask_brew_apps=(
-        "font-delugia-complete font-fira-code font-fira-code-nerd-font"
+        font-delugia-complete
+        font-fira-code
+        font-fira-code-nerd-font
     )
     brew tap homebrew/cask-fonts
 
     for app in "${cask_brew_apps[@]}"; do
-        if brew list "$app" &>/dev/null; then
+        echo "**** Trying to install $app ..."
+        if ! brew list "$app" &>/dev/null; then
             brew install --cask "$app"
         fi
     done
 }
 
 install_linux_specific() {
+    echo "**** Trying to install Linux specific tools ..."
+
     # lf ========================================
     local appv=r32
     local appcpu=amd # or arm
@@ -65,11 +66,14 @@ install_linux_specific() {
     # native apps ========================================
 
     local native_apps=(
-        "net-tools fonts-firacode"
+        gcc
+        net-tools
+        fonts-firacode
     )
 
     for app in "${native_apps[@]}"; do
-        eval "sudo apt install -y $app"
+        echo "**** Trying to install $app ..."
+        eval "sudo nala install -y $app"
     done
 
     # delugia font ========================================
@@ -82,7 +86,6 @@ install_linux_specific() {
     sudo mv -f "${target}" /usr/share/fonts/
     sudo fc-cache -f -v
     rm "$download_file"
-
 }
 
 setup_environment() {
