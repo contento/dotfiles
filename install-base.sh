@@ -16,7 +16,7 @@ install_brew() {
 
 install_brew_apps() {
     local brew_apps=(
-        zsh git vim tmux most pandoc w3m lynx
+        zsh git tmux most pandoc w3m lynx
         neofetch ranger mc bat lsd bpytop
         python3 python3-pip cargo golang
         keychain wakeonlan fzf fd eza tldr zoxide
@@ -33,6 +33,8 @@ install_brew_apps() {
 
 install_mac_specific() {
     local cask_brew_apps=(
+        vim
+        iterm2
         font-delugia-complete
         font-fira-code
         font-fira-code-nerd-font
@@ -67,13 +69,15 @@ install_linux_specific() {
 
     local native_apps=(
         gcc
+        nala
+        vim
         net-tools
         fonts-firacode
     )
 
     for app in "${native_apps[@]}"; do
         echo "**** Trying to install $app ..."
-        eval "sudo nala install -y $app"
+        eval "sudo apt install -y $app"
     done
 
     # delugia font ========================================
