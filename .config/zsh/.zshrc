@@ -43,10 +43,12 @@ setup_aliases() {
 
   # xoxide aliases
   alias cd="z"
+
+  setup_cat_aliases
 }
 
 # Function to find an alternative to 'cat'
-setup_cat_alternative() {
+setup_cat_aliases() {
   local alternatives=("batcat" "bat")
   for alt in "${alternatives[@]}"; do
     if type "$alt" >/dev/null; then
@@ -59,15 +61,15 @@ setup_cat_alternative() {
 
 # Function to set up PATH
 setup_path() {
-  [ -d /opt/homebrew/bin ]              && export PATH="$PATH:/opt/homebrew/bin"
+  [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
   [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
   [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
 
   # CUDA
   cuda_version=11.8
-  [ -d "/usr/local/cuda-$cuda_version/bin" ]    && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
-  [ -d "/usr/local/cuda-$cuda_version/lib64" ]  && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
+  [ -d "/usr/local/cuda-$cuda_version/bin" ] && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
+  [ -d "/usr/local/cuda-$cuda_version/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
 }
 
 # Function to set up additional tools
@@ -117,7 +119,6 @@ show_system_info() {
 # Execute all setup functions
 setup_zsh_options
 setup_history
-setup_cat_alternative
 setup_path
 setup_additional_tools
 
