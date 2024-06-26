@@ -1,47 +1,107 @@
 #!/bin/bash
 # .make.sh
 
+all_apps=(
+    atuin
+    bat
+    bpytop
+    cargo
+    eza
+    fd
+    fonts-firacode
+    fzf
+    gcc
+    golang
+    keychain
+    lsd
+    lynx
+    mc
+    most
+    nala
+    neofetch
+    net-tools
+    pandoc
+    python3
+    python3-pip
+    ranger
+    tmux
+    tldr
+    wakeonlan
+    w3m
+    yazi
+    zoxide
+)
+
+linux_apps=(
+    vim
+)
+
+mac_apps=()
+
+mac_cask_brew_apps=(
+    vim
+    iterm2
+    font-delugia-complete
+    font-fira-code
+    font-fira-code-nerd-font
+)
+
+# --- Parse command-line arguments ----------------
+
+# check for no_brew flag. If set, do not install brew
+no_brew_installation=false
+
+for arg in "$@"; do
+    case $arg in
+    --no-brew)
+        # Step 2: Set the flag if --no-brew is passed
+        no_brew_installation=true
+        shift # Remove --no-brew from processing
+        ;;
+    *)
+        shift # Skip unknown options
+        ;;
+    esac
+done
+
+# ---- Brew --------------------------------------------
+
 install_brew() {
+    if [ "$no_brew_installation" = false ]; then
+        echo "**** Installing brew ..."
+    else
+        echo "**** Skipping brew installation ..."
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            echo "brew is required on Mac"
+            exit 1
+        fi
+        return
+    fi
+
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Linux
         $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        # Mac OSX
+        # Mac OS
         $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         echo "Unsupported $OSTYPE for brew installation"
     fi
 }
 
-install_brew_apps() {
-    local brew_apps=(
-        zsh git tmux most pandoc w3m lynx
-        neofetch ranger mc bat lsd bpytop
-        python3 python3-pip cargo golang
-        keychain wakeonlan fzf fd eza tldr zoxide
-        atuin yazi
-    )
+# ---- Mac --------------------------------------------
 
-    for app in "${brew_apps[@]}"; do
+install_mac_brew_apps() {
+    for app in "${all_apps[@]}"; do
         echo "**** Trying to install $app ..."
         if ! brew list "$app" &>/dev/null; then
             brew install "$app"
         fi
     done
-}
 
-install_mac_specific() {
-    local cask_brew_apps=(
-        vim
-        iterm2
-        font-delugia-complete
-        font-fira-code
-        font-fira-code-nerd-font
-    )
     brew tap homebrew/cask-fonts
-
-    for app in "${cask_brew_apps[@]}"; do
+    for app in "${mac_cask_brew_apps[@]}"; do
         echo "**** Trying to install $app ..."
         if ! brew list "$app" &>/dev/null; then
             brew install --cask "$app"
@@ -49,8 +109,10 @@ install_mac_specific() {
     done
 }
 
-install_linux_specific() {
-    echo "**** Trying to install Linux specific tools ..."
+# -- Linux --------------------------------------------
+
+install_linux_special_apps() {
+    echo "installing special apps"
 
     # lf ========================================
     local appv=r32
@@ -65,21 +127,6 @@ install_linux_specific() {
 
     rm "$download_file"
 
-    # native apps ========================================
-
-    local native_apps=(
-        gcc
-        nala
-        vim
-        net-tools
-        fonts-firacode
-    )
-
-    for app in "${native_apps[@]}"; do
-        echo "**** Trying to install $app ..."
-        eval "sudo apt install -y $app"
-    done
-
     # delugia font ========================================
     local appv="v2111.01.2"
     local target="delugia-complete"
@@ -91,6 +138,33 @@ install_linux_specific() {
     sudo fc-cache -f -v
     rm "$download_file"
 }
+
+install_linux_app() {
+    local app=$1
+    echo "**** Trying to install $app ..."
+    if ! dpkg -l "$app" &>/dev/null; then
+        if ! sudo apt install -y "$app"; then
+            if [ "$no_brew_installation" = false ]; then
+                echo "**** apt failed, trying to install $app with brew..."
+                brew install "$app"
+            fi
+        fi
+    fi
+}
+
+install_linux_apps() {
+    for app in "${all_apps[@]}"; do
+        install_linux_app "$app"
+    done
+
+    for app in "${linux_apps[@]}"; do
+        install_linux_app "$app"
+    done
+
+    install_linux_special_apps
+}
+
+# ---- Environment setup --------------------------------------------
 
 setup_environment() {
     # Starship
@@ -110,20 +184,19 @@ setup_environment() {
     rm -rf pfetch
 }
 
-###############################################
-# Main logic
+# ---- Main logic --------------------------------------------
 
 install_brew
 
-install_brew_apps
-
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    install_linux_specific
+    install_linux_apps
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    install_mac_specific
+    install_mac_brew_apps
 else
     echo "Unsupported $OSTYPE for brew installation"
     exit 1
 fi
 
 setup_environment
+
+# ------------------------------------------------------------
