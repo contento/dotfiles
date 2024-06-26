@@ -28,22 +28,32 @@ setup_aliases() {
   alias lt='ls --tree'
 
   # Python aliases
-  alias python='python3'
-  alias pip='pip3'
+  if type python3 >/dev/null 2>&1; then
+    alias python='python3'
+  fi
+  if type pip3 >/dev/null 2>&1; then
+    alias pip='pip3'
+  fi
 
   # Tmux aliases
-  alias tmux="TERM=screen-256color-bce tmux"
-  alias tm="tmux new-session"
-  alias tl="tmux list-sessions"
-  alias ta="tmux attach -t"
+  if type tmux >/dev/null 2>&1; then
+    alias tmux="TERM=screen-256color-bce tmux"
+    alias tm="tmux new-session"
+    alias tl="tmux list-sessions"
+    alias ta="tmux attach -t"
+  fi
 
   # Eza - lz aliases
-  # ---- Eza (better ls) -----
-  alias lz="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+  # Check if eza is installed before creating alias
+  if type eza >/dev/null 2>&1; then
+    alias lz="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+  fi
 
   # xoxide aliases
-  alias cd="z"
-
+  # Check if zoxide is installed before overriding cd
+  if type zoxide >/dev/null 2>&1; then
+    alias cd="z"
+  fi
   setup_cat_aliases
 }
 
@@ -85,22 +95,30 @@ setup_additional_tools() {
   # Initialize zsh-syntax-highlighting if available
   [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
-  # Initialize ssh-agent and use keychain to manage keys
-  eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
+  # Initialize ssh-agent and use keychain to manage keys, if keychain is available
+  if type keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$USERNAME" ]; then
+    eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
+  fi
 
-  # Initialize fzf
-  eval "$(fzf --zsh)"
+  # Initialize fzf if available
+  if type fzf >/dev/null 2>&1; then
+    eval "$(fzf --zsh)"
+  fi
 
-  # Initialize zoxide
-  eval "$(zoxide init zsh)"
+  # Initialize zoxide if available
+  if type zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+  fi
 
-  #  initialize atuin
-  eval "$(atuin init zsh)"
+  # Initialize atuin if available
+  if type atuin >/dev/null 2>&1; then
+    eval "$(atuin init zsh)"
+  fi
 }
 
 setup_additional_tools_linux() {
   # ---- brew
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  [ -f /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 }
 
 setup_additional_tools_mac() {
