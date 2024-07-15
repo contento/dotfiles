@@ -39,7 +39,6 @@ linux_apps=(
 mac_apps=()
 
 mac_cask_brew_apps=(
-    vim
     iterm2
     font-delugia-complete
     font-fira-code
