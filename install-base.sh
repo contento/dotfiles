@@ -9,7 +9,6 @@ all_apps=(
     eza
     fd
     fonts-firacode
-    fzf
     gcc
     golang
     keychain
@@ -37,7 +36,13 @@ linux_apps=(
     vim
 )
 
-mac_apps=()
+brew_linux_apps=(
+    fzf
+)
+
+brew_mac_apps=(
+    fzf
+)
 
 mac_cask_brew_apps=(
     iterm2
@@ -100,6 +105,13 @@ install_mac_brew_apps() {
         fi
     done
 
+    for app in "${brew_mac_apps[@]}"; do
+        echo "**** Trying to install $app ..."
+        if ! brew list "$app" &>/dev/null; then
+            brew install "$app"
+        fi
+    done
+
     brew tap homebrew/cask-fonts
     for app in "${mac_cask_brew_apps[@]}"; do
         echo "**** Trying to install $app ..."
@@ -150,6 +162,16 @@ install_linux_app() {
             fi
         fi
     fi
+}
+
+install_brew_linux_apps() {
+    for app in "${brew_linux_apps[@]}"; do
+        echo "**** Trying to install $app ..."
+        if ! brew list "$app" &>/dev/null; then
+            brew install "$app"
+        fi
+    done
+
 }
 
 install_linux_apps() {
