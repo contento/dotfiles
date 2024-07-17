@@ -13,6 +13,8 @@ setup_history() {
   SAVEHIST=1000
   HISTFILE=$ZSH_PATH/.zsh_history
   HIST_STAMPS="yyyy-mm-dd"
+  HISTCONTROL=ignoreboth
+  HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 }
 
 # Function to set up aliases
@@ -54,7 +56,13 @@ setup_aliases() {
   if type zoxide >/dev/null 2>&1; then
     alias cd="z"
   fi
+
   setup_cat_aliases
+
+  # yazi aliases
+  if type yazi >/dev/null 2>&1; then
+    alias y="yazi"
+  fi
 }
 
 # Function to find an alternative to 'cat'
