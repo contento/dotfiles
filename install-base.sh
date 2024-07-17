@@ -33,6 +33,7 @@ all_apps=(
 )
 
 linux_apps=(
+    tilix
     vim
 )
 
