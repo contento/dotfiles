@@ -79,15 +79,15 @@ setup_cat_aliases() {
 
 # Function to set up PATH
 setup_path() {
-  [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
+  [ -d /opt/homebrew/bin ]              && export PATH="$PATH:/opt/homebrew/bin"
   [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
-  [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
+  [ -d $HOME/miniconda3/bin ]           && export PATH="$PATH:$HOME/miniconda3/bin"
 
   # CUDA
-  cuda_version=11.8
-  [ -d "/usr/local/cuda-$cuda_version/bin" ] && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
-  [ -d "/usr/local/cuda-$cuda_version/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
+  cuda_version=12
+  [ -d "/usr/local/cuda-$cuda_version/bin" ]    && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
+  [ -d "/usr/local/cuda-$cuda_version/lib64" ]  && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
 }
 
 # Function to set up additional tools
