@@ -15,20 +15,19 @@ setup_zsh_options() {
   ZSH_DISABLE_COMPFIX=true
 }
 
-# Function to set up history
 setup_history() {
   setopt APPEND_HISTORY
   setopt HIST_REDUCE_BLANKS
   setopt HIST_VERIFY
   setopt INC_APPEND_HISTORY
   setopt EXTENDED_HISTORY
+  setopt SHARE_HISTORY
 
   export HISTSIZE=1000
   export SAVEHIST=1000
   export HISTFILE=$ZSH_PATH/.zsh_history
-  export SHARE_HISTORY=1
   export HIST_STAMPS="yyyy-mm-dd"
-  export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+  export HIST_IGNORE_PATTERN="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 }
 
 # Function to set up aliases
