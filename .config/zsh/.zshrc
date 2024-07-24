@@ -1,5 +1,13 @@
 #!/bin/zsh  # This looks like a zsh configuration, so we specify zsh as the interpreter
 
+#   o  o
+# \______/
+#   |
+#      |    https://conten.to
+# --------
+
+export TERM="xterm-256color" # getting proper colors
+
 # Function to set basic zsh options
 setup_zsh_options() {
   setopt histignorealldups sharehistory
@@ -9,12 +17,18 @@ setup_zsh_options() {
 
 # Function to set up history
 setup_history() {
-  HISTSIZE=1000
-  SAVEHIST=1000
-  HISTFILE=$ZSH_PATH/.zsh_history
-  HIST_STAMPS="yyyy-mm-dd"
-  HISTCONTROL=ignoreboth
-  HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
+  setopt APPEND_HISTORY
+  setopt HIST_REDUCE_BLANKS
+  setopt HIST_VERIFY
+  setopt INC_APPEND_HISTORY
+  setopt EXTENDED_HISTORY
+
+  export HISTSIZE=1000
+  export SAVEHIST=1000
+  export HISTFILE=$ZSH_PATH/.zsh_history
+  export SHARE_HISTORY=1
+  export HIST_STAMPS="yyyy-mm-dd"
+  export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 }
 
 # Function to set up aliases
@@ -63,6 +77,11 @@ setup_aliases() {
   if type yazi >/dev/null 2>&1; then
     alias y="yazi"
   fi
+
+  # adding flags
+  alias df='df -h'               # human-readable sizes
+  alias free='free -m'           # show sizes in MB
+  alias grep='grep --color=auto' # colorize output (good for log files)
 }
 
 # Function to find an alternative to 'cat'
@@ -79,15 +98,15 @@ setup_cat_aliases() {
 
 # Function to set up PATH
 setup_path() {
-  [ -d /opt/homebrew/bin ]              && export PATH="$PATH:/opt/homebrew/bin"
+  [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
   [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
-  [ -d $HOME/miniconda3/bin ]           && export PATH="$PATH:$HOME/miniconda3/bin"
+  [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
 
   # CUDA
   cuda_version=12
-  [ -d "/usr/local/cuda-$cuda_version/bin" ]    && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
-  [ -d "/usr/local/cuda-$cuda_version/lib64" ]  && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
+  [ -d "/usr/local/cuda-$cuda_version/bin" ] && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
+  [ -d "/usr/local/cuda-$cuda_version/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
 }
 
 # Function to set up additional tools
