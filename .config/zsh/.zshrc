@@ -27,7 +27,7 @@ setup_history() {
   export SAVEHIST=1000
   export HISTFILE=$ZSH_PATH/.zsh_history
   export HIST_STAMPS="yyyy-mm-dd"
-  export HIST_IGNORE_PATTERN="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+  export HISTIGNORE='&:*:(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)'
 }
 
 # Function to set up aliases
