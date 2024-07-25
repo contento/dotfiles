@@ -25,6 +25,7 @@ all_apps=(
     ranger
     tmux
     tldr
+    unzip
     wakeonlan
     w3m
     yazi
@@ -98,6 +99,11 @@ install_brew() {
 # ---- Mac --------------------------------------------
 
 install_mac_brew_apps() {
+    if [ "$no_brew_installation" = true ]; then
+        echo "**** Skipping brew installation ..."
+        return
+    fi
+
     for app in "${all_apps[@]}"; do
         echo "**** Trying to install $app ..."
         if ! brew list "$app" &>/dev/null; then
@@ -165,13 +171,17 @@ install_linux_app() {
 }
 
 install_brew_linux_apps() {
+    if [ "$no_brew_installation" = true ]; then
+        echo "**** Skipping brew installation ..."
+        return
+    fi
+
     for app in "${brew_linux_apps[@]}"; do
         echo "**** Trying to install $app ..."
         if ! brew list "$app" &>/dev/null; then
             brew install "$app"
         fi
     done
-
 }
 
 install_linux_apps() {
@@ -184,6 +194,8 @@ install_linux_apps() {
     done
 
     install_linux_special_apps
+
+    install_brew_linux_apps
 }
 
 # ---- Environment setup --------------------------------------------
