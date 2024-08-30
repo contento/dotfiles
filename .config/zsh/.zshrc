@@ -128,7 +128,7 @@ setup_additional_tools() {
 
   # Initialize fzf if available
   if type fzf >/dev/null 2>&1; then
-    eval "$(fzf --zsh)"
+    source <(fzf --zsh)
   fi
 
   # Initialize zoxide if available
