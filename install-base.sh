@@ -20,6 +20,7 @@ all_apps=(
     neofetch
     net-tools
     pandoc
+    pfetch
     python3
     python3-pip
     ranger
@@ -209,13 +210,6 @@ setup_environment() {
 
     # ZSH Highlighting
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
-
-    # pfetch
-    git clone https://github.com/dylanaraps/pfetch.git
-    sudo install pfetch/pfetch /usr/local/bin/
-
-    # Remove cloned pfetch directory
-    rm -rf pfetch
 }
 
 # ---- Main logic --------------------------------------------
