@@ -1,6 +1,6 @@
 # dotfiles
 
-Linux dot files
+Linux and Mac OS DOT files
 
 ## References
 
