@@ -2,12 +2,6 @@
 # See:
 #   https://starship.rs/config/
 
-#format = """
-#[╭─user───❯](bold blue) $username
-#[┣─system─❯](bold yellow) $hostname
-#[┣─project❯](bold red) $directory$rust$git_branch$git_state$git_status$package$golang$terraform$docker_context$python$docker_context$nodejs
-#[╰─cmd────❯](bold green)
-#"""
 [username]
 style_user = "green bold"
 style_root = "red bold"
@@ -22,16 +16,16 @@ trim_at = "."
 disabled = false
 
 # Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
 error_symbol = "[✗](bold red)"
 
 #  
 # configure directory
 [directory]
-read_only = " "
+read_only = " 󰌾"
 truncation_length = 10
-truncate_to_repo = true # truncates directory to root folder if in github repo
+truncate_to_repo = true    # truncates directory to root folder if in github repo
 style = "bold italic blue"
 
 [cmd_duration]
@@ -42,6 +36,9 @@ style = "bold italic red"
 
 [aws]
 symbol = "  "
+
+[c]
+symbol = " "
 
 [conda]
 symbol = " "
@@ -74,15 +71,15 @@ symbol = " "
 format = '([\[$all_status$ahead_behind\]]($style) )'
 stashed = "[${count}*](green)"
 modified = "[${count}+](yellow)"
-deleted =  "[${count}-](red)"
-conflicted =  "[${count}~](red)"
+deleted = "[${count}-](red)"
+conflicted = "[${count}~](red)"
 ahead = "⇡${count}"
 behind = "⇣${count}"
 untracked = "[${count}?](blue)"
 staged = "[${count}+](green)"
 
 [git_state]
-style =	"bold red"
+style = "bold red"
 format = "[$state( $progress_current/$progress_total) ]($style)"
 rebase = "rebase"
 merge = "merge"
@@ -131,17 +128,65 @@ symbol = "󰆥 "
 [nix_shell]
 symbol = " "
 
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
 [package]
-symbol = " "
+symbol = "󰏗 "
 
 [perl]
-symbol = " "
+symbol = " "
 
 [php]
 symbol = " "
 
+[pijul_channel]
+symbol = " "
+
 [python]
-symbol = "🐍 "
+symbol = " "
 #pyenv_version_name = true
 format = 'via [${symbol}python (${version} )(\($virtualenv\) )]($style)'
 style = "bold yellow"
@@ -151,17 +196,16 @@ detect_extensions = ["py"]
 version_format = "v${raw}"
 
 [ruby]
-symbol = " "
+symbol = " "
 
 [rust]
-symbol = " "
+symbol = "󱘗 "
 
 [scala]
 symbol = " "
 
-[shlvl]
-symbol = " "
-
 [swift]
-symbol = "ﯣ "
+symbol = " "
 
+[zig]
+symbol = " "
