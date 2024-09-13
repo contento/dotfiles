@@ -32,7 +32,6 @@ syntax on
 filetype plugin indent on
 set term=screen-256color
 set encoding=UTF-8
-" set guifont=Fira\ Code\ Regular\ 11
 set guifont=Delugia\ Regular\ 11
 
 set autoindent
@@ -71,6 +70,11 @@ set t_vb=
 highlight ColorColumn ctermbg=black
 set colorcolumn=80
 
+" Yank without leading characters or newline
+nnoremap <leader>y :normal! "+y`]<CR>
+" Custom paste mapping that handles paste mode
+nnoremap <leader>p :set paste<CR>"+p:set nopaste<CR>
+
 " >>> Vim-Plug
 " # https://github.com/junegunn/vim-plug
 
@@ -89,6 +93,8 @@ let NERDTreeShowHidden=1
 
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Open NERDTree automatically if no files are specified
+autocmd VimEnter * if !argc() | NERDTree | endif
 
 Plug 'ryanoasis/vim-devicons'
 let g:webdevicons_enable_nerdtree = 1
@@ -118,9 +124,18 @@ Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
 let g:syntastic_python_flake8_args = "--ignore=E501 --max-complexity 10"
 
-Plug 'ctrlpvim/ctrlp.vim'
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+" Map <Leader>f to open fzf file search
+nnoremap <leader>f :Files<CR>
+" Map <Leader>b to open fzf buffer search
+nnoremap <leader>b :Buffers<CR>
+" Map <Leader>g to open fzf ripgrep search
+nnoremap <leader>g :Rg<CR>
+" Map <Leader>h to open command history search
+nnoremap <leader>h :History:<CR>
+" Map <Leader>m to search through marks
+nnoremap <leader>m :Marks<CR>
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
