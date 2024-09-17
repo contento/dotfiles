@@ -8,16 +8,22 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSH_PATH="$ZDOTDIR" # Assuming ZSH_PATH and ZDOTDIR are the same
 export UPDATE_ZSH_DAYS=13
 
+# vim/nvim configurations
+if command -v nvim >/dev/null 2>&1; then
+  alias vim="nvim"
+  export VIMINIT="set nocp | source ${XDG_CONFIG_HOME}/nvim/init.lua"
+else
+  alias vim="vim"
+  export VIMINIT="set nocp | source ${XDG_CONFIG_HOME}/vim/vimrc"
+fi
+
 # Default applications
 export PAGER="most"
 export EDITOR="vim"
 export VISUAL="$EDITOR"
 
 # Projects directory
-export PROJECT_HOME="$HOME/projects"
-
-# Vim initialization (See: https://blog.joren.ga/tools/vim-xdg)
-export VIMINIT="set nocp | source ${XDG_CONFIG_HOME}/vim/vimrc"
+export PROJECT_HOME="$HOME/Projects"
 
 # Rust Cargo environment
 CARGO_ENV="$HOME/.cargo/env"

@@ -37,6 +37,7 @@ linux_apps=(
     fzf
     tilix
     vim
+    nvim
 )
 
 brew_linux_apps=(
@@ -44,6 +45,7 @@ brew_linux_apps=(
 
 brew_mac_apps=(
     fzf
+    nvim
 )
 
 mac_cask_brew_apps=(
