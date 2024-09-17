@@ -146,11 +146,6 @@ fi
      start_agent
  fi
 
-# >> add keys
-keychain ~/.ssh/id_rsa-micronotes
-. ~/.keychain/`uname -n`-sh
-# << add keys
-
 # >> Powerline Go
 GOPATH=$HOME/go
 function _update_ps1() {
