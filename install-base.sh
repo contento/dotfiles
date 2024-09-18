@@ -34,17 +34,19 @@ all_apps=(
 )
 
 linux_apps=(
-    fzf
     tilix
     vim
     nvim
 )
 
 brew_linux_apps=(
+    fzf
+    node
 )
 
 brew_mac_apps=(
     fzf
+    node
     nvim
 )
 
