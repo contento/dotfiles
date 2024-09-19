@@ -12,6 +12,7 @@ all_apps=(
     gcc
     golang
     keychain
+    lazygit
     lsd
     lynx
     mc
