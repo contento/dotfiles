@@ -52,7 +52,7 @@ setup_aliases() {
 
   # Tmux aliases
   if type tmux >/dev/null 2>&1; then
-    alias tmux="TERM=screen-256color-bce tmux"
+    # alias tmux="TERM=screen-256color-bce tmux"
     alias tm="tmux new-session"
     alias tl="tmux list-sessions"
     alias ta="tmux attach -t"
