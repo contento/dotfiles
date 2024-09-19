@@ -24,6 +24,7 @@ all_apps=(
     python3
     python3-pip
     ranger
+    ripgrep
     tmux
     tldr
     unzip

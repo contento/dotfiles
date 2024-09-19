@@ -33,6 +33,11 @@ return {
             ["<C-t>"] = trouble_telescope.open,
           },
         },
+        pickers = {
+          find_files = {
+            hidden = true,
+          },
+        },
       },
     })
 
