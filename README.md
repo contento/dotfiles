@@ -3,7 +3,6 @@
 Linux and Mac OS DOT files
 
 ## References
-
 * [wesdoyle/dotfiles](https://github.com/wesdoyle/dotfiles.git)
 * [LazyVim](https://www.lazyvim.org/)
 * [neovim for newbs](https://github.com/cpow/neovim-for-newbs.git)
@@ -37,7 +36,26 @@ logout
 
 ## Installing
 
+### Homebrew installation [OPTIONAL]
+
 ```bash
-chmod +x install-base.sh && ./install-base.sh
-chmod +x .make.sh && ./.make.sh
+# Leaving a machine
+brew leaves > leaves.txt
+
+# Fresh installation
+xargs brew install < leaves.txt
 ```
+
+### Generic
+
+```bash
+# TODO: to be deprecated 
+chmod +x install-base.sh && ./install-base.sh
+```
+
+### Install with stow:
+```bash
+sh stow-all.sh # stow */
+```
+
+

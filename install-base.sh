@@ -26,6 +26,7 @@ all_apps=(
     python3-pip
     ranger
     ripgrep
+    stow
     tmux
     tldr
     unzip
