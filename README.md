@@ -49,7 +49,7 @@ xargs brew install < leaves.txt
 ### Generic
 
 ```bash
-# TODO: to be deprecated 
+# TODO: to be deprecated
 chmod +x install-base.sh && ./install-base.sh
 ```
 

@@ -1,4 +1,5 @@
+**/.DS_Store
 *.log
 **/backup
-**/.DS_Store
 **/pfetch
+**/lazy-lock.json

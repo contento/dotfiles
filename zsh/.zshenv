@@ -1,4 +1,10 @@
-# https://conten.to
+#!/bin/zsh
+
+#   o  o
+# \______/
+#   |
+#      |    https://conten.to
+# --------
 
 # Set XDG_CONFIG_HOME to default if not set (See: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
