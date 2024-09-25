@@ -88,8 +88,7 @@ setup_cat_aliases() {
   local alternatives=("batcat" "bat")
   for alt in "${alternatives[@]}"; do
     if type "$alt" >/dev/null; then
-      alias cat="$alt -pp"
-      alias catt="$alt"
+      alias cat="$alt --plain"
       break
     fi
   done
