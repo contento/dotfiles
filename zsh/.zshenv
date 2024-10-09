@@ -18,10 +18,8 @@ export UPDATE_ZSH_DAYS=13
 local nvim_config="${XDG_CONFIG_HOME}/nvim"
 local nvim_init="${nvim_config}/init.lua"
 if [ -f "${nvim_init}" ]; then
-  alias vim="nvim"
   export VIMINIT="set nocp | source ${nvim_init}"
 else
-  alias vim="vim"
   export VIMINIT="set nocp | source ${XDG_CONFIG_HOME}/vim/vimrc"
 fi
 

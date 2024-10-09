@@ -81,6 +81,8 @@ setup_aliases() {
   alias df='df -h'               # human-readable sizes
   alias free='free -m'           # show sizes in MB
   alias grep='grep --color=auto' # colorize output (good for log files)
+
+  alias vim="nvim"
 }
 
 # Function to find an alternative to 'cat'
