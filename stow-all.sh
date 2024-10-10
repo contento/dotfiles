@@ -1,4 +1,4 @@
-#!/bin/zsh  # This looks like a zsh configuration, so we specify zsh as the interpreter
+#!/bin/zsh
 
 #   o  o
 # \______/
@@ -6,4 +6,4 @@
 #      |    https://conten.to
 # --------
 
-stow */
+stow -D */ && stow */
