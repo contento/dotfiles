@@ -198,7 +198,7 @@ install_linux_special_apps() {
 
 install_linux_app() {
     local app=$1
-    if dpkg -l "$app" &>/dev/null; then
+    if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "install ok installed"; then
         echo "**** $app is already installed" | tee -a "$logfile_path"
     else
         echo "**** Trying 'apt install' $app ..." | tee -a "$logfile_path"
