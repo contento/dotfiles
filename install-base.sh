@@ -4,14 +4,8 @@ logs_folder="$(dirname "${BASH_SOURCE[0]}")/logs"
 mkdir -p "$logs_folder"
 
 logfile_path="$logs_folder/$(basename "${BASH_SOURCE[0]}" .sh)-$(date +%Y-%m-%d).log"
-# echo "$logfile_path"
-# exit 0
 
 all_apps=(
-    neovim
-)
-
-all_apps2=(
     atuin
     bat
     bpytop
