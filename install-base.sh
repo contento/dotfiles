@@ -1,12 +1,23 @@
 #!/bin/bash
-# .make.sh
+
+logs_folder="$(dirname "${BASH_SOURCE[0]}")/logs"
+mkdir -p "$logs_folder"
+
+logfile_path="$logs_folder/$(basename "${BASH_SOURCE[0]}" .sh)-$(date +%Y-%m-%d).log"
+# echo "$logfile_path"
+# exit 0
 
 all_apps=(
+    neovim
+)
+
+all_apps2=(
     atuin
     bat
     bpytop
     cargo
     eza
+    fastfetch
     fd
     fonts-firacode
     gcc
@@ -19,6 +30,7 @@ all_apps=(
     most
     nala
     neofetch
+    neovim
     net-tools
     pandoc
     pfetch
@@ -30,6 +42,7 @@ all_apps=(
     tmux
     tldr
     unzip
+    vim
     wakeonlan
     w3m
     yazi
@@ -38,8 +51,6 @@ all_apps=(
 
 linux_apps=(
     tilix
-    vim
-    nvim
 )
 
 brew_linux_apps=(
@@ -50,7 +61,6 @@ brew_linux_apps=(
 brew_mac_apps=(
     fzf
     node
-    nvim
 )
 
 mac_cask_brew_apps=(
@@ -58,19 +68,31 @@ mac_cask_brew_apps=(
     font-delugia-complete
     font-fira-code
     font-fira-code-nerd-font
+    wezterm
 )
 
 # --- Parse command-line arguments ----------------
 
-# check for no_brew flag. If set, do not install brew
 no_brew_installation=false
+no_special_linux=false
+no_terminal=false
 
 for arg in "$@"; do
     case $arg in
     --no-brew)
-        # Step 2: Set the flag if --no-brew is passed
+        # Set the flag if --no-brew is passed
         no_brew_installation=true
         shift # Remove --no-brew from processing
+        ;;
+    --no-special-linux)
+        # Set the flag if --no-special-linux is passed
+        no_special_linux=true
+        shift # Remove --no-special-linux from processing
+        ;;
+    --no-terminal)
+        # Set the flag if --no-terminal is passed
+        no_terminal=true
+        shift # Remove --no-terminal from processing
         ;;
     *)
         shift # Skip unknown options
@@ -82,11 +104,11 @@ done
 
 install_brew() {
     if [ "$no_brew_installation" = false ]; then
-        echo "**** Installing brew ..."
+        echo "**** Installing brew ..." | tee -a "$logfile_path"
     else
-        echo "**** Skipping brew installation ..."
+        echo "**** Skipping brew installation ..." | tee -a "$logfile_path"
         if [[ "$OSTYPE" == "darwin"* ]]; then
-            echo "brew is required on Mac"
+            echo "brew is required on Mac" | tee -a "$logfile_path"
             exit 1
         fi
         return
@@ -94,13 +116,13 @@ install_brew() {
 
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Linux
-        $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" | tee -a "$logfile_path"
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" | tee -a "$logfile_path"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
         # Mac OS
-        $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        $(which bash) -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" | tee -a "$logfile_path"
     else
-        echo "Unsupported $OSTYPE for brew installation"
+        echo "Unsupported $OSTYPE for brew installation" | tee -a "$logfile_path"
     fi
 }
 
@@ -108,27 +130,31 @@ install_brew() {
 
 install_mac_brew_apps() {
     if [ "$no_brew_installation" = true ]; then
-        echo "**** Skipping brew installation ..."
+        echo "**** Skipping brew installation ..." | tee -a "$logfile_path"
         return
     fi
 
     for app in "${all_apps[@]}"; do
-        echo "**** Trying to install $app ..."
-        if ! brew list "$app" &>/dev/null; then
+        if brew list "$app" &>/dev/null; then
+            echo "**** $app is already installed" | tee -a "$logfile_path"
+        else
+            echo "**** Trying 'brew install $app' ..." | tee -a "$logfile_path"
             brew install "$app"
         fi
     done
 
     for app in "${brew_mac_apps[@]}"; do
-        echo "**** Trying to install $app ..."
-        if ! brew list "$app" &>/dev/null; then
+        if brew list "$app" &>/dev/null; then
+            echo "**** $app is already installed" | tee -a "$logfile_path"
+        else
+            echo "**** Trying 'brew install $app' ..." | tee -a "$logfile_path"
             brew install "$app"
         fi
     done
 
     brew tap homebrew/cask-fonts
     for app in "${mac_cask_brew_apps[@]}"; do
-        echo "**** Trying to install $app ..."
+        echo "**** Trying 'brew --cask install $app' ..." | tee -a "$logfile_path"
         if ! brew list "$app" &>/dev/null; then
             brew install --cask "$app"
         fi
@@ -138,7 +164,12 @@ install_mac_brew_apps() {
 # -- Linux --------------------------------------------
 
 install_linux_special_apps() {
-    echo "installing special apps"
+    if [ "$no_special_linux" = true ]; then
+        echo "**** Skipping special Linux apps installation ..." | tee -a "$logfile_path"
+        return
+    fi
+
+    echo "installing special apps" | tee -a "$logfile_path"
 
     # lf ========================================
     local appv=r32
@@ -146,32 +177,34 @@ install_linux_special_apps() {
 
     local download_file="lf-linux-${appcpu}64.tar.gz"
 
-    wget "https://github.com/gokcehan/lf/releases/download/${appv}/${download_file}" -O "$download_file"
-    tar xvf "$download_file"
-    chmod +x lf
-    sudo mv lf /usr/local/bin
+    wget "https://github.com/gokcehan/lf/releases/download/${appv}/${download_file}" -O "$download_file" | tee -a "$logfile_path"
+    tar xvf "$download_file" | tee -a "$logfile_path"
+    chmod +x lf | tee -a "$logfile_path"
+    sudo mv lf /usr/local/bin | tee -a "$logfile_path"
 
-    rm "$download_file"
+    rm "$download_file" | tee -a "$logfile_path"
 
     # delugia font ========================================
     local appv="v2111.01.2"
     local target="delugia-complete"
     local download_file="${target}.zip"
-    wget "https://github.com/adam7/delugia-code/releases/download/${appv}/${download_file}" -O "$download_file"
-    unzip -o "$download_file"
-    sudo rm -r /usr/share/fonts/"${target}"
-    sudo mv -f "${target}" /usr/share/fonts/
-    sudo fc-cache -f -v
-    rm "$download_file"
+    wget "https://github.com/adam7/delugia-code/releases/download/${appv}/${download_file}" -O "$download_file" | tee -a "$logfile_path"
+    unzip -o "$download_file" | tee -a "$logfile_path"
+    sudo rm -r /usr/share/fonts/"${target}" | tee -a "$logfile_path"
+    sudo mv -f "${target}" /usr/share/fonts/ | tee -a "$logfile_path"
+    sudo fc-cache -f -v | tee -a "$logfile_path"
+    rm "$download_file" | tee -a "$logfile_path"
 }
 
 install_linux_app() {
     local app=$1
-    echo "**** Trying to install $app ..."
-    if ! dpkg -l "$app" &>/dev/null; then
+    if dpkg -l "$app" &>/dev/null; then
+        echo "**** $app is already installed" | tee -a "$logfile_path"
+    else
+        echo "**** Trying 'apt install' $app ..." | tee -a "$logfile_path"
         if ! sudo apt install -y "$app"; then
             if [ "$no_brew_installation" = false ]; then
-                echo "**** apt failed, trying to install $app with brew..."
+                echo "**** apt failed, trying 'brew install $app' with brew..." | tee -a "$logfile_path"
                 brew install "$app"
             fi
         fi
@@ -180,13 +213,15 @@ install_linux_app() {
 
 install_brew_linux_apps() {
     if [ "$no_brew_installation" = true ]; then
-        echo "**** Skipping brew installation ..."
+        echo "**** Skipping brew installation ..." | tee -a "$logfile_path"
         return
     fi
 
     for app in "${brew_linux_apps[@]}"; do
-        echo "**** Trying to install $app ..."
-        if ! brew list "$app" &>/dev/null; then
+        echo "**** Trying to install $app ..." | tee -a "$logfile_path"
+        if brew list "$app" &>/dev/null; then
+            echo "**** $app is already installed" | tee -a "$logfile_path"
+        else
             brew install "$app"
         fi
     done
@@ -208,15 +243,20 @@ install_linux_apps() {
 
 # ---- Environment setup --------------------------------------------
 
-setup_environment() {
+setup_terminal() {
+    if [[ "$no_terminal" = true ]]; then
+        echo "**** Skipping terminal setup ..." | tee -a "$logfile_path"
+        return
+    fi
+
     # Starship
-    yes | curl -fsSL https://starship.rs/install.sh | sh -s -- --bin-dir /usr/local/bin --force
+    yes | curl -fsSL https://starship.rs/install.sh | sh -s -- --bin-dir /usr/local/bin --force | tee -a "$logfile_path"
 
     # ZSH Auto Suggestions
-    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.config/zsh/zsh-autosuggestions | tee -a "$logfile_path"
 
     # ZSH Highlighting
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/zsh/zsh-highlighting | tee -a "$logfile_path"
 }
 
 # ---- Main logic --------------------------------------------
@@ -228,10 +268,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     install_mac_brew_apps
 else
-    echo "Unsupported $OSTYPE for brew installation"
+    echo "Unsupported $OSTYPE for brew installation" | tee -a "$logfile_path"
     exit 1
 fi
 
-setup_environment
-
-# ------------------------------------------------------------
+setup_terminal
