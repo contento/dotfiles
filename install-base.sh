@@ -122,7 +122,7 @@ install_brew() {
 
 # ---- Mac --------------------------------------------
 
-install_mac_brew_apps() {
+install_mac_apps() {
     if [ "$no_brew_installation" = true ]; then
         echo "**** Skipping brew installation ..." | tee -a "$logfile_path"
         return
@@ -153,6 +153,10 @@ install_mac_brew_apps() {
             brew install --cask "$app"
         fi
     done
+
+    # Install tmux plugin manager
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 }
 
 # -- Linux --------------------------------------------
@@ -188,6 +192,9 @@ install_linux_special_apps() {
     sudo mv -f "${target}" /usr/share/fonts/ | tee -a "$logfile_path"
     sudo fc-cache -f -v | tee -a "$logfile_path"
     rm "$download_file" | tee -a "$logfile_path"
+
+    # Install tmux plugin manager
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
 
 install_linux_app() {
@@ -260,7 +267,7 @@ install_brew
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     install_linux_apps
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    install_mac_brew_apps
+    install_mac_apps
 else
     echo "Unsupported $OSTYPE for brew installation" | tee -a "$logfile_path"
     exit 1
