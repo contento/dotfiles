@@ -32,9 +32,9 @@ setup_history() {
 
 # Function to set up aliases
 setup_aliases() {
-  # lsd aliases
-  if type lsd >/dev/null; then
-    alias ls='lsd'
+  # eza aliases
+  if type eza >/dev/null; then
+    alias ls='eza --color=always --git --icons=always'
   fi
 
   alias l='ls -l'
@@ -52,16 +52,12 @@ setup_aliases() {
 
   # Tmux aliases
   if type tmux >/dev/null 2>&1; then
-    # alias tmux="TERM=screen-256color-bce tmux"
-    alias tm="tmux new-session"
+    alias t="tmux"
+    alias tm="tmux new-session -s"
     alias tl="tmux list-sessions"
+    alias tk="tmux kill-session -t"
+    alias tks="tmux kill-server"
     alias ta="tmux attach -t"
-  fi
-
-  # Eza - lz aliases
-  # Check if eza is installed before creating alias
-  if type eza >/dev/null 2>&1; then
-    alias lz="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
   fi
 
   # xoxide aliases
@@ -83,6 +79,7 @@ setup_aliases() {
   alias grep='grep --color=auto' # colorize output (good for log files)
 
   alias vim="nvim"
+  alias v="nvim"
 }
 
 # Function to find an alternative to 'cat'
