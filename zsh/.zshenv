@@ -25,7 +25,7 @@ fi
 
 # Default applications
 export PAGER="most"
-export EDITOR="vim"
+export EDITOR="nvim"
 export VISUAL="$EDITOR"
 
 # Projects directory
