@@ -34,8 +34,6 @@ keymap.set("n", "<M-j>", '<Cmd>lua require("tmux").resize_bottom()<CR>', { silen
 keymap.set("n", "<M-k>", '<Cmd>lua require("tmux").resize_top()<CR>', { silent = true })
 keymap.set("n", "<M-l>", '<Cmd>lua require("tmux").resize_right()<CR>', { silent = true })
 
-local set_keymap = vim.api.nvim_set_keymap
-
 -- Split windows
 keymap.set("n", "ss", ":vsplit<Return>", opts)
 keymap.set("n", "sv", ":split<Return>", opts)
@@ -45,34 +43,11 @@ keymap.set("n", "te", ":tabedit", opts)
 keymap.set("n", "<tab>", ":tabnext<Return>", opts)
 keymap.set("n", "<s-tab>", ":tabprev<Return>", opts)
 
--- package-info keymaps
-set_keymap(
-  "n",
-  "<leader>cpt",
-  "<cmd>lua require('package-info').toggle()<cr>",
-  { silent = true, noremap = true, desc = "Toggle" }
-)
-set_keymap(
-  "n",
-  "<leader>cpd",
-  "<cmd>lua require('package-info').delete()<cr>",
-  { silent = true, noremap = true, desc = "Delete package" }
-)
-set_keymap(
-  "n",
-  "<leader>cpu",
-  "<cmd>lua require('package-info').update()<cr>",
-  { silent = true, noremap = true, desc = "Update package" }
-)
-set_keymap(
-  "n",
-  "<leader>cpi",
-  "<cmd>lua require('package-info').install()<cr>",
-  { silent = true, noremap = true, desc = "Install package" }
-)
-set_keymap(
-  "n",
-  "<leader>cpc",
-  "<cmd>lua require('package-info').change_version()<cr>",
-  { silent = true, noremap = true, desc = "Change package version" }
-)
+-- telescope
+
+local function set_telescope_keymap(mode, key, action, desc)
+  -- vim.keymap.set(mode, key, action, { silent = true, noremap = true, desc = desc })
+  vim.keymap.set(mode, key, action, { silent = true, noremap = true, desc = desc })
+end
+
+set_telescope_keymap("n", "<C-p>", "<cmd>lua require('telescope.builtin').find_files()<cr>", "Find files")
