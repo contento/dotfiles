@@ -17,20 +17,16 @@ all_apps=(
     gcc
     golang
     keychain
+    kitty
     lazygit
-    lsd
     lynx
     mc
     most
     nala
-    neofetch
     neovim
-    net-tools
     pandoc
-    pfetch
     python3
     python3-pip
-    ranger
     ripgrep
     stow
     tmux
