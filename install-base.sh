@@ -8,7 +8,6 @@ logfile_path="$logs_folder/$(basename "${BASH_SOURCE[0]}" .sh)-$(date +%Y-%m-%d)
 all_apps=(
     atuin
     bat
-    bpytop
     cargo
     eza
     fastfetch
@@ -44,11 +43,13 @@ linux_apps=(
 )
 
 brew_linux_apps=(
+    bpytop
     fzf
     node
 )
 
 brew_mac_apps=(
+    bpytop
     fzf
     node
 )
