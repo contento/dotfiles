@@ -21,7 +21,6 @@ all_apps=(
     lynx
     mc
     most
-    nala
     neovim
     pandoc
     portal
@@ -240,6 +239,44 @@ install_linux_apps() {
     install_brew_linux_apps
 }
 
+# Function to install yay if not already installed
+install_yay() {
+    if ! command -v yay &> /dev/null; then
+        echo "Installing yay..."
+        sudo pacman -S --needed git base-devel
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si
+        cd ..
+        rm -rf yay
+    fi
+}
+
+# Function to install packages using yay
+install_with_yay() {
+    for app in "$@"; do
+        if ! yay -S --noconfirm "$app"; then
+            echo "Failed to install $app with yay, trying with brew..."
+            brew install "$app"
+        fi
+    done
+}
+
+# Function to install packages using apt
+install_with_apt() {
+    sudo apt update
+    for app in "$@"; do
+        sudo apt install -y "$app"
+    done
+}
+
+# Function to install packages using brew
+install_with_brew() {
+    for app in "$@"; do
+        brew install "$app"
+    done
+}
+
 # ---- Environment setup --------------------------------------------
 
 setup_terminal() {
@@ -272,3 +309,21 @@ else
 fi
 
 setup_terminal
+
+# Detect the operating system and install packages accordingly
+if [[ -f /etc/arch-release ]]; then
+    # Arch Linux
+    install_yay
+    install_with_yay "${all_apps[@]}"
+    install_with_yay "${linux_apps[@]}"
+    install_with_brew "${brew_linux_apps[@]}"
+elif [[ -f /etc/debian_version ]]; then
+    # Debian-based distributions
+    install_with_apt "${all_apps[@]}"
+    install_with_apt "${linux_apps[@]}"
+    install_with_apt nala
+    install_with_brew "${brew_linux_apps[@]}"
+else
+    echo "Unsupported operating system."
+    exit 1
+fi
