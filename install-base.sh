@@ -24,6 +24,7 @@ all_apps=(
     nala
     neovim
     pandoc
+    portal
     python3
     python3-pip
     ripgrep
