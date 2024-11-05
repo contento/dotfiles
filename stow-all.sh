@@ -19,5 +19,8 @@ exclude_pattern=$(printf "|%s" "${exclude_dirs[@]}")
 exclude_pattern=${exclude_pattern:1} # Remove the leading '|'
 
 packages=$(ls -d */ | grep -Ev "^(${exclude_pattern})/$" | sed 's:/*$::')
-stow --verbose=3 $packages
+
+for package in $packages; do
+    stow --verbose=3 $package
+done
 
