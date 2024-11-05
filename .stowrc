@@ -1,5 +1,1 @@
 --ignore='\.DS_Store'
---ignore='\.vscode'
---ignore='backup'
---ignore='logs'
---ignore='.*\.log'

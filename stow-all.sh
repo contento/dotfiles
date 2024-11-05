@@ -6,4 +6,18 @@
 #      |    https://conten.to
 # --------
 
-stow -D --verbose=2 */ && stow --verbose=2 */
+stow -D --verbose=3 */
+
+exclude_dirs=(
+    'logs'
+    'backup'
+    'temp'
+)
+
+# Build the exclusion pattern
+exclude_pattern=$(printf "|%s" "${exclude_dirs[@]}")
+exclude_pattern=${exclude_pattern:1} # Remove the leading '|'
+
+packages=$(ls -d */ | grep -Ev "^(${exclude_pattern})/$")
+
+stow --verbose=3 $packages
