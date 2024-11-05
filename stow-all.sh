@@ -6,4 +6,4 @@
 #      |    https://conten.to
 # --------
 
-stow -D */ && stow */
+stow -D --verbose=2 */ && stow --verbose=2 */
