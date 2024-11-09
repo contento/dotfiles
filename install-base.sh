@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/bin/zsh
+
+#   o  o
+# \______/
+#   |
+#      |    https://conten.to
+# --------
 
 logs_folder="$(dirname "${BASH_SOURCE[0]}")/logs"
 mkdir -p "$logs_folder"
