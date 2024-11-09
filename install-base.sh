@@ -314,8 +314,6 @@ else
     exit 1
 fi
 
-setup_terminal
-
 # Detect the operating system and install packages accordingly
 if [[ -f /etc/arch-release ]]; then
     # Arch Linux
@@ -333,3 +331,5 @@ else
     echo "Unsupported operating system."
     exit 1
 fi
+
+setup_terminal
