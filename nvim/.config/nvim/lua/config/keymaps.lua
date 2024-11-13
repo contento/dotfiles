@@ -12,17 +12,12 @@ keymap.set("n", "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>", { silent = true })
 keymap.set("n", "<C-\\>", "<Cmd>NvimTmuxNavigateLastActive<CR>", { silent = true })
 keymap.set("n", "<C-Space>", "<Cmd>NvimTmuxNavigateNavigateNext<CR>", { silent = true })
 
--- Borderless terminal with 90% opacity
 vim.keymap.set("n", "<C-/>", function()
-  local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-  if is_windows then
-    Util.terminal("powershell.exe", { border = "none", opacity = 90 })
-  else
-    Util.terminal(nil, { border = "none", opacity = 90 })
-  end
-end, { desc = "Term with no border and 90% opacity" })
+  local is_windows = package.config:sub(1, 1) == "\\"
+  local terminal_cmd = is_windows and "powershell.exe" or nil
+  Util.terminal(terminal_cmd, { border = "none", opacity = 0.9 })
+end, { desc = "Toggle terminal with no border and 90% opacity" })
 
--- Borderless lazygit
 vim.keymap.set("n", "<leader>gg", function()
   Util.terminal({ "lazygit" }, { cwd = Util.root(), esc_esc = false, ctrl_hjkl = false, border = "none" })
 end, { desc = "Lazygit (root dir)" })
@@ -51,7 +46,6 @@ keymap.set("n", "<s-tab>", ":tabprev<Return>", opts)
 -- telescope
 
 local function set_telescope_keymap(mode, key, action, desc)
-  -- vim.keymap.set(mode, key, action, { silent = true, noremap = true, desc = desc })
   vim.keymap.set(mode, key, action, { silent = true, noremap = true, desc = desc })
 end
 
