@@ -11,7 +11,7 @@ mkdir -p "$logs_folder"
 
 logfile_path="$logs_folder/$(basename "${BASH_SOURCE[0]}" .sh)-$(date +%Y-%m-%d).log"
 
-all_apps=(
+common_apps=(
     atuin
     bat
     cargo
@@ -27,7 +27,6 @@ all_apps=(
     lynx
     mc
     most
-    neovim
     pandoc
     portal
     python3
@@ -45,18 +44,19 @@ all_apps=(
 )
 
 linux_apps=(
-    tilix
 )
 
 brew_linux_apps=(
     bpytop
     fzf
+    neovim
     node
 )
 
 brew_mac_apps=(
     bpytop
     fzf
+    neovim
     node
 )
 
@@ -71,7 +71,6 @@ mac_cask_brew_apps=(
 # --- Parse command-line arguments ----------------
 
 no_brew_installation=false
-no_special_linux=false
 no_terminal=false
 
 for arg in "$@"; do
@@ -81,12 +80,7 @@ for arg in "$@"; do
         no_brew_installation=true
         shift # Remove --no-brew from processing
         ;;
-    --no-special-linux)
-        # Set the flag if --no-special-linux is passed
-        no_special_linux=true
-        shift # Remove --no-special-linux from processing
-        ;;
-    --no-terminal)
+   --no-terminal)
         # Set the flag if --no-terminal is passed
         no_terminal=true
         shift # Remove --no-terminal from processing
@@ -97,7 +91,34 @@ for arg in "$@"; do
     esac
 done
 
-# ---- Brew --------------------------------------------
+# --- Util ------------------------
+
+install_tmux_plugin_manager() {
+    echo "**** Installing tmux plugin manager ..." | tee -a "$logfile_path"
+
+    if ! command -v tmux &> /dev/null; then
+        echo "tmux is not installed. Please install tmux first." | tee -a "$logfile_path"
+        return 1
+    fi
+
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+}
+
+install_yay() {
+    if [[ ! -f /etc/arch-release ]]; then
+        return
+    fi
+
+    if ! command -v yay &> /dev/null; then
+        echo "Installing yay..."
+        sudo pacman -S --needed git base-devel
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si
+        cd ..
+        rm -rf yay
+    fi
+}
 
 install_brew() {
     if [ "$no_brew_installation" = false ]; then
@@ -123,116 +144,88 @@ install_brew() {
     fi
 }
 
-# ---- Mac --------------------------------------------
+install_with_yay() {
+    local app=$1
+    echo "**** Checking if $app is already installed ..." | tee -a "$logfile_path"
 
-install_mac_apps() {
-    if [ "$no_brew_installation" = true ]; then
-        echo "**** Skipping brew installation ..." | tee -a "$logfile_path"
-        return
+    if pacman -Qs "$app" > /dev/null; then
+        echo "$app is already installed." | tee -a "$logfile_path"
+        return 0
     fi
 
-    for app in "${all_apps[@]}"; do
-        if brew list "$app" &>/dev/null; then
-            echo "**** $app is already installed" | tee -a "$logfile_path"
-        else
-            echo "**** Trying 'brew install $app' ..." | tee -a "$logfile_path"
+    echo "**** Trying 'yay install $app' ..." | tee -a "$logfile_path"
+    if ! yay -S --noconfirm "$app"; then
+        echo "Failed to install with yay trying with brew..." | tee -a "$logfile_path"
+        brew install "$app"
+    fi
+}
+
+install_with_apt() {
+    local app=$1
+    echo "**** Checking if $app is already installed ..." | tee -a "$logfile_path"
+
+    if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "install ok installed"; then
+        echo "**** $app is already installed" | tee -a "$logfile_path"
+    else
+        echo "**** Trying 'apt install $app' ..." | tee -a "$logfile_path"
+        if ! sudo apt install -y "$app"; then
+            echo "Failed to install $app with apt, trying with brew..." | tee -a "$logfile_path"
             brew install "$app"
         fi
+    fi
+}
+
+install_with_brew_formula() {
+    local app=$1
+    echo "**** Trying 'brew install $app' ..." | tee -a "$logfile_path"
+    if brew list "$app" &>/dev/null; then
+       echo "**** $app is already installed" | tee -a "$logfile_path"
+    else
+       brew install "$app"
+    fi
+}
+
+install_with_brew_cask() {
+    local app=$1
+    echo "**** Trying 'brew --cask install $app' ..." | tee -a "$logfile_path"
+    if brew list "$app" &>/dev/null; then
+       echo "**** $app is already installed" | tee -a "$logfile_path"
+    else
+        brew install --cask "$app"
+    fi
+}
+
+# -- Mac ----------------------------------------------
+
+install_mac_apps() {
+    for app in "${common_apps[@]}"; do
+        install_with_brew_formula "$app"
     done
 
     for app in "${brew_mac_apps[@]}"; do
-        if brew list "$app" &>/dev/null; then
-            echo "**** $app is already installed" | tee -a "$logfile_path"
-        else
-            echo "**** Trying 'brew install $app' ..." | tee -a "$logfile_path"
-            brew install "$app"
-        fi
+        install_with_brew_formula "$app"
     done
 
-    brew tap homebrew/cask-fonts
     for app in "${mac_cask_brew_apps[@]}"; do
-        echo "**** Trying 'brew --cask install $app' ..." | tee -a "$logfile_path"
-        if ! brew list "$app" &>/dev/null; then
-            brew install --cask "$app"
-        fi
+        install_with_brew_cask "$app"
     done
-
-    # Install tmux plugin manager
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
 }
 
 # -- Linux --------------------------------------------
 
-install_linux_special_apps() {
-    if [ "$no_special_linux" = true ]; then
-        echo "**** Skipping special Linux apps installation ..." | tee -a "$logfile_path"
-        return
-    fi
-
-    echo "installing special apps" | tee -a "$logfile_path"
-
-    # lf ========================================
-    local appv=r32
-    local appcpu=amd # or arm
-
-    local download_file="lf-linux-${appcpu}64.tar.gz"
-
-    wget "https://github.com/gokcehan/lf/releases/download/${appv}/${download_file}" -O "$download_file" | tee -a "$logfile_path"
-    tar xvf "$download_file" | tee -a "$logfile_path"
-    chmod +x lf | tee -a "$logfile_path"
-    sudo mv lf /usr/local/bin | tee -a "$logfile_path"
-
-    rm "$download_file" | tee -a "$logfile_path"
-
-    # delugia font ========================================
-    local appv="v2111.01.2"
-    local target="delugia-complete"
-    local download_file="${target}.zip"
-    wget "https://github.com/adam7/delugia-code/releases/download/${appv}/${download_file}" -O "$download_file" | tee -a "$logfile_path"
-    unzip -o "$download_file" | tee -a "$logfile_path"
-    sudo rm -r /usr/share/fonts/"${target}" | tee -a "$logfile_path"
-    sudo mv -f "${target}" /usr/share/fonts/ | tee -a "$logfile_path"
-    sudo fc-cache -f -v | tee -a "$logfile_path"
-    rm "$download_file" | tee -a "$logfile_path"
-
-    # Install tmux plugin manager
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-}
-
 install_linux_app() {
     local app=$1
-    if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "install ok installed"; then
-        echo "**** $app is already installed" | tee -a "$logfile_path"
-    else
-        echo "**** Trying 'apt install' $app ..." | tee -a "$logfile_path"
-        if ! sudo apt install -y "$app"; then
-            if [ "$no_brew_installation" = false ]; then
-                echo "**** apt failed, trying 'brew install $app' with brew..." | tee -a "$logfile_path"
-                brew install "$app"
-            fi
-        fi
-    fi
-}
 
-install_brew_linux_apps() {
-    if [ "$no_brew_installation" = true ]; then
-        echo "**** Skipping brew installation ..." | tee -a "$logfile_path"
-        return
+    if [[ -f /etc/arch-release ]]; then
+        install_with_yay "$app"
+    elif [[ -f /etc/debian_version ]]; then
+        install_with_apt "$app"
     fi
 
-    for app in "${brew_linux_apps[@]}"; do
-        echo "**** Trying to install $app ..." | tee -a "$logfile_path"
-        if brew list "$app" &>/dev/null; then
-            echo "**** $app is already installed" | tee -a "$logfile_path"
-        else
-            brew install "$app"
-        fi
-    done
 }
 
 install_linux_apps() {
-    for app in "${all_apps[@]}"; do
+    for app in "${common_apps[@]}"; do
         install_linux_app "$app"
     done
 
@@ -240,46 +233,8 @@ install_linux_apps() {
         install_linux_app "$app"
     done
 
-    install_linux_special_apps
-
-    install_brew_linux_apps
-}
-
-# Function to install yay if not already installed
-install_yay() {
-    if ! command -v yay &> /dev/null; then
-        echo "Installing yay..."
-        sudo pacman -S --needed git base-devel
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si
-        cd ..
-        rm -rf yay
-    fi
-}
-
-# Function to install packages using yay
-install_with_yay() {
-    for app in "$@"; do
-        if ! yay -S --noconfirm "$app"; then
-            echo "Failed to install $app with yay, trying with brew..."
-            brew install "$app"
-        fi
-    done
-}
-
-# Function to install packages using apt
-install_with_apt() {
-    sudo apt update
-    for app in "$@"; do
-        sudo apt install -y "$app"
-    done
-}
-
-# Function to install packages using brew
-install_with_brew() {
-    for app in "$@"; do
-        brew install "$app"
+    for app in "${linux_brew_apps[@]}"; do
+        install_with_brew_formula "$app"
     done
 }
 
@@ -303,7 +258,11 @@ setup_terminal() {
 
 # ---- Main logic --------------------------------------------
 
+install_yay
+
 install_brew
+
+install_tmux_plugin_manager
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     install_linux_apps
@@ -311,24 +270,6 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     install_mac_apps
 else
     echo "Unsupported $OSTYPE for brew installation" | tee -a "$logfile_path"
-    exit 1
-fi
-
-# Detect the operating system and install packages accordingly
-if [[ -f /etc/arch-release ]]; then
-    # Arch Linux
-    install_yay
-    install_with_yay "${all_apps[@]}"
-    install_with_yay "${linux_apps[@]}"
-    install_with_brew "${brew_linux_apps[@]}"
-elif [[ -f /etc/debian_version ]]; then
-    # Debian-based distributions
-    install_with_apt "${all_apps[@]}"
-    install_with_apt "${linux_apps[@]}"
-    install_with_apt nala
-    install_with_brew "${brew_linux_apps[@]}"
-else
-    echo "Unsupported operating system."
     exit 1
 fi
 
