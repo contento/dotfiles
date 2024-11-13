@@ -12,10 +12,15 @@ keymap.set("n", "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>", { silent = true })
 keymap.set("n", "<C-\\>", "<Cmd>NvimTmuxNavigateLastActive<CR>", { silent = true })
 keymap.set("n", "<C-Space>", "<Cmd>NvimTmuxNavigateNavigateNext<CR>", { silent = true })
 
--- Borderless terminal
+-- Borderless terminal with 90% opacity
 vim.keymap.set("n", "<C-/>", function()
-  Util.terminal(nil, { border = "none" })
-end, { desc = "Term with border" })
+  local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
+  if is_windows then
+    Util.terminal("powershell.exe", { border = "none", opacity = 90 })
+  else
+    Util.terminal(nil, { border = "none", opacity = 90 })
+  end
+end, { desc = "Term with no border and 90% opacity" })
 
 -- Borderless lazygit
 vim.keymap.set("n", "<leader>gg", function()
