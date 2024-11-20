@@ -26,6 +26,7 @@ common_apps=(
     kitty
     lazygit
     lynx
+    make
     mc
     most
     pandoc
@@ -232,7 +233,7 @@ install_linux_apps() {
         install_linux_app "$app"
     done
 
-    for app in "${linux_brew_apps[@]}"; do
+    for app in "${brew_linux_apps[@]}"; do
         install_with_brew_formula "$app"
     done
 }
