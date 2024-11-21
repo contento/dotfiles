@@ -60,7 +60,6 @@ require("lazy").setup({
         "tohtml",
         "tutor",
         "zipPlugin",
-        "avante",
       },
     },
   },
