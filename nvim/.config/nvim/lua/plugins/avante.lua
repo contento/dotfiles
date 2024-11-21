@@ -1,5 +1,6 @@
+local enable_avante = false
 return {
-  {
+  enable_avante and {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
