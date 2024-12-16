@@ -4,9 +4,9 @@ Linux and Mac OS DOT files
 
 ## References
 
-- [wesdoyle/dotfiles](https://github.com/wesdoyle/dotfiles.git)
-- [LazyVim](https://www.lazyvim.org/)
-- [neovim for newbs](https://github.com/cpow/neovim-for-newbs.git)
+-   [wesdoyle/dotfiles](https://github.com/wesdoyle/dotfiles.git)
+-   [LazyVim](https://www.lazyvim.org/)
+-   [neovim for newbs](https://github.com/cpow/neovim-for-newbs.git)
 
 ## Notes
 
@@ -53,7 +53,7 @@ xargs brew install < leaves.txt
 chmod +x install-base.sh && ./install-base.sh
 ```
 
-### Install with stow
+### Adjust $HOME/.config with stow
 
 ```bash
 sh stow-all.sh # stow */
