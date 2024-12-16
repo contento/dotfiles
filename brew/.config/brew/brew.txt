@@ -8,6 +8,7 @@ fastfetch
 fd
 fzf
 gcc
+git-filter-repo
 go
 hugo
 keychain
@@ -22,6 +23,7 @@ neovim
 pandoc
 perl
 pfetch
+poppler
 portal
 ranger
 ripgrep
@@ -37,5 +39,6 @@ unzip
 vim
 w3m
 wakeonlan
+wget
 yazi
 zoxide
