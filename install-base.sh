@@ -30,6 +30,7 @@ common_apps=(
     mc
     most
     pandoc
+    pfetch-rs
     portal
     python3
     python3-pip

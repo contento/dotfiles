@@ -152,12 +152,12 @@ setup_additional_tools_mac() {
 
 # Function to show system info
 show_system_info() {
-  if type fastfetch >/dev/null; then
+  if type pfetch >/dev/null; then
+    pfetch
+  elif type fastfetch >/dev/null; then
     fastfetch --config $XDG_CONFIG_HOME/fastfetch/config.jsonc
-
   fi
 }
-
 # Execute all setup functions
 setup_zsh_options
 setup_history
