@@ -105,6 +105,10 @@ setup_path() {
   cuda_version=12
   [ -d "/usr/local/cuda-$cuda_version/bin" ] && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
   [ -d "/usr/local/cuda-$cuda_version/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
+
+  # dotnet
+  export DOTNET_ROOT=$HOME/.dotnet
+  [ -d $DOTNET_ROOT ] && export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 }
 
 # Function to set up additional tools
