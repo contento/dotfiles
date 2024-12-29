@@ -22,6 +22,7 @@ common_apps=(
     fonts-firacode
     gcc
     golang
+    go
     keychain
     kitty
     lazygit
@@ -57,6 +58,7 @@ brew_linux_apps=(
 
 brew_mac_apps=(
     fzf
+    go
     neovim
     node
 )
@@ -66,7 +68,6 @@ mac_cask_brew_apps=(
     font-delugia-complete
     font-fira-code
     font-fira-code-nerd-font
-    wezterm
 )
 
 # --- Parse command-line arguments ----------------
