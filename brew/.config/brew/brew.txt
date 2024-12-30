@@ -22,7 +22,7 @@ neofetch
 neovim
 pandoc
 perl
-pfetch
+pfetch-rs
 poppler
 portal
 ranger
