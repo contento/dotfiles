@@ -23,6 +23,7 @@ common_apps=(
     gcc
     golang
     go
+    ghostty
     keychain
     kitty
     lazygit
