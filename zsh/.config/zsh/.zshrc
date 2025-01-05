@@ -30,38 +30,15 @@ setup_history() {
   export HISTIGNORE='&:*:(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)'
 }
 
-# Function to set up aliases
 setup_aliases() {
-  # eza aliases
-  if type eza >/dev/null; then
-    alias ls='eza --color=always --git --icons=always'
-  fi
+  setup_git_aliases
 
-  alias l='ls -l'
-  alias la='ls -a'
-  alias lla='ls -la'
-  alias lt='ls --tree'
+  setup_eza_aliases
 
-  # Python aliases
-  if type python3 >/dev/null 2>&1; then
-    alias python='python3'
-  fi
-  if type pip3 >/dev/null 2>&1; then
-    alias pip='pip3'
-  fi
+  setup_python_aliases
 
-  # Tmux aliases
-  if type tmux >/dev/null 2>&1; then
-    alias t="tmux"
-    alias tm="tmux new-session -s"
-    alias tl="tmux list-sessions"
-    alias tk="tmux kill-session -t"
-    alias tks="tmux kill-server"
-    alias ta="tmux attach -t"
-  fi
+  setup_tmux_aliases
 
-  # xoxide aliases
-  # Check if zoxide is installed before overriding cd
   if type zoxide >/dev/null 2>&1; then
     alias cd="z"
   fi
@@ -78,11 +55,14 @@ setup_aliases() {
   alias free='free -m'           # show sizes in MB
   alias grep='grep --color=auto' # colorize output (good for log files)
 
+  # vim/nvim aliases
   alias vim="nvim"
   alias v="nvim"
+
+  # vscode aliases
+  alias c='code'
 }
 
-# Function to find an alternative to 'cat'
 setup_cat_aliases() {
   local alternatives=("batcat" "bat")
   for alt in "${alternatives[@]}"; do
@@ -94,7 +74,51 @@ setup_cat_aliases() {
   done
 }
 
-# Function to set up PATH
+setup_eza_aliases() {
+  if type eza >/dev/null 2>&1; then
+    alias ls='eza --color=always --git --icons=always'
+  fi
+
+  alias l='ls -l'
+  alias la='ls -a'
+  alias lla='ls -la'
+  alias lt='ls --tree'
+}
+setup_python_aliases() {
+  if type python3 >/dev/null 2>&1; then
+    alias python='python3'
+  fi
+  if type pip3 >/dev/null 2>&1; then
+    alias pip='pip3'
+  fi
+}
+
+setup_tmux_aliases() {
+  if type tmux >/dev/null 2>&1; then
+    alias t="tmux"
+    alias tm="tmux new-session -s"
+    alias tl="tmux list-sessions"
+    alias tk="tmux kill-session -t"
+    alias tks="tmux kill-server"
+    alias ta="tmux attach -t"
+  fi
+}
+
+setup_git_aliases() {
+  if type git >/dev/null 2>&1; then
+    alias g='git'
+    alias ga='git add'
+    alias gc='git commit'
+    alias gca='git commit --amend'
+    alias gco='git checkout'
+    alias gd='git diff'
+    alias gl='git log'
+    alias gp='git pull'
+    alias gpu='git push'
+    alias gst='git status'
+  fi
+}
+
 setup_path() {
   [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
   [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
