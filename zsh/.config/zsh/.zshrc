@@ -133,6 +133,9 @@ setup_path() {
   # dotnet
   export DOTNET_ROOT=$HOME/.dotnet
   [ -d $DOTNET_ROOT ] && export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+
+  # local bin
+  [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
 }
 
 # Function to set up additional tools
