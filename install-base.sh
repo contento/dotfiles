@@ -15,7 +15,6 @@ common_apps=(
     atuin
     bat
     btop
-    cargo
     eza
     fastfetch
     fd
@@ -37,6 +36,7 @@ common_apps=(
     python3
     python3-pip
     ripgrep
+    rustup
     stow
     tmux
     tldr
