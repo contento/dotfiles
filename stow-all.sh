@@ -5,7 +5,10 @@
 
 dry_run=false
 verbose=false
-exclude_dirs=()
+exclude_dirs=("logs")
+
+# Determine the directory of the script
+dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Function to display help
 function show_help() {
@@ -60,6 +63,7 @@ if $verbose; then
 fi
 
 # Find packages to stow
+cd "$dotfiles_dir" || exit 1
 packages=$(ls -d */ | grep -Ev "^(${exclude_pattern})/$" | sed 's:/*$::' | tr '\n' ' ')
 if [[ -z "$packages" ]]; then
   echo "Error: No packages found to stow."
@@ -70,16 +74,26 @@ if $verbose; then
   echo "---- Packages: $packages"
 fi
 
-# Build stow command
+# Unstow existing packages
 simulate_args=""
 if $dry_run; then
   simulate_args="--simulate"
 fi
 
-cmd="stow $simulate_args -R $packages"
+unstow_cmd="stow $simulate_args -D -t ~ $packages"  # Use -t ~ to target the home directory
+if $verbose; then
+  echo "---- Unstow Command: $unstow_cmd"
+fi
+
+echo "**** Unstowing existing stow packages ****"
+eval $unstow_cmd
+
+# Build stow command
+cmd="stow $simulate_args -R -t ~ $packages"  # Use -t ~ to target the home directory
 
 if $verbose; then
-  echo "---- Command: $cmd"
+  echo "---- Dotfiles directory: $dotfiles_dir"
+  echo "---- Stow Command: $cmd"
 fi
 
 # Execute the command
