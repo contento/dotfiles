@@ -1,11 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
-function launch_zsh() {
-  if [ -t 1 ]; then
-    exec zsh
-  fi
-}
-
 function check_interactive() {
   case $- in
     *i*) ;;
@@ -124,7 +118,6 @@ function show_system_info() {
 }
 
 # Main execution
-launch_zsh
 check_interactive
 configure_history
 configure_terminal
