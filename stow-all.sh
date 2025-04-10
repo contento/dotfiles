@@ -3,11 +3,9 @@
 # Generic Stow Script
 # https://conten.to
 
-verbose_level=1
 dry_run=false
 verbose=false
 exclude_dirs=()
-stow_options=""
 
 # Function to display help
 function show_help() {
@@ -16,9 +14,7 @@ function show_help() {
   echo "Options:"
   echo "  --dry-run           Simulate the stow command without making changes"
   echo "  --verbose           Enable verbose output"
-  echo "  --verbose-level=N   Set the verbose level (default: 1)"
   echo "  --exclude=DIRS      Comma-separated list of directories to exclude"
-  echo "  --stow-options=OPTS Additional options to pass to the stow command"
   echo "  --help              Show this help message"
   exit 0
 }
@@ -32,14 +28,8 @@ for arg in "$@"; do
     --verbose)
       verbose=true
       ;;
-    --verbose-level=*)
-      verbose_level="${arg#*=}"
-      ;;
     --exclude=*)
       IFS=',' read -r -a exclude_dirs <<< "${arg#*=}"
-      ;;
-    --stow-options=*)
-      stow_options="${arg#*=}"
       ;;
     --help)
       show_help
@@ -81,17 +71,12 @@ if $verbose; then
 fi
 
 # Build stow command
-verbose_args=""
-if $verbose; then
-  verbose_args="--verbose=$verbose_level"
-fi
-
 simulate_args=""
 if $dry_run; then
   simulate_args="--simulate"
 fi
 
-cmd="stow $verbose_args $simulate_args $stow_options -R $packages"
+cmd="stow $simulate_args -R $packages"
 
 if $verbose; then
   echo "---- Command: $cmd"
