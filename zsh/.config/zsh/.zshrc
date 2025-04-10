@@ -83,6 +83,7 @@ setup_eza_aliases() {
   alias la='ls -a'
   alias lla='ls -la'
   alias lt='ls --tree'
+
 }
 setup_python_aliases() {
   if type python3 >/dev/null 2>&1; then
