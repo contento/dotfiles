@@ -98,7 +98,7 @@ function setup_typical_aliases() {
   alias l='ls $LS_OPTIONS -lA'
 
   alias y='yazi'
-  alias v='vi'
+  alias v='vim'
 
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
@@ -107,10 +107,9 @@ function setup_typical_aliases() {
 }
 
 function setup_path() {
-  # Add custom paths here
-  export PATH=$PATH:/root/.cargo/bin
-  export PATH=$PATH:/usr/local/bin
-  export PATH=$PATH:$HOME/bin
+  [ -d "$HOME/.cargo/bin" ] && export PATH=$PATH:$HOME/.cargo/bin
+  [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
+  [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
 }
 
 function show_system_info() {
