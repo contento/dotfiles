@@ -2,8 +2,8 @@
 
 function check_interactive() {
   case $- in
-    *i*) ;;
-    *) return ;;
+  *i*) ;;
+  *) return ;;
   esac
 }
 
@@ -26,7 +26,7 @@ function setup_prompt() {
   fi
 
   case "$TERM" in
-    xterm-color | *-256color) color_prompt=yes ;;
+  xterm-color | *-256color) color_prompt=yes ;;
   esac
 
   force_color_prompt=yes
@@ -44,9 +44,9 @@ function setup_prompt() {
   unset color_prompt force_color_prompt
 
   case "$TERM" in
-    xterm* | rxvt*)
-      PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-      ;;
+  xterm* | rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
   esac
 }
 
@@ -121,7 +121,6 @@ check_interactive
 configure_history
 configure_terminal
 setup_prompt
-setup_aliases
 setup_typical_aliases
 load_custom_aliases
 enable_completion
