@@ -30,7 +30,6 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.typescript" },
     { import = "lazyvim.plugins.extras.lang.yaml" },
     { import = "lazyvim.plugins.extras.linting.eslint" },
-    { import = "lazyvim.plugins.extras.test.core" },
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
     { import = "lazyvim.plugins.extras.util.dot" },
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
@@ -55,8 +54,6 @@ require("lazy").setup({
         "gzip",
         "matchit",
         "matchparen",
-        "netrw",
-        "netrwPlugin",
         "tarPlugin",
         "tohtml",
         "tutor",
@@ -64,6 +61,7 @@ require("lazy").setup({
       },
     },
   },
-})
+}
+)
 
 vim.cmd("highlight Visual ctermbg=0 guibg=#6441A5")
