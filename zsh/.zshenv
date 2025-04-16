@@ -31,9 +31,8 @@ export VISUAL="$EDITOR"
 # Projects directory
 export PROJECT_HOME="$HOME/Projects"
 
-# Rust Cargo environment
-CARGO_ENV="$HOME/.cargo/env"
-[ -f "$CARGO_ENV" ] && source "$CARGO_ENV"
+# Rust bin directory
+[ -d "/opt/homebrew/opt/rustup/bin" ] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
 # -- Use fd instead of fzf --
 

@@ -107,7 +107,7 @@ function setup_typical_aliases() {
 }
 
 function setup_path() {
-  [ -d "$HOME/.cargo/bin" ] && export PATH=$PATH:$HOME/.cargo/bin
+  [ -d "/opt/homebrew/opt/rustup/bin" ] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
 }
