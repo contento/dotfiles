@@ -51,16 +51,17 @@ function setup_prompt() {
 }
 
 function load_custom_aliases() {
-  if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-  fi
+  # shellcheck disable=SC1091
+  [ -f "$HOME/.bash_aliases" ] && . "$HOME/.bash_aliases"
 }
 
 function enable_completion() {
   if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
+      # shellcheck disable=SC1091
       . /usr/share/bash-completion/bash_completion
     elif [ -f /etc/bash_completion ]; then
+      # shellcheck disable=SC1091
       . /etc/bash_completion
     fi
   fi
@@ -74,20 +75,23 @@ function setup_ssh_agent() {
     touch "$SSH_ENV"
     chmod 600 "$SSH_ENV"
     /usr/bin/ssh-agent | sed 's/^echo/#echo/' >>"$SSH_ENV"
+    # shellcheck source=/dev/null
     . "$SSH_ENV" >/dev/null
     /usr/bin/ssh-add
   }
 
   if [ -f "$SSH_ENV" ]; then
+    # shellcheck source=/dev/null
     . "$SSH_ENV" >/dev/null
-    kill -0 $SSH_AGENT_PID 2>/dev/null || start_agent
+    kill -0 "$SSH_AGENT_PID" 2>/dev/null || start_agent
   else
     start_agent
   fi
 }
 
 function source_fzf() {
-  [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+  # shellcheck disable=SC1091
+  [ -f "$HOME/.fzf.bash" ] && source "$HOME/.fzf.bash"
 }
 
 function setup_typical_aliases() {
@@ -98,7 +102,7 @@ function setup_typical_aliases() {
   alias l='ls $LS_OPTIONS -lA'
 
   alias y='yazi'
-  alias v='vim'
+  alias v='nvim'
 
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
