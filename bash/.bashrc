@@ -111,9 +111,10 @@ function setup_typical_aliases() {
 }
 
 function setup_path() {
-  [ -d "/opt/homebrew/opt/rustup/bin" ] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
+  # shellcheck disable=SC1091
+  [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 }
 
 function show_system_info() {
@@ -125,10 +126,10 @@ check_interactive
 configure_history
 configure_terminal
 setup_prompt
+setup_path
 setup_typical_aliases
 load_custom_aliases
 enable_completion
 setup_ssh_agent
 source_fzf
-setup_path
 show_system_info
