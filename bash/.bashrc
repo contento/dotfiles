@@ -103,6 +103,7 @@ function setup_typical_aliases() {
 
   alias y='yazi'
   alias v='nvim'
+  alias c='code'
 
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
@@ -113,6 +114,7 @@ function setup_typical_aliases() {
 function setup_path() {
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
+  # [ -d "/opt/homebrew/opt/rustup/bin" ] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
   # shellcheck disable=SC1091
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 }

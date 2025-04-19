@@ -79,9 +79,8 @@ setup_eza_aliases() {
     alias ls='eza --color=always --git --icons=always'
   fi
 
-  alias l='ls -l'
-  alias la='ls -a'
-  alias lla='ls -la'
+  alias l='ls -lA'
+  alias ll='ls -l'
   alias lt='ls --tree'
 
 }
@@ -121,10 +120,17 @@ setup_git_aliases() {
 }
 
 setup_path() {
+  [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
+  [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
+  [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
+
+  # brew
+  # shellcheck disable=SC1091
   [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
   [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
-  [ -d $HOME/miniconda3/bin ] && export PATH="$PATH:$HOME/miniconda3/bin"
+  # Rust
+  [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
   # CUDA
   cuda_version=12
@@ -134,9 +140,6 @@ setup_path() {
   # dotnet
   export DOTNET_ROOT=$HOME/.dotnet
   [ -d $DOTNET_ROOT ] && export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
-
-  # local bin
-  [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
 }
 
 # Function to set up additional tools
