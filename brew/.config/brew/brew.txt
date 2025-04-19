@@ -5,6 +5,7 @@ bat
 bpytop
 btop
 deno
+dosbox-x
 eza
 fastfetch
 fd
