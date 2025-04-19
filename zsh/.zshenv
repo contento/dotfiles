@@ -31,9 +31,6 @@ export VISUAL="$EDITOR"
 # Projects directory
 export PROJECT_HOME="$HOME/Projects"
 
-# Rust bin directory
-[ -d "/opt/homebrew/opt/rustup/bin" ] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
-
 # -- Use fd instead of fzf --
 
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
