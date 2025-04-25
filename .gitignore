@@ -8,3 +8,10 @@ nvim/.config/nvim/lazyvim.json
 zed/.config/zed/prompts/prompts-library-db.0.mdb
 fastfetch/.config/fastfetch/config.jsonc.bak
 kitty/.config/kitty/kitty.conf.bak
+zsh/.config/zsh/.zsh_history
+zsh/.config/zsh/zsh-autosuggestions
+zsh/.config/zsh/zsh-completions
+zsh/.config/zsh/zsh-highlighting
+zsh/.config/zsh/.zcompdump
+
+
