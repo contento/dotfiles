@@ -56,7 +56,6 @@ setup_aliases() {
   alias grep='grep --color=auto' # colorize output (good for log files)
 
   # vim/nvim aliases
-  alias vim="nvim"
   alias v="nvim"
 
   # vscode aliases

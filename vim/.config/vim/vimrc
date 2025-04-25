@@ -21,10 +21,6 @@ set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
 set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
 set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
 
-if !has('nvim') " Neovim has its own special location
-  set viminfofile=$XDG_CACHE_HOME/vim/viminfo
-endif
-
 set tabstop=4
 set nocompatible
 set shiftwidth=4
@@ -73,76 +69,3 @@ set colorcolumn=80
 " Yank without leading characters or newline
 nnoremap <leader>y :normal! "+y`]<CR>
 " Custom paste mapping that handles paste mode
-nnoremap <leader>p :set paste<CR>"+p:set nopaste<CR>
-
-" >>> Vim-Plug
-" # https://github.com/junegunn/vim-plug
-
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.vim/plugged')
-
-Plug 'scrooloose/nerdtree'
-map <C-n> :NERDTreeToggle<CR>
-nnoremap <leader>n :NERDTreeFocus<CR>
-let NERDTreeShowHidden=1
-
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Open NERDTree automatically if no files are specified
-autocmd VimEnter * if !argc() | NERDTree | endif
-
-Plug 'ryanoasis/vim-devicons'
-let g:webdevicons_enable_nerdtree = 1
-
-Plug 'scrooloose/nerdcommenter'
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-" Align line-wise comment delimiters flush left instead of following code
-" indentation
-let g:NERDDefaultAlign = 'left'
-
-" Allow commenting and inverting empty lines (useful when commenting a
-" region)
-let g:NERDCommentEmptyLines = 1
-
-" Enable trimming of trailing whitespace when uncommenting
-let g:NERDTrimTrailingWhitespace = 1
-
-Plug 'editorconfig/editorconfig-vim'
-
-Plug 'tpope/vim-markdown'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-
-Plug 'scrooloose/syntastic'
-let g:syntastic_python_flake8_args = "--ignore=E501 --max-complexity 10"
-
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-" Map <Leader>f to open fzf file search
-nnoremap <leader>f :Files<CR>
-" Map <Leader>b to open fzf buffer search
-nnoremap <leader>b :Buffers<CR>
-" Map <Leader>g to open fzf ripgrep search
-nnoremap <leader>g :Rg<CR>
-" Map <Leader>h to open command history search
-nnoremap <leader>h :History:<CR>
-" Map <Leader>m to search through marks
-nnoremap <leader>m :Marks<CR>
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme='minimalist'
-" let g:airline_theme='powerlineish'
-let g:airline_powerline_fonts = 1
-
-call plug#end()
-
-" # << Vim-Plug

@@ -14,16 +14,7 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSH_PATH="$ZDOTDIR" # Assuming ZSH_PATH and ZDOTDIR are the same
 export UPDATE_ZSH_DAYS=13
 
-# vim/nvim configurations
-local nvim_config="${XDG_CONFIG_HOME}/nvim"
-local nvim_init="${nvim_config}/init.lua"
-if [ -f "${nvim_init}" ]; then
-  export VIMINIT="set nocp | source ${nvim_init}"
-else
-  export VIMINIT="set nocp | source ${XDG_CONFIG_HOME}/vim/vimrc"
-fi
-
-# Default applications
+## Default applications
 export PAGER="most"
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
