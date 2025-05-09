@@ -40,7 +40,7 @@ _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
 
-export FZF_CTRL_T_OPTS="--preview 'cat -n --color=always --line-range :500 {}'"
+export FZF_CTRL_T_OPTS="--preview 'cat -n {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
 # Advanced customization of fzf options via _fzf_comprun function
@@ -54,6 +54,6 @@ _fzf_comprun() {
   cd) fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
   export | unset) fzf --preview "eval 'echo $'{}" "$@" ;;
   ssh) fzf --preview 'dig {}' "$@" ;;
-  *) fzf --preview "cat -n --color=always --line-range :500 {}" "$@" ;;
+  *) fzf --preview "cat -n --color always --line-range :500 {}" "$@" ;;
   esac
 }
