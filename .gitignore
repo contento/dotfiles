@@ -2,7 +2,7 @@
 *.log
 **/backup
 **/pfetch
-**/lazy-lock.json
+# **/lazy-lock.json   <-- removed to allow tracking of plugin lockfile
 **/tmux/plugins
 nvim/.config/nvim/lazyvim.json
 zed/.config/zed/prompts/prompts-library-db.0.mdb
