@@ -39,6 +39,10 @@ setup_aliases() {
 
   setup_tmux_aliases
 
+  setup_k8s_aliases
+
+  setup_podman_aliases
+
   if type zoxide >/dev/null 2>&1; then
     alias cd="z"
   fi
@@ -115,6 +119,43 @@ setup_git_aliases() {
     alias gp='git pull'
     alias gpu='git push'
     alias gst='git status'
+  fi
+}
+
+setup_k8s_aliases() {
+  if type kubectl >/dev/null 2>&1; then
+    alias k='kubectl'
+    alias kgp='kubectl get pods'
+    alias kgs='kubectl get svc'
+    alias kgn='kubectl get nodes'
+    alias kga='kubectl get all'
+    alias kdp='kubectl describe pod'
+    alias kds='kubectl describe svc'
+    alias kdel='kubectl delete'
+    alias kaf='kubectl apply -f'
+    alias kctx='kubectl config use-context'
+    alias kns='kubectl config set-context --current --namespace'
+    alias kl='kubectl logs'
+    alias kexec='kubectl exec -it'
+  fi
+}
+
+setup_podman_aliases() {
+  if type podman >/dev/null 2>&1; then
+    alias p='podman'
+    alias plogs='podman logs'
+    alias pps='podman ps'
+    alias ppa='podman ps -a'
+    alias pi='podman images'
+    alias prun='podman run'
+    alias pexec='podman exec -it'
+    alias pstop='podman stop'
+    alias prm='podman rm'
+    alias primi='podman rmi'
+    alias pbld='podman build'
+    alias ppull='podman pull'
+    alias ppush='podman push'
+    alias pinspect='podman inspect'
   fi
 }
 
@@ -208,6 +249,7 @@ else
 fi
 
 setup_aliases
+
 show_system_info
 
 export NVM_DIR="$HOME/.config/nvm"
