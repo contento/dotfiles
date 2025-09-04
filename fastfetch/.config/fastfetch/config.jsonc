@@ -11,5 +11,6 @@
     "gpu",
     "memory",
     "localip",
-  ],
+    "disk"
+  ]
 }

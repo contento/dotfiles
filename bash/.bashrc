@@ -120,7 +120,11 @@ function setup_path() {
 }
 
 function show_system_info() {
-  [ -x "$(command -v pfetch)" ] && pfetch
+  if command -v pfetch >/dev/null 2>&1; then
+    pfetch
+  elif command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+  fi
 }
 
 # Main execution
