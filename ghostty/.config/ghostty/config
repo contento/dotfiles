@@ -1,4 +1,7 @@
-theme = catppuccin-mocha
+# theme = Catppuccin Mocha
+# theme = Monokai Pro
+theme = Rose Pine
+# theme = Catppuccin Latte
 font-family = "FiraCode Nerd Font Mono"
 font-size = 14
 window-decoration = "client"
