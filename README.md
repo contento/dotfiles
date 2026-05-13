@@ -99,7 +99,7 @@ Also installs:
 - [Starship](https://starship.rs/) prompt
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
-- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm)
+- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm) + plugins: tmux-sensible, tmux-resurrect, tmux-continuum, tmux-fzf, tmux-sessionx, tmux-yank, rose-pine
 
 ```
 Options:

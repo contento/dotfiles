@@ -15,6 +15,7 @@ Config: `tmux/.config/tmux/tmux.conf` → `~/.config/tmux/tmux.conf`
 | [tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | Auto-save + auto-restore on startup |
 | [tmux-fzf](https://github.com/sainnhe/tmux-fzf) | Fuzzy session/window/pane selection |
 | [tmux-sessionx](https://github.com/omerxx/tmux-sessionx) | Enhanced session manager with zoxide |
+| [tmux-yank](https://github.com/tmux-plugins/tmux-yank) | Copy to system clipboard from copy-mode |
 | [rose-pine](https://github.com/rose-pine/tmux) | Status bar theme (moon variant) |
 
 ---
@@ -57,8 +58,23 @@ Inside the **sessionx picker** (fzf):
 | Key | Action |
 | --- | --- |
 | `Enter` | Attach / switch to session |
+| `Tab` | Toggle between sessions and windows |
 | `ctrl-y` | Create new window from selected path |
-| `ctrl-n / ctrl-p` | Navigate list |
+| `ctrl-r` | Rename selected session |
+| `ctrl-x` | Kill selected session |
+| `ctrl-e` | Open selected session in `$EDITOR` |
+| `ctrl-w` | Rename selected window |
+| `ctrl-u` / `ctrl-d` | Scroll preview up/down |
+| `Esc` | Close without switching |
+
+### Copy mode (tmux-yank)
+
+| Key | Action |
+| --- | --- |
+| `prefix + [` | Enter copy-mode |
+| `y` | Copy selection to system clipboard |
+| `Y` | Copy line to system clipboard |
+| `D` | Copy from cursor to end of line |
 
 ### Utilities
 
