@@ -47,11 +47,17 @@ SSH_DIR="$HOME/.ssh"
 echo "Updating permissions for the SSH directory..."
 run_cmd chmod 700 "$SSH_DIR"
 
-echo "Changing permissions for SSH keys and their symlinks..."
+echo "Changing permissions for SSH private keys..."
 if [[ "$dry_run" == true ]]; then
-    echo "[dry-run] find $SSH_DIR -maxdepth 1 -name 'id_rsa*' -exec chmod 600 {} \\;"
+    echo "[dry-run] find $SSH_DIR -maxdepth 1 -type f ! -name '*.pub' ! -name 'known_hosts*' ! -name 'config' ! -name 'authorized_keys' ! -name 'environment' -exec chmod 600 {} \\;"
 else
-    find "$SSH_DIR" -maxdepth 1 -name "id_rsa*" -exec chmod 600 {} \;
+    find "$SSH_DIR" -maxdepth 1 -type f \
+        ! -name "*.pub" \
+        ! -name "known_hosts*" \
+        ! -name "config" \
+        ! -name "authorized_keys" \
+        ! -name "environment" \
+        -exec chmod 600 {} \;
 fi
 
 echo "Current permissions for SSH directory and keys:"
@@ -61,7 +67,7 @@ ls -ld "$SSH_DIR"
 echo "SSH keys in the directory:"
 OS="$(uname)"
 if [[ "$OS" == "Darwin" ]]; then
-    stat -f "%A %N" "$SSH_DIR"/id_rsa* 2>/dev/null || echo "(no id_rsa* keys found)"
+    stat -f "%A %N" "$SSH_DIR"/id_* 2>/dev/null || echo "(no private keys found)"
 else
-    stat -c "%a %n" "$SSH_DIR"/id_rsa* 2>/dev/null || echo "(no id_rsa* keys found)"
+    stat -c "%a %n" "$SSH_DIR"/id_* 2>/dev/null || echo "(no private keys found)"
 fi

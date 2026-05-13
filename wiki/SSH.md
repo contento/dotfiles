@@ -4,14 +4,14 @@
 
 ## Key naming convention
 
-Keys use the pattern `id_rsa-<identifier>` (e.g. `id_rsa-github`, `id_rsa-work`).
+Keys use the pattern `id_<type>-<identifier>` (e.g. `id_ed25519-github`, `id_ed25519-work`).
 
 ---
 
 ## Generate a key
 
 ```bash
-ssh-keygen -t ed25519 -C "your@email.com" -f ~/.ssh/id_rsa-github
+ssh-keygen -t ed25519 -C "your@email.com" -f ~/.ssh/id_ed25519-github
 ```
 
 ---
@@ -68,7 +68,7 @@ ssh-add ~/.ssh/id_rsa-github
 
 File: `~/.ssh/config`
 
-```
+```sshconfig
 Host github
     HostName github.com
     User git
