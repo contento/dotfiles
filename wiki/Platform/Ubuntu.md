@@ -44,7 +44,7 @@ logout   # re-login to activate zsh
 
 ## Package installation
 
-`install-base.sh` uses `apt install` for packages in `common_apps`.  
+`bootstrap.sh` uses `apt install` for packages in `common_apps`.  
 If a package fails with apt, it falls back to `brew install`.
 
 Packages that require Homebrew on Linux (`brew_linux_apps`): `fzf`, `neovim`, `node`.

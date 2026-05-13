@@ -13,7 +13,7 @@ Step-by-step guide for setting up a fresh machine.
 xcode-select --install
 ```
 
-Homebrew is installed automatically by `install-base.sh`.
+Homebrew is installed automatically by `bootstrap.sh`.
 
 ### Ubuntu / Debian
 
@@ -47,10 +47,10 @@ cd ~/dotfiles
 
 ```bash
 # Preview first — no changes made
-./install-base.sh --dry-run
+./bootstrap.sh --dry-run
 
 # Install
-./install-base.sh
+./bootstrap.sh
 ```
 
 What this installs:
@@ -65,7 +65,7 @@ What this installs:
 | Languages | Go, Node, Rust (rustup), Python 3 |
 | Utilities | stow, tmux, keychain, pandoc, tldr, mc |
 
-See [[Scripts#install-base.sh]] for full flag reference.
+See [[Scripts#bootstrap.sh]] for full flag reference.
 
 ---
 

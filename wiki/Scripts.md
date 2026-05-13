@@ -4,12 +4,12 @@ All scripts support `--dry-run` to preview changes without applying them.
 
 ---
 
-## install-base.sh
+## bootstrap.sh
 
 Cross-platform package installer.
 
 ```
-./install-base.sh [options]
+./bootstrap.sh [options]
 
 Options:
   --dry-run       Print what would happen, make no changes
@@ -38,7 +38,7 @@ Options:
 | `brew_mac_apps` | macOS via brew |
 | `mac_cask_brew_apps` | macOS casks (GUI apps, fonts) |
 
-Logs go to `logs/install-base-YYYY-MM-DD.log`.
+Logs go to `logs/bootstrap-YYYY-MM-DD.log`.
 
 ---
 

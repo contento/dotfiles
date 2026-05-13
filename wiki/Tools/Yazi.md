@@ -28,7 +28,7 @@ Navigate with hjkl. Press `q` to quit and `cd` to the last visited directory (re
 
 ## Install
 
-Installed by `install-base.sh`. On macOS:
+Installed by `bootstrap.sh`. On macOS:
 
 ```bash
 brew install yazi

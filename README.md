@@ -24,7 +24,7 @@ dotfiles/
 ├── zed/              # Zed editor config
 ├── zsh/              # zsh config (primary shell)
 ├── wiki/             # Obsidian knowledge base
-├── install-base.sh   # Install packages and terminal tools
+├── bootstrap.sh   # Install packages and terminal tools
 ├── stow-all.sh       # Symlink all configs via stow
 └── change-ssh-mod.sh # Fix SSH key file permissions
 ```
@@ -66,13 +66,13 @@ cd ~/dotfiles
 ### 3. Install base packages
 
 ```bash
-chmod +x install-base.sh
+chmod +x bootstrap.sh
 
 # Preview what will happen (no changes made)
-./install-base.sh --dry-run
+./bootstrap.sh --dry-run
 
 # Run
-./install-base.sh
+./bootstrap.sh
 ```
 
 ### 4. Symlink dotfiles with Stow
@@ -91,7 +91,7 @@ chmod +x stow-all.sh
 
 ## Scripts
 
-### `install-base.sh`
+### `bootstrap.sh`
 
 Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt` (with Homebrew fallback for some tools); on Arch uses `yay` (with Homebrew fallback).
 
@@ -109,7 +109,7 @@ Options:
   --help          Show help
 ```
 
-Logs are written to `logs/install-base-YYYY-MM-DD.log`.
+Logs are written to `logs/bootstrap-YYYY-MM-DD.log`.
 
 ### `stow-all.sh`
 

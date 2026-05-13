@@ -8,7 +8,7 @@
 xcode-select --install   # Xcode CLI tools (required for git, make, gcc)
 ```
 
-Homebrew is installed automatically by `install-base.sh`.
+Homebrew is installed automatically by `bootstrap.sh`.
 
 ---
 
@@ -35,7 +35,7 @@ xargs brew install < brew/brew.txt
 
 ## Fonts (Cask)
 
-Installed by `install-base.sh` as casks:
+Installed by `bootstrap.sh` as casks:
 
 ```bash
 brew install --cask font-fira-code font-fira-code-nerd-font font-delugia-complete
@@ -45,7 +45,7 @@ brew install --cask font-fira-code font-fira-code-nerd-font font-delugia-complet
 
 ## macOS-specific packages
 
-Installed via `brew_mac_apps` and `mac_cask_brew_apps` in `install-base.sh`:
+Installed via `brew_mac_apps` and `mac_cask_brew_apps` in `bootstrap.sh`:
 
 - **fzf**, **go**, **neovim**, **node** (brew formulas)
 - **iterm2**, fonts (brew casks)

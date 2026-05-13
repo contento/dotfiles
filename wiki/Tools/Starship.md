@@ -24,7 +24,7 @@ From left to right:
 
 ## Installation
 
-Installed by `install-base.sh` via:
+Installed by `bootstrap.sh` via:
 
 ```bash
 curl -fsSL https://starship.rs/install.sh | sh -s -- --bin-dir /usr/local/bin --force
