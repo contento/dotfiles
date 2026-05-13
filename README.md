@@ -26,7 +26,7 @@ dotfiles/
 ├── wiki/             # Obsidian knowledge base
 ├── bootstrap.sh   # Install packages and terminal tools
 ├── stow-all.sh       # Symlink all configs via stow
-└── change-ssh-mod.sh # Fix SSH key file permissions
+└── fix-ssh-perms.sh # Fix SSH key file permissions
 ```
 
 ## Quick Start
@@ -137,7 +137,7 @@ Options:
 ./stow-all.sh --dry-run --verbose
 ```
 
-### `change-ssh-mod.sh`
+### `fix-ssh-perms.sh`
 
 Sets correct permissions on `~/.ssh` and all `id_rsa*` key files (`700` / `600`).
 
@@ -149,10 +149,10 @@ Options:
 
 ```bash
 # Preview
-./change-ssh-mod.sh --dry-run
+./fix-ssh-perms.sh --dry-run
 
 # Apply
-./change-ssh-mod.sh
+./fix-ssh-perms.sh
 ```
 
 ---
@@ -209,7 +209,7 @@ All env vars that depend on a command or file are guarded so the shell never fai
 eval "$(ssh-agent -s)"
 
 # Fix permissions
-./change-ssh-mod.sh
+./fix-ssh-perms.sh
 
 # Copy public key to a remote host
 ssh-copy-id -i ~/.ssh/id_rsa-<ID>.pub <user>@<host>

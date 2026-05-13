@@ -72,12 +72,12 @@ Options:
 
 ---
 
-## change-ssh-mod.sh
+## fix-ssh-perms.sh
 
 Fixes SSH key permissions to the values required by OpenSSH.
 
 ```
-./change-ssh-mod.sh [options]
+./fix-ssh-perms.sh [options]
 
 Options:
   --dry-run   Show what would change, apply nothing
@@ -95,8 +95,8 @@ Works on both macOS (`stat -f`) and Linux (`stat -c`).
 
 ```bash
 # Preview
-./change-ssh-mod.sh --dry-run
+./fix-ssh-perms.sh --dry-run
 
 # Apply
-./change-ssh-mod.sh
+./fix-ssh-perms.sh
 ```

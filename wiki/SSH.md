@@ -20,10 +20,10 @@ ssh-keygen -t ed25519 -C "your@email.com" -f ~/.ssh/id_ed25519-github
 
 ```bash
 # Preview
-./change-ssh-mod.sh --dry-run
+./fix-ssh-perms.sh --dry-run
 
 # Apply
-./change-ssh-mod.sh
+./fix-ssh-perms.sh
 ```
 
 Or manually:

@@ -11,7 +11,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ### Setup
 - [[Installation]] — fresh machine setup, step by step
-- [[Scripts]] — `bootstrap.sh`, `stow-all.sh`, `change-ssh-mod.sh`
+- [[Scripts]] — `bootstrap.sh`, `stow-all.sh`, `fix-ssh-perms.sh`
 - [[SSH]] — key management, permissions, agent setup
 
 ### Shell
