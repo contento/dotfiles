@@ -243,4 +243,4 @@ Open the `wiki/` folder as an Obsidian vault to browse with graph view and wikil
 
 ## Notes
 
-See [Notes.md](./Notes.md)
+See the [[wiki/Platform/Ubuntu]] page for Linux-specific setup notes.

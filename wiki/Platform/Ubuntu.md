@@ -15,6 +15,12 @@ sudo apt install -y nala
 sudo nala update && sudo nala upgrade
 ```
 
+### Desktop components (tasksel)
+
+```bash
+sudo tasksel   # interactive selector for desktop environments, server roles, etc.
+```
+
 ---
 
 ## Flatpak
@@ -95,12 +101,46 @@ chmod u+x ~/.vnc/xstartup
 
 ### Run as a systemd service
 
-Create `/etc/systemd/system/vncserver@.service` (see `Notes.md` for full unit file), then:
+Create `/etc/systemd/system/vncserver@.service`:
+
+```ini
+[Unit]
+Description=Start TigerVNC server at startup
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=contento
+Group=contento
+WorkingDirectory=/home/contento
+
+PIDFile=/home/contento/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver :%i -localhost no -depth 32 -geometry 1920x1080
+ExecStop=/usr/bin/vncserver -kill :%i
+
+[Install]
+WantedBy=multi-user.target
+```
+
+> Use `-localhost yes` if you plan to tunnel VNC over SSH (recommended).
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl start vncserver@1.service
 sudo systemctl enable vncserver@1.service
+```
+
+---
+
+## VNC server (RealVNC)
+
+```bash
+# Install the .deb directly (replace with current version)
+sudo nala install ./VNC-Server-7.x.x-Linux-x64.deb
+vncserver
+sudo systemctl start vncserver-x11-serviced.service
+sudo systemctl enable vncserver-x11-serviced.service
 ```
 
 ---
@@ -114,3 +154,9 @@ pandoc README.md | lynx -stdin
 # Markdown → plain text
 pandoc README.md -t plain | less
 ```
+
+---
+
+## Resources
+
+- [Pling](https://www.pling.com/) — themes, icons, wallpapers for Linux desktops

@@ -82,4 +82,4 @@ Inside the **sessionx picker** (fzf):
 
 ## Aliases
 
-See [[Shell/Aliases#Tmux]] for shell shortcuts (`t`, `tm`, `tl`, `tk`, `tks`, `ta`).
+See [[Shell/Aliases]] for shell shortcuts (`t`, `tm`, `tl`, `tk`, `tks`, `ta`).
