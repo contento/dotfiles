@@ -39,8 +39,8 @@ These work globally without a prefix. When the active pane is running nvim, the 
 | `C-h` | Move to left pane | Forwarded to nvim when in nvim |
 | `C-j` | Move to pane below | Forwarded to nvim when in nvim |
 | `C-k` | Move to pane above | Forwarded to nvim when in nvim |
-| `C-l` | Move to right pane | **Shadows `Ctrl+L` clear-screen** — use `prefix + C-l` instead |
 | `C-\` | Last active pane | Forwarded to nvim when in nvim |
+| `prefix + l` | Move to right pane | Default tmux — `C-l` intentionally unbound to preserve clear-screen |
 
 Also active in copy-mode-vi.
 
