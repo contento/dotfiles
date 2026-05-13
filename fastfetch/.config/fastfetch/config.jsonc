@@ -5,12 +5,10 @@
     "separator",
     "os",
     "host",
-    "kernel",
-    "shell",
+    "uptime",
     "cpu",
-    "gpu",
     "memory",
-    "localip",
-    "disk"
+    "disk",
+    "colors"
   ]
 }
