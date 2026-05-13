@@ -94,16 +94,16 @@ fi
 
 echo "**** Unstowing existing stow packages ****"
 if $verbose; then
-  echo "---- Unstow Command: stow ${stow_args[*]} -D -t $HOME ${packages[*]}"
+  echo "---- Unstow Command: stow ${stow_args[*]+"${stow_args[*]}"} -D -t $HOME ${packages[*]}"
 fi
-stow "${stow_args[@]}" -D -t "$HOME" "${packages[@]}"
+stow "${stow_args[@]+"${stow_args[@]}"}" -D -t "$HOME" "${packages[@]}"
 
 # Build stow command
 if $verbose; then
   echo "---- Dotfiles directory: $dotfiles_dir"
-  echo "---- Stow Command: stow ${stow_args[*]} -R -t $HOME ${packages[*]}"
+  echo "---- Stow Command: stow ${stow_args[*]+"${stow_args[*]}"} -R -t $HOME ${packages[*]}"
 fi
 
 # Execute the command
 echo "**** Executing stow command ****"
-stow "${stow_args[@]}" -R -t "$HOME" "${packages[@]}"
+stow "${stow_args[@]+"${stow_args[@]}"}" -R -t "$HOME" "${packages[@]}"
