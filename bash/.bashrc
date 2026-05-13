@@ -1,4 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
+# shellcheck shell=bash
 
 function check_interactive() {
   case $- in
@@ -96,7 +97,10 @@ function source_fzf() {
 
 function setup_typical_aliases() {
   export LS_OPTIONS='--color=auto'
-  eval "$(dircolors)"
+  # dircolors is GNU coreutils — not available on macOS without installing it
+  if command -v dircolors >/dev/null 2>&1; then
+    eval "$(dircolors)"
+  fi
   alias ls='ls $LS_OPTIONS'
   alias ll='ls $LS_OPTIONS -l'
   alias l='ls $LS_OPTIONS -lA'
@@ -139,3 +143,9 @@ enable_completion
 setup_ssh_agent
 source_fzf
 show_system_info
+
+# shellcheck disable=SC1091
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+[ -d "$HOME/.lmstudio/bin" ] && export PATH="$PATH:$HOME/.lmstudio/bin"
+

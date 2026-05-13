@@ -18,7 +18,6 @@
     last = log -1 HEAD
     lga = log --oneline --graph --all --decorate
     lg = log --oneline --graph --decorate --all --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %C(cyan)[%an]%Creset'
-
 [merge]
     tool = vimdiff  # Merge tool preference
 
@@ -33,3 +32,9 @@
 
 [credential]
     helper = cache  # Cache credentials for a while
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential

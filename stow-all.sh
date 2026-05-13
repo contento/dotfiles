@@ -3,21 +3,22 @@
 # Generic Stow Script
 # https://conten.to
 
+set -euo pipefail
+
 dry_run=false
 verbose=false
-exclude_dirs=("logs")
+exclude_dirs=("logs" "wiki")
 
 # Determine the directory of the script
 dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Function to display help
-function show_help() {
+show_help() {
   echo "Usage: $0 [options]"
   echo ""
   echo "Options:"
   echo "  --dry-run           Simulate the stow command without making changes"
   echo "  --verbose           Enable verbose output"
-  echo "  --exclude=DIRS      Comma-separated list of directories to exclude"
+  echo "  --exclude=DIRS      Comma-separated list of dirs to exclude (replaces default: logs,wiki)"
   echo "  --help              Show this help message"
   exit 0
 }
@@ -64,38 +65,45 @@ fi
 
 # Find packages to stow
 cd "$dotfiles_dir" || exit 1
-packages=$(ls -d */ | grep -Ev "^(${exclude_pattern})/$" | sed 's:/*$::' | tr '\n' ' ')
-if [[ -z "$packages" ]]; then
+packages=()
+for dir in */; do
+  dir="${dir%/}"
+  # Skip if it matches the exclude pattern (bash built-in, no subprocess)
+  if [[ -n "$exclude_pattern" && "$dir" =~ ^(${exclude_pattern})$ ]]; then
+    continue
+  fi
+  packages+=("$dir")
+done
+if [[ ${#packages[@]} -eq 0 ]]; then
   echo "Error: No packages found to stow."
   exit 1
 fi
 
 if $verbose; then
-  echo "---- Packages: $packages"
+  echo "---- Packages: ${packages[*]}"
 fi
 
-# Unstow existing packages
-simulate_args=""
+# Build stow base args
+stow_args=()
 if $dry_run; then
-  simulate_args="--simulate"
+  stow_args+=("--simulate")
 fi
-
-unstow_cmd="stow $simulate_args -D -t ~ $packages"  # Use -t ~ to target the home directory
 if $verbose; then
-  echo "---- Unstow Command: $unstow_cmd"
+  stow_args+=("-v")
 fi
 
 echo "**** Unstowing existing stow packages ****"
-eval $unstow_cmd
+if $verbose; then
+  echo "---- Unstow Command: stow ${stow_args[*]} -D -t $HOME ${packages[*]}"
+fi
+stow "${stow_args[@]}" -D -t "$HOME" "${packages[@]}"
 
 # Build stow command
-cmd="stow $simulate_args -R -t ~ $packages"  # Use -t ~ to target the home directory
-
 if $verbose; then
   echo "---- Dotfiles directory: $dotfiles_dir"
-  echo "---- Stow Command: $cmd"
+  echo "---- Stow Command: stow ${stow_args[*]} -R -t $HOME ${packages[*]}"
 fi
 
 # Execute the command
 echo "**** Executing stow command ****"
-eval $cmd
+stow "${stow_args[@]}" -R -t "$HOME" "${packages[@]}"

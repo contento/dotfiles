@@ -196,9 +196,12 @@ setup_additional_tools() {
   [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
   # Initialize ssh-agent and use keychain to manage keys, if keychain is available
-  if type keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$USERNAME" ]; then
-    eval $(keychain --eval --agents ssh "id_rsa-$USERNAME")
+  # $USER is POSIX-portable; $USERNAME is bash/Linux-only and unset on macOS by default
+  _ssh_user="${USER:-$USERNAME}"
+  if type keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
+    eval "$(keychain --eval --agents ssh "id_rsa-$_ssh_user")"
   fi
+  unset _ssh_user
 
   # Initialize fzf if available
   if type fzf >/dev/null 2>&1; then
@@ -255,3 +258,8 @@ show_system_info
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# opencode
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
