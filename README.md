@@ -14,7 +14,6 @@ dotfiles/
 ├── fastfetch/        # fastfetch system info config
 ├── ghostty/          # Ghostty terminal config
 ├── git/              # git global config & aliases
-├── kitty/            # Kitty terminal config
 ├── mc/               # Midnight Commander config
 ├── nvim/             # Neovim (LazyVim) config
 ├── starship/         # Starship prompt config

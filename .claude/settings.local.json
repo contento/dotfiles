@@ -6,7 +6,15 @@
       "Bash(git push *)",
       "Bash(git rm *)",
       "Bash(git commit -m ' *)",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(ls -la ~/Projects/contento/dotfiles ~/projects/contento/dotfiles 2>&1 | head -5 && stat -f \"%i\" ~/Projects ~/projects 2>&1)",
+      "Read(//Users/contento/projects/**)",
+      "Bash(rm ~/.config/tmux ~/.config/vim ~/.config/yazi ~/.config/zed ~/.config/zsh/.zprofile ~/.config/zsh/.zshrc ~/.zshenv && echo \"Removed conflicting symlinks\")",
+      "Bash(./stow-all.sh)",
+      "Bash(curl -s \"https://api.github.com/repos/aristocratos/btop/commits?per_page=1\")"
+    ],
+    "additionalDirectories": [
+      "/Users/contento/projects/contento/dotfiles/zsh/.config/zsh"
     ]
   }
 }
