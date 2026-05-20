@@ -233,6 +233,27 @@ Open the `wiki/` folder as an Obsidian vault to browse with graph view and wikil
 
 ---
 
+
+---
+
+## Docker Environment
+
+These dotfiles power [contento/linux-dev](https://github.com/contento/linux-dev) — a lightweight Docker container that delivers the same terminal environment on any machine with Docker, without touching the host.
+
+When the image is built with `SETUP_DOTFILES=true` (the default), the container:
+
+1. Clones this repository to `~/.dotfiles`
+2. Runs `bootstrap.sh` to install packages via apt + Homebrew
+3. Runs `stow-all.sh` to symlink all configs into `$HOME`
+
+The result is a container where the shell, prompt, editor, and tools behave exactly as they do on a native machine. Useful for onboarding, remote work, or keeping a consistent environment across different host OSes (macOS, Linux, Windows via WSL2).
+
+```bash
+git clone https://github.com/contento/linux-dev.git
+cd linux-dev
+./start.sh   # prompts, then drops you into the configured environment
+```
+
 ## References
 
 - [GNU Stow](https://www.gnu.org/software/stow/)
