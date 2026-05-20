@@ -341,7 +341,7 @@ setup_terminal() {
         local starship_installer
         starship_installer=$(mktemp)
         run_cmd curl -fsSL https://starship.rs/install.sh -o "$starship_installer"
-        run_cmd sh "$starship_installer" -- --yes 2>&1 | tee -a "$logfile_path"
+        run_cmd sh "$starship_installer" --yes 2>&1 | tee -a "$logfile_path"
         rm -f "$starship_installer"
     fi
 
