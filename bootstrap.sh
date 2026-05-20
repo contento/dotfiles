@@ -231,7 +231,8 @@ install_with_yay() {
     echo "**** Trying 'yay -S $app' ..." | tee -a "$logfile_path"
     if ! run_cmd yay -S --noconfirm "$app" 2>&1 | tee -a "$logfile_path"; then
         echo "**** Failed to install $app with yay, trying with brew..." | tee -a "$logfile_path"
-        run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path"
+        run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
+            echo "**** WARNING: Could not install $app via yay or brew, skipping" | tee -a "$logfile_path"
     fi
 }
 
@@ -247,7 +248,8 @@ install_with_apt() {
     echo "**** Trying 'apt install $app' ..." | tee -a "$logfile_path"
     if ! run_cmd sudo apt install -y "$app" 2>&1 | tee -a "$logfile_path"; then
         echo "**** Failed to install $app with apt, trying with brew..." | tee -a "$logfile_path"
-        run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path"
+        run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
+            echo "**** WARNING: Could not install $app via apt or brew, skipping" | tee -a "$logfile_path"
     fi
 }
 
@@ -258,7 +260,8 @@ install_with_brew_formula() {
         return 0
     fi
     echo "**** Trying 'brew install $app' ..." | tee -a "$logfile_path"
-    run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path"
+    run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
+        echo "**** WARNING: Could not install $app via brew, skipping" | tee -a "$logfile_path"
 }
 
 install_with_brew_cask() {
@@ -268,7 +271,8 @@ install_with_brew_cask() {
         return 0
     fi
     echo "**** Trying 'brew install --cask $app' ..." | tee -a "$logfile_path"
-    run_cmd brew install --cask "$app" 2>&1 | tee -a "$logfile_path"
+    run_cmd brew install --cask "$app" 2>&1 | tee -a "$logfile_path" || \
+        echo "**** WARNING: Could not install $app via brew cask, skipping" | tee -a "$logfile_path"
 }
 
 # -- Mac ----------------------------------------------
