@@ -95,6 +95,17 @@ function source_fzf() {
   [ -f "$HOME/.fzf.bash" ] && source "$HOME/.fzf.bash"
 }
 
+function setup_osc7() {
+  _emit_osc7() {
+    if [ -n "$TMUX" ]; then
+      printf '\ePtmux;\e\e]7;file://%s%s\e\\\a' "${HOSTNAME}" "$PWD"
+    else
+      printf '\e]7;file://%s%s\a' "${HOSTNAME}" "$PWD"
+    fi
+  }
+  PROMPT_COMMAND="_emit_osc7${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+}
+
 function setup_typical_aliases() {
   export LS_OPTIONS='--color=auto'
   # dircolors is GNU coreutils — not available on macOS without installing it
@@ -142,6 +153,7 @@ load_custom_aliases
 enable_completion
 setup_ssh_agent
 source_fzf
+setup_osc7
 show_system_info
 
 # shellcheck disable=SC1091

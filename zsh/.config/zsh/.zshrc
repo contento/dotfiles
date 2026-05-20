@@ -219,6 +219,18 @@ setup_additional_tools() {
   fi
 }
 
+setup_osc7() {
+  _emit_osc7() {
+    if [ -n "$TMUX" ]; then
+      printf '\ePtmux;\e\e]7;file://%s%s\e\\\a' "${HOSTNAME}" "$PWD"
+    else
+      printf '\e]7;file://%s%s\a' "${HOSTNAME}" "$PWD"
+    fi
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd _emit_osc7
+}
+
 setup_additional_tools_linux() {
   # ---- brew
   [ -f /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -241,6 +253,7 @@ setup_zsh_options
 setup_history
 setup_path
 setup_additional_tools
+setup_osc7
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   setup_additional_tools_linux
