@@ -1,5 +1,14 @@
 # dotfiles
 
+```text
+  o  o
+\______/
+  |
+     |    https://conten.to
+--------
+```
+
+
 Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 Supports **macOS**, **Ubuntu/Debian**, and **Arch Linux**. Works with **bash** and **zsh**.
 
