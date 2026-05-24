@@ -26,7 +26,7 @@ error_symbol = "[✗](bold red)"
 read_only = " 󰌾"
 truncation_length = 10
 truncate_to_repo = false   # show full path under home, not just the repo root
-home_symbol = ""           # drops the leading "~" so $HOME/Projects/x renders as /Projects/x
+home_symbol = "…"          # signals "under $HOME" without looking like an absolute /root path
 style = "bold italic blue"
 
 [cmd_duration]
