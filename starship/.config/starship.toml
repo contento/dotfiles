@@ -30,7 +30,7 @@ truncate_to_repo = false         # don't collapse to repo root; respect truncati
 style = "bold italic blue"
 
 [cmd_duration]
-min_time = 4
+min_time = 4000          # milliseconds — only show "took Ns" when a command runs ≥ 4s
 show_milliseconds = false
 disabled = false
 style = "bold italic red"
