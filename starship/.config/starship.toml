@@ -9,7 +9,7 @@ $hostname\
 $localip\
 $shlvl\
 $singularity\
-$kubernetes\
+$kubernetes
 $directory
 $vcsh\
 $fossil_branch\
