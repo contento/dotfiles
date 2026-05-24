@@ -1,8 +1,8 @@
-# CLAUDE.md
+# Copilot instructions
 
-Guidelines for Claude Code when working in this repository.
+Guidelines for GitHub Copilot when working in this repository.
 
-> **Kept in sync with [`.github/copilot-instructions.md`](.github/copilot-instructions.md).**
+> **Kept in sync with [`../CLAUDE.md`](../CLAUDE.md).**
 > Any change to one must be mirrored in the other so both assistants follow the same rules.
 > TODO: automate this sync via a pre-commit hook so the two files cannot drift.
 
