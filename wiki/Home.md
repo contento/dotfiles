@@ -45,7 +45,6 @@ dotfiles/
 ├── fastfetch/    → ~/.config/fastfetch/
 ├── ghostty/      → ~/.config/ghostty/
 ├── git/          → ~/.gitconfig
-├── kitty/        → ~/.config/kitty/
 ├── mc/           → ~/.config/mc/
 ├── nvim/         → ~/.config/nvim/
 ├── starship/     → ~/.config/starship.toml
