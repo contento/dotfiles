@@ -7,13 +7,12 @@ Config: `starship/.config/starship.toml` → `~/.config/starship.toml`
 
 ## What it shows
 
-The prompt spans three lines:
+The prompt is compact — two lines, using the default starship format:
 
-1. **Line 1** — directory (truncated to 10 chars, repo-root aware), with `user@host` prepended when relevant.
-2. **Line 2** — git branch, git status, active language runtime, command duration (when > 4s).
-3. **Line 3** — `➜` on success, `✗` on error.
+1. **Line 1** — `user@host` + full path under `$HOME` (e.g. `/Projects/contento/dotfiles`) + git branch / status + active language runtime + command duration (when > 4s).
+2. **Line 2** — `➜` on success, `✗` on error.
 
-Splitting the directory onto its own line keeps each line readable when paths or git status get long.
+The directory module shows the full path under `$HOME` rather than collapsing to the repo root (`truncate_to_repo = false`) and drops the `~` prefix (`home_symbol = ""`) so a path under home reads `/Projects/...` instead of `~/Projects/...`.
 
 ---
 
@@ -37,4 +36,4 @@ fi
 
 ## Customisation
 
-Edit `starship/.config/starship/starship.toml`. Full reference: [starship.rs/config](https://starship.rs/config/).
+Edit `starship/.config/starship.toml`. Full reference: [starship.rs/config](https://starship.rs/config/).
