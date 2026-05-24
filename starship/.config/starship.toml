@@ -24,9 +24,9 @@ error_symbol = "[✗](bold red)"
 # configure directory
 [directory]
 read_only = " 󰌾"
-truncation_length = 10
-truncate_to_repo = false   # show full path under home, not just the repo root
-home_symbol = "…"          # signals "under $HOME" without looking like an absolute /root path
+truncation_length = 3            # keep at most the last 3 path components
+truncation_symbol = "…/"         # prepend "…/" when truncation actually happened
+truncate_to_repo = false         # don't collapse to repo root; respect truncation_length instead
 style = "bold italic blue"
 
 [cmd_duration]
