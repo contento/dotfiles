@@ -1,24 +1,19 @@
 # Starship
 
 Prompt: [starship.rs](https://starship.rs/)  
-Config: `starship/.config/starship/starship.toml` → `~/.config/starship/starship.toml`
+Config: `starship/.config/starship.toml` → `~/.config/starship.toml`
 
 ---
 
 ## What it shows
 
-From left to right:
+The prompt spans three lines:
 
-| Segment | Content |
-|---|---|
-| OS icon | Current operating system |
-| User | `user@host` (shown when relevant) |
-| Directory | Truncated to 10 chars, repo-root aware |
-| Git branch | Current branch name |
-| Git status | Staged / unstaged / ahead / behind indicators |
-| Language | Active runtime (Go, Node, Python, Rust, …) |
-| Duration | Command duration when > 4 seconds |
-| Status | `➜` on success, `✗` on error |
+1. **Line 1** — directory (truncated to 10 chars, repo-root aware), with `user@host` prepended when relevant.
+2. **Line 2** — git branch, git status, active language runtime, command duration (when > 4s).
+3. **Line 3** — `➜` on success, `✗` on error.
+
+Splitting the directory onto its own line keeps each line readable when paths or git status get long.
 
 ---
 

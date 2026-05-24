@@ -48,7 +48,7 @@ dotfiles/
 ├── kitty/        → ~/.config/kitty/
 ├── mc/           → ~/.config/mc/
 ├── nvim/         → ~/.config/nvim/
-├── starship/     → ~/.config/starship/
+├── starship/     → ~/.config/starship.toml
 ├── tmux/         → ~/.config/tmux/
 ├── vim/          → ~/.vim/
 ├── yazi/         → ~/.config/yazi/
