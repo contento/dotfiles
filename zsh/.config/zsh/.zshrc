@@ -199,7 +199,7 @@ setup_additional_tools() {
   # $USER is POSIX-portable; $USERNAME is bash/Linux-only and unset on macOS by default
   _ssh_user="${USER:-$USERNAME}"
   if type keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
-    eval "$(keychain --eval --agents ssh "id_rsa-$_ssh_user")"
+    eval "$(keychain --eval "id_rsa-$_ssh_user")"
   fi
   unset _ssh_user
 

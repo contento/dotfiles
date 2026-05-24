@@ -43,7 +43,7 @@ The `.zshrc` auto-starts the agent via `keychain` if the key file exists:
 
 ```zsh
 # Runs automatically on shell init if keychain is installed
-eval "$(keychain --eval --agents ssh "id_rsa-$USER")"
+eval "$(keychain --eval "id_rsa-$USER")"
 ```
 
 ### Linux / bash — persistent agent
