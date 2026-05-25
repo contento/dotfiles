@@ -79,9 +79,16 @@ chmod +x bootstrap.sh
 # Preview what will happen (no changes made)
 ./bootstrap.sh --dry-run
 
-# Run
+# Install the minimum tool set (default)
 ./bootstrap.sh
+
+# Install everything
+./bootstrap.sh --all
 ```
+
+The default **minimum** set is enough to use this dotfiles config day-to-day
+(shell, prompt, multiplexer, editor, git, search). Pass `--all` to add the
+full ~50-tool catalog. See [Tools](#tools) below for the per-tier breakdown.
 
 ### 4. Symlink dotfiles with Stow
 
@@ -103,19 +110,39 @@ chmod +x stow-all.sh
 
 Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt` (with Homebrew fallback for some tools); on Arch uses `yay` (with Homebrew fallback).
 
-Also installs:
-- [Starship](https://starship.rs/) prompt
-- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
-- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
-- [Tmux Plugin Manager (TPM)](https://github.com/tmux-plugins/tpm) + plugins: tmux-sensible, tmux-resurrect, tmux-continuum, tmux-fzf, tmux-sessionx, tmux-yank, rose-pine
+**What it installs:**
+
+1. **Package managers** (if missing) — Homebrew on all platforms; `yay` on Arch.
+2. **CLI tools** — ~50 utilities defined in five arrays at the top of the script:
+   - `common_apps` — same package name across brew, apt, and yay
+   - `linux_apps` — apt-native names (yay falls back to brew on mismatch)
+   - `brew_linux_apps` — Linux packages that must come from brew (newer versions)
+   - `brew_mac_apps` — macOS-only brew formulas
+   - `mac_cask_brew_apps` — macOS brew casks (GUI apps, fonts)
+
+   See the [Tools](#tools) section below for the full categorized reference.
+3. **Shell prompt** — [Starship](https://starship.rs/) via its official installer.
+4. **Zsh plugins** — cloned to `~/.config/zsh/`:
+   - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
+   - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+5. **Tmux plugins** — [TPM](https://github.com/tmux-plugins/tpm) cloned to `~/.tmux/plugins/tpm`, plugins declared in [tmux/.config/tmux/tmux.conf](tmux/.config/tmux/tmux.conf): tmux-sensible, tmux-resurrect, tmux-continuum, tmux-fzf, tmux-sessionx, tmux-yank, rose-pine.
 
 ```
 Options:
   --dry-run       Simulate installation without making changes
   --no-brew       Skip Homebrew installation (Linux only; required on macOS)
   --no-terminal   Skip terminal/shell plugin setup
+  --minimum       Install only the minimum tool set (default)
+  --all           Install the full tool set
   --help          Show help
 ```
+
+**Tiers:**
+
+- **Minimum (default)** — `stow`, `zsh`, `tmux`, `vim`, `unzip`, `make`, `gcc`, `fzf`, `ripgrep`, `jq`. Plus `starship` and the zsh/tmux plugins (unless `--no-terminal`). This is enough for the shell config in this repo to be fully usable. `git` and `curl` are repo prerequisites and assumed present.
+- **Full (`--all`)** — everything above plus the rest of the [Tools](#tools) catalog and macOS GUI casks.
+
+**Linux + minimum skips Homebrew entirely** — every minimum tool is available via `apt`/`yay`, so the ~500MB brew install is unnecessary. Run with `--all` (or install brew manually) if you want it. macOS always installs brew since it's the only package manager.
 
 Logs are written to `logs/bootstrap-YYYY-MM-DD.log`.
 
@@ -162,6 +189,118 @@ Options:
 # Apply
 ./fix-ssh-perms.sh
 ```
+
+---
+
+## Tools
+
+Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/Debian, and Arch.
+
+### Shell, prompt & session
+
+| Tool | Purpose |
+|---|---|
+| [atuin](https://atuin.sh) | Shell history with search and sync |
+| [starship](https://starship.rs) | Cross-shell prompt |
+| [tmux](https://github.com/tmux/tmux) | Terminal multiplexer |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter `cd` that learns frequent dirs |
+| [fzf](https://github.com/junegunn/fzf) | Fuzzy finder |
+| [direnv](https://direnv.net) | Per-directory environment variables |
+| [keychain](https://www.funtoo.org/Keychain) | SSH / GPG agent manager |
+
+### File navigation & search
+
+| Tool | Replaces | Purpose |
+|---|---|---|
+| [eza](https://github.com/eza-community/eza) | `ls` | Modern listing with icons & git status |
+| [bat](https://github.com/sharkdp/bat) | `cat` | Syntax-highlighted file viewer |
+| [fd](https://github.com/sharkdp/fd) | `find` | Faster, friendlier file finder |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | `grep` | Fast recursive code search |
+| [yazi](https://yazi-rs.github.io) | — | Terminal file manager (with previews) |
+| [mc](https://midnight-commander.org) | — | Midnight Commander (classic dual-pane) |
+
+### System monitoring & info
+
+| Tool | Replaces | Purpose |
+|---|---|---|
+| [btop](https://github.com/aristocratos/btop) | `top`/`htop` | Resource monitor |
+| [fastfetch](https://github.com/fastfetch-cli/fastfetch) | `neofetch` | System info banner |
+| [duf](https://github.com/muesli/duf) | `df` | Disk usage / free space |
+| [dust](https://github.com/bootandy/dust) | `du` | Visual directory size |
+| [hyperfine](https://github.com/sharkdp/hyperfine) | `time` | Command-line benchmarking |
+
+### Networking
+
+| Tool | Purpose |
+|---|---|
+| [httpie](https://httpie.io) | Friendlier `curl` |
+| [mtr](https://www.bitwizard.nl/mtr) | Traceroute + ping combined |
+| [wakeonlan](https://github.com/jpoliv/wakeonlan) | Wake-on-LAN packet sender |
+| [lynx](https://lynx.invisible-island.net), [w3m](http://w3m.sourceforge.net) | Text-mode web browsers |
+
+### Git & GitHub
+
+| Tool | Purpose |
+|---|---|
+| [gh](https://cli.github.com) | GitHub CLI (issues, PRs, releases) |
+| [lazygit](https://github.com/jesseduffield/lazygit) | Terminal UI for git |
+| [git-delta](https://github.com/dandavison/delta) | Better `git diff` viewer (binary: `delta`) |
+
+### Data & documents
+
+| Tool | Purpose |
+|---|---|
+| [jq](https://jqlang.org) | JSON processor |
+| [yq](https://github.com/mikefarah/yq) | YAML / TOML / XML processor |
+| [pandoc](https://pandoc.org) | Universal document converter |
+| [tldr](https://tldr.sh) | Simplified, example-based man pages |
+| [most](https://www.jedsoft.org/most) | Pager with multi-window support |
+
+### Images & media
+
+| Tool | Purpose |
+|---|---|
+| [imagemagick](https://imagemagick.org) | Image processing toolkit |
+| [pngquant](https://pngquant.org) | Lossy PNG compression |
+| [jpegoptim](https://github.com/tjko/jpegoptim) | JPEG compression |
+| [ffmpegthumbnailer](https://github.com/dirkvdb/ffmpegthumbnailer) | Video thumbnails (used by yazi) |
+| [poppler](https://poppler.freedesktop.org) | PDF rendering (used by yazi) |
+
+### Shell scripting & build
+
+| Tool | Purpose |
+|---|---|
+| [shellcheck](https://www.shellcheck.net) | Bash / sh linter |
+| [shfmt](https://github.com/mvdan/sh) | Shell script formatter |
+| `make`, `gcc` | Build essentials |
+
+### Languages & toolchains
+
+| Tool | Purpose |
+|---|---|
+| [python3](https://www.python.org), `python3-pip` | Python interpreter & package manager |
+| [rustup](https://rustup.rs) | Rust toolchain installer |
+| [go](https://go.dev) | Go toolchain |
+| [node](https://nodejs.org) | Node.js runtime |
+
+### Editors & terminals
+
+| Tool | Purpose |
+|---|---|
+| [neovim](https://neovim.io) | Modern Vim (LazyVim config in this repo) |
+| [vim](https://www.vim.org) | Classic Vim (fallback editor) |
+| [ghostty](https://ghostty.org) | GPU-accelerated terminal |
+| [iterm2](https://iterm2.com) | macOS terminal (cask) |
+
+### Misc
+
+| Tool | Purpose |
+|---|---|
+| [stow](https://www.gnu.org/software/stow) | Symlink farm manager (this repo's foundation) |
+| [portal](https://github.com/SpatiumPortae/portal) | Encrypted peer-to-peer file transfer |
+| [pfetch-rs](https://github.com/Macchina-CLI/pfetch-rs) | Minimal system info fetch (Linux) |
+| `xsel`, `xclip` | X11 clipboard helpers (Linux) |
+| `unzip` | Archive extraction |
 
 ---
 

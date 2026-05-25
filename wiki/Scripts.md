@@ -15,28 +15,52 @@ Options:
   --dry-run       Print what would happen, make no changes
   --no-brew       Skip Homebrew installation (Linux only; required on macOS)
   --no-terminal   Skip Starship + zsh plugin + TPM installation
+  --minimum       Install only the minimum tool set (default)
+  --all           Install the full tool set
   --help          Show help
 ```
+
+### Tiers
+
+By default the script installs only the **minimum** tool set — just enough for
+this dotfiles config to be fully usable:
+
+`stow`, `zsh`, `tmux`, `vim`, `unzip`, `make`, `gcc`, `fzf`, `ripgrep`, `jq`,
+plus Starship and the zsh/tmux plugins. `git` and `curl` are repo prerequisites.
+
+Pass `--all` to install the full ~50-tool catalog (extras for media, system
+monitoring, networking, GitHub CLI, language toolchains, macOS casks, etc.).
+
+The minimum set is defined by the `is_minimum()` function in
+[bootstrap.sh](../bootstrap.sh) — edit that function to change the cutoff.
+
+**Linux + minimum skips Homebrew installation.** Every minimum tool is
+available via apt/yay, so the ~500MB brew bootstrap is wasted in this mode.
+Use `--all` (or install brew manually) on Linux if you want it. macOS always
+installs brew — it's the only package manager.
 
 ### How it works
 
 1. Installs `yay` on Arch (if missing)
 2. Installs Homebrew (if missing, unless `--no-brew`)
-3. Installs packages:
+3. Installs packages (filtered by tier):
    - **Arch** → `yay -S`, falls back to `brew install`
    - **Ubuntu** → `apt install`, falls back to `brew install`
-   - **macOS** → `brew install` + `brew install --cask`
+   - **macOS** → `brew install` + `brew install --cask` (casks only with `--all`)
 4. Installs Starship, zsh-autosuggestions, zsh-syntax-highlighting, TPM
 
 ### Package lists
 
-| List | Used on |
-|---|---|
-| `common_apps` | All platforms |
-| `linux_apps` | Linux only (apt/yay) |
-| `brew_linux_apps` | Linux via brew |
-| `brew_mac_apps` | macOS via brew |
-| `mac_cask_brew_apps` | macOS casks (GUI apps, fonts) |
+| List | Used on | Naming rule |
+|---|---|---|
+| `common_apps` | All platforms | Package name identical across brew, apt, and yay |
+| `linux_apps` | Linux only (apt/yay) | apt-name; yay falls back to brew on mismatch |
+| `brew_linux_apps` | Linux via brew | Pulled from brew on Linux (newer versions than apt/yay) |
+| `brew_mac_apps` | macOS via brew | macOS-only formulas |
+| `mac_cask_brew_apps` | macOS casks | GUI apps and fonts |
+
+For the full per-tool catalog (with homepage links and purpose), see the
+[Tools section in README](../README.md#tools).
 
 Logs go to `logs/bootstrap-YYYY-MM-DD.log`.
 

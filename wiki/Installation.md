@@ -49,23 +49,41 @@ cd ~/dotfiles
 # Preview first — no changes made
 ./bootstrap.sh --dry-run
 
-# Install
+# Install the minimum tool set (default)
 ./bootstrap.sh
+
+# Install everything (~50 tools + macOS casks)
+./bootstrap.sh --all
 ```
 
-What this installs:
+The default is **minimum** — just enough for this dotfiles config to be usable:
+
+`stow`, `zsh`, `tmux`, `vim`, `unzip`, `make`, `gcc`, `fzf`, `ripgrep`, `jq`,
+plus Starship + zsh/tmux plugins.
+
+On **Linux**, minimum mode also skips installing Homebrew — every minimum
+tool is in apt/yay, so the brew bootstrap isn't needed. Use `--all` (or
+install brew manually) if you want it. macOS always installs brew.
+
+Pass `--all` to install the full catalog:
 
 | Category | Tools |
 |---|---|
-| Shell | zsh plugins, Starship, TPM |
+| Shell, prompt & session | zsh plugins, Starship, TPM, tmux, atuin, fzf, zoxide, direnv, keychain |
+| File navigation & search | bat, eza, fd, ripgrep, yazi, mc |
+| System monitoring | btop, fastfetch, duf, dust, hyperfine |
+| Networking | httpie, mtr, wakeonlan, lynx, w3m |
+| Git & GitHub | gh, lazygit, git-delta |
+| Data & documents | jq, yq, pandoc, tldr, most |
+| Images & media | imagemagick, pngquant, jpegoptim, ffmpegthumbnailer, poppler |
+| Shell scripting | shellcheck, shfmt, make, gcc |
+| Languages | Python 3, Rust (rustup), Go (golang), Node |
 | Editors | Neovim (via brew), Vim |
-| CLI | bat, eza, fd, fzf, ripgrep, zoxide, atuin, lazygit |
-| Monitoring | btop, fastfetch |
-| Terminals | Kitty, Ghostty (macOS) |
-| Languages | Go, Node, Rust (rustup), Python 3 |
-| Utilities | stow, tmux, keychain, pandoc, tldr, mc |
+| Terminals | Ghostty, iTerm2 (macOS) |
+| Utilities | stow, portal, pfetch-rs (Linux), xsel/xclip (Linux) |
 
-See [[Scripts#bootstrap.sh]] for full flag reference.
+See [[Scripts#bootstrap.sh]] for full flag reference, or the
+[Tools section in README](../README.md#tools) for per-tool descriptions and homepage links.
 
 ---
 
