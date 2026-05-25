@@ -11,7 +11,7 @@ show_always = true
 
 [hostname]
 ssh_only = false
-format = '[$ssh_symbol](bold blue) on [$hostname](bold purple) '
+format = '[${ssh_symbol} ](bold blue)on [$hostname](bold purple) '
 trim_at = "."
 disabled = false
 
