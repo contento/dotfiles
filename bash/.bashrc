@@ -118,7 +118,7 @@ function setup_typical_aliases() {
   # navigation
   alias ..='cd ..'
   alias ...='cd ../..'
-  mkd() { mkdir -p "$1" && cd "$1"; }
+  mkd() { mkdir -p "$1" && cd "$1" || return; }
 
   # file safety
   alias cp='cp -i'
@@ -155,6 +155,26 @@ function setup_path() {
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
   # shellcheck disable=SC1091
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+  # CUDA — auto-detect from /usr/local/cuda symlink, fall back to version scan
+  if [ -L /usr/local/cuda ] || [ -d /usr/local/cuda ]; then
+    local cuda_dir
+    cuda_dir="$(readlink -f /usr/local/cuda 2>/dev/null || echo /usr/local/cuda)"
+    [ -d "$cuda_dir/bin" ] && export PATH="$PATH:$cuda_dir/bin"
+    [ -d "$cuda_dir/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_dir/lib64"
+  else
+    # Fall back: check the highest installed CUDA version
+    # Use nullglob to avoid "no matches found" error when no CUDA versions are installed
+    shopt -s nullglob
+    local cuda_vers=(/usr/local/cuda-*)
+    shopt -u nullglob
+    if [ ${#cuda_vers[@]} -gt 0 ]; then
+      local cuda_ver
+      cuda_ver="$(printf '%s\n' "${cuda_vers[@]}" | sort -V | tail -1)"
+      [ -d "$cuda_ver/bin" ] && export PATH="$PATH:$cuda_ver/bin"
+      [ -d "$cuda_ver/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_ver/lib64"
+    fi
+  fi
 }
 
 function show_system_info() {
@@ -196,4 +216,3 @@ fi
 [ -d "$HOME/.lmstudio/bin" ] && export PATH="$PATH:$HOME/.lmstudio/bin"
 
 [ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
-

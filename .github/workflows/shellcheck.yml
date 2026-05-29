@@ -27,4 +27,10 @@ jobs:
         with:
           scandir: "."
           severity: style
-          ignore_names: ".zshrc"  # ZSH syntax triggers false positives in shellcheck
+          ignore_names: >-
+            .zshrc
+            .zshenv
+          ignore_paths: >-
+            tmux/.config/tmux/plugins/
+        env:
+          SHELLCHECK_OPTS: -e SC1091

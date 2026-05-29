@@ -228,7 +228,7 @@ setup_path() {
   else
     # Fall back: check the highest installed CUDA version
     local cuda_ver
-    cuda_ver="$(ls -d /usr/local/cuda-* 2>/dev/null | sort -V | tail -1)"
+    cuda_ver="$(ls -d /usr/local/cuda-*(N) 2>/dev/null | sort -V | tail -1)"
     if [ -n "$cuda_ver" ]; then
       [ -d "$cuda_ver/bin" ] && export PATH="$PATH:$cuda_ver/bin"
       [ -d "$cuda_ver/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_ver/lib64"
