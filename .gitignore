@@ -2,7 +2,6 @@
 .claude/settings.local.json
 *.log
 **/backup
-**/pfetch
 # **/lazy-lock.json   <-- removed to allow tracking of plugin lockfile
 **/tmux/plugins
 nvim/.config/nvim/lazyvim.json
@@ -13,5 +12,3 @@ zsh/.config/zsh/zsh-autosuggestions
 zsh/.config/zsh/zsh-completions
 zsh/.config/zsh/zsh-highlighting
 zsh/.config/zsh/.zcompdump
-
-

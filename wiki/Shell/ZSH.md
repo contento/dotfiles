@@ -1,6 +1,8 @@
 # ZSH
 
-Primary shell. Config follows the XDG Base Directory spec.
+ZSH is the primary daily driver shell — richer features (autosuggestions, syntax highlighting, advanced completion) and full XDG compliance. Bash is kept in sync as a fallback so the same aliases, prompt (Starship), and tool integrations work identically on machines where ZSH isn't available or practical to install.
+
+Config follows the XDG Base Directory spec.
 
 ---
 
@@ -64,16 +66,21 @@ History is stored at `$ZDOTDIR/.zsh_history` (1000 entries, timestamped).
 | `/usr/local/bin` | if directory exists |
 | `~/bin` | if directory exists |
 | `~/.local/bin` | if directory exists |
-| `/opt/homebrew/bin` | if directory exists (macOS) |
+| CUDA | auto-detected via `/usr/local/cuda` symlink or version scan |
 | `~/.cargo/bin` (via env) | if `~/.cargo/env` exists |
-| CUDA bin + lib64 | if CUDA 12 directories exist |
 | `~/.dotnet` | if directory exists |
+| `WATCOM` paths | if `$WATCOM_DIR` is set or vendored dir exists |
 | `~/.opencode/bin` | if directory exists |
+
+Brew PATH is handled by `setup_brew()` which runs `brew shellenv` (auto-detects prefix
+on all platforms). The old hardcoded paths (`/opt/homebrew/bin`, `/home/linuxbrew/.linuxbrew/bin`)
+have been removed in favor of this dynamic approach.
 
 ### Tool initialisation
 
 | Tool | Init method | Guard |
 |---|---|---|
+| brew | `brew shellenv` | `command -v brew` (handled by `setup_brew()`) |
 | Starship | `starship init zsh` | `type starship` |
 | zsh-autosuggestions | source plugin file | `[ -f file ]` |
 | zsh-syntax-highlighting | source plugin file | `[ -f file ]` |
@@ -85,7 +92,7 @@ History is stored at `$ZDOTDIR/.zsh_history` (1000 entries, timestamped).
 
 ### System info
 
-On shell start, shows `pfetch` if installed, else `fastfetch`.
+On shell start, shows `pfetch-rs` if installed, else `fastfetch`.
 
 ---
 

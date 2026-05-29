@@ -107,7 +107,7 @@ This runs `stow -R` on every package directory, creating symlinks in `$HOME`.
 - [ ] Set up SSH keys → see [[SSH]]
 - [ ] Install tmux plugins: open tmux, press `prefix + I`
 - [ ] Install Neovim plugins: open `nvim`, let lazy.nvim auto-install
-- [ ] Copy Homebrew packages to new machine: `xargs brew install < brew/brew.txt`
+- [ ] Install git hooks: `make install-hooks`
 
 ---
 

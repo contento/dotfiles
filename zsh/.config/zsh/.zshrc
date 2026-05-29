@@ -43,6 +43,14 @@ setup_aliases() {
 
   setup_podman_aliases
 
+  setup_nav_aliases
+
+  setup_file_aliases
+
+  setup_job_aliases
+
+  setup_tool_aliases
+
   if type zoxide >/dev/null 2>&1; then
     alias cd="z"
   fi
@@ -60,10 +68,47 @@ setup_aliases() {
   alias grep='grep --color=auto' # colorize output (good for log files)
 
   # vim/nvim aliases
-  alias v="nvim"
+  alias v="nvim ."
 
   # vscode aliases
-  alias c='code'
+  alias c='code .'
+}
+
+setup_nav_aliases() {
+  alias ..='cd ..'
+  alias ...='cd ../..'
+
+  # create a directory and cd into it
+  mkd() {
+    mkdir -p "$1" && cd "$1"
+  }
+}
+
+setup_file_aliases() {
+  alias cp='cp -i'
+  alias mv='mv -i'
+  alias rm='rm -i'
+  alias rmf='rm -rf'
+}
+
+setup_job_aliases() {
+  alias f='fg'
+  alias j='jobs'
+  alias h='htop'
+}
+
+setup_tool_aliases() {
+  if type lazygit >/dev/null 2>&1; then
+    alias lg='lazygit'
+  fi
+
+  if type make >/dev/null 2>&1; then
+    alias m='make'
+  fi
+
+  if type docker >/dev/null 2>&1; then
+    alias d='docker'
+  fi
 }
 
 setup_cat_aliases() {
@@ -159,28 +204,50 @@ setup_podman_aliases() {
   fi
 }
 
+setup_brew() {
+  # Activate brew shellenv on all platforms — auto-detects prefix
+  if command -v brew >/dev/null 2>&1; then
+    eval "$(brew shellenv 2>/dev/null)"
+  fi
+}
+
 setup_path() {
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
   [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
 
-  # brew
-  # shellcheck disable=SC1091
-  [ -d /opt/homebrew/bin ] && export PATH="$PATH:/opt/homebrew/bin"
-  [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
-
   # Rust
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-  # CUDA
-  cuda_version=12
-  [ -d "/usr/local/cuda-$cuda_version/bin" ] && export PATH="$PATH:/usr/local/cuda-$cuda_version/bin"
-  [ -d "/usr/local/cuda-$cuda_version/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda-$cuda_version/lib64"
+  # CUDA — auto-detect from /usr/local/cuda symlink, fall back to version scan
+  if [ -L /usr/local/cuda ] || [ -d /usr/local/cuda ]; then
+    local cuda_dir
+    cuda_dir="$(readlink -f /usr/local/cuda 2>/dev/null || echo /usr/local/cuda)"
+    [ -d "$cuda_dir/bin" ] && export PATH="$PATH:$cuda_dir/bin"
+    [ -d "$cuda_dir/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_dir/lib64"
+  else
+    # Fall back: check the highest installed CUDA version
+    local cuda_ver
+    cuda_ver="$(ls -d /usr/local/cuda-* 2>/dev/null | sort -V | tail -1)"
+    if [ -n "$cuda_ver" ]; then
+      [ -d "$cuda_ver/bin" ] && export PATH="$PATH:$cuda_ver/bin"
+      [ -d "$cuda_ver/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_ver/lib64"
+    fi
+  fi
 
   # dotnet
   if [ -d "$HOME/.dotnet" ]; then
     export DOTNET_ROOT="$HOME/.dotnet"
     export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+  fi
+
+  # Open Watcom (vendored) — guarded by env var or directory existence
+  if [ -n "${WATCOM_DIR:-}" ] && [ -d "$WATCOM_DIR" ]; then
+    export WATCOM="$WATCOM_DIR"
+    export PATH="$WATCOM/armo64:$PATH"
+  elif [ -d "$HOME/projects/contento/open-watcom-zinc/vendor/watcom" ]; then
+    export WATCOM=$HOME/projects/contento/open-watcom-zinc/vendor/watcom
+    export PATH=$WATCOM/armo64:$PATH
   fi
 }
 
@@ -223,10 +290,12 @@ setup_additional_tools() {
 
 setup_osc7() {
   _emit_osc7() {
+    local host
+    host="$(hostname 2>/dev/null || echo "${HOSTNAME:-localhost}")"
     if [ -n "$TMUX" ]; then
-      printf '\ePtmux;\e\e]7;file://%s%s\e\\\a' "${HOSTNAME}" "$PWD"
+      printf '\ePtmux;\e\e]7;file://%s%s\e\\\a' "${host}" "$PWD"
     else
-      printf '\e]7;file://%s%s\a' "${HOSTNAME}" "$PWD"
+      printf '\e]7;file://%s%s\a' "${host}" "$PWD"
     fi
   }
   autoload -Uz add-zsh-hook
@@ -234,18 +303,19 @@ setup_osc7() {
 }
 
 setup_additional_tools_linux() {
-  # ---- brew
-  [ -f /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  # No-op: brew shellenv is handled by setup_brew() above
+  :
 }
 
 setup_additional_tools_mac() {
-  # brew ???
+  # No-op: brew shellenv is handled by setup_brew() above
+  :
 }
 
 # Function to show system info
 show_system_info() {
-  if type pfetch >/dev/null; then
-    pfetch
+  if type pfetch-rs >/dev/null; then
+    pfetch-rs
   elif type fastfetch >/dev/null; then
     fastfetch --config $XDG_CONFIG_HOME/fastfetch/config.jsonc
   fi
@@ -253,6 +323,7 @@ show_system_info() {
 # Execute all setup functions
 setup_zsh_options
 setup_history
+setup_brew
 setup_path
 setup_additional_tools
 setup_osc7

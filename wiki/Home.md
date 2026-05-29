@@ -2,7 +2,7 @@
 
 Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-**Shells:** bash · zsh  
+**Shells:** bash · zsh
 **Platforms:** macOS · Ubuntu/Debian · Arch Linux
 
 ---
@@ -11,7 +11,8 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ### Setup
 - [[Installation]] — fresh machine setup, step by step
-- [[Scripts]] — `bootstrap.sh`, `stow-all.sh`, `fix-ssh-perms.sh`
+- [[Scripts]] — `bootstrap.sh`, `stow-all.sh`, `fix-ssh-perms.sh`, `sync-shell-configs.sh`
+- [[Makefile]] — `make bootstrap`, `make stow`, `make lint`, etc.
 - [[SSH]] — key management, permissions, agent setup
 
 ### Shell
@@ -38,22 +39,26 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ```
 dotfiles/
-├── bash/         → ~/.bashrc
-├── brew/         → brew leaves snapshot
-├── btop/         → ~/.config/btop/
-├── editorconfig/ → ~/.editorconfig
-├── fastfetch/    → ~/.config/fastfetch/
-├── ghostty/      → ~/.config/ghostty/
-├── git/          → ~/.gitconfig
-├── mc/           → ~/.config/mc/
-├── nvim/         → ~/.config/nvim/
-├── starship/     → ~/.config/starship.toml
-├── tmux/         → ~/.config/tmux/
-├── vim/          → ~/.vim/
-├── yazi/         → ~/.config/yazi/
-├── zed/          → ~/.config/zed/
-├── zsh/          → ~/.zshenv + ~/.config/zsh/
-└── wiki/         ← you are here
+├── bash/                 → ~/.bashrc
+├── btop/                 → ~/.config/btop/
+├── editorconfig/         → ~/.editorconfig
+├── fastfetch/            → ~/.config/fastfetch/
+├── ghostty/              → ~/.config/ghostty/
+├── git/                  → ~/.gitconfig
+├── mc/                   → ~/.config/mc/
+├── nvim/                 → ~/.config/nvim/
+├── starship/             → ~/.config/starship.toml
+├── tmux/                 → ~/.config/tmux/
+├── vim/                  → ~/.vim/
+├── yazi/                 → ~/.config/yazi/
+├── zed/                  → ~/.config/zed/
+├── zsh/                  → ~/.zshenv + ~/.config/zsh/
+├── .githooks/            → Git hooks (pre-commit sync check)
+├── .github/              → CI workflows
+├── Makefile              → Convenience targets
+├── sync-shell-configs.sh → Bash/ZSH config drift detector
+└── wiki/                 ← you are here
 ```
 
 Each directory is a Stow package. Running `stow-all.sh` symlinks everything into `$HOME`.
+Run `make install-hooks` to activate the pre-commit hook that keeps [[CLAUDE.md]] and [[.github/copilot-instructions.md]] in sync.

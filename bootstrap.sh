@@ -28,7 +28,7 @@ common_apps=(
     ffmpegthumbnailer  # yazi: video thumbnails
     fzf
     gcc
-    git-delta          # better git diff viewer (binary: delta)
+    git-delta          # package name across brew/apt/yay; the installed binary is 'delta'
     httpie             # friendlier curl
     hyperfine          # command-line benchmarking
     imagemagick        # yazi: image preview

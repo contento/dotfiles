@@ -16,25 +16,28 @@ Supports **macOS**, **Ubuntu/Debian**, and **Arch Linux**. Works with **bash** a
 
 ```
 dotfiles/
-├── bash/             # bash configuration
-├── brew/             # Homebrew bundle / leaves
-├── btop/             # btop resource monitor config
-├── editorconfig/     # .editorconfig
-├── fastfetch/        # fastfetch system info config
-├── ghostty/          # Ghostty terminal config
-├── git/              # git global config & aliases
-├── mc/               # Midnight Commander config
-├── nvim/             # Neovim (LazyVim) config
-├── starship/         # Starship prompt config
-├── tmux/             # tmux config + TPM
-├── vim/              # Vim config
-├── yazi/             # Yazi file manager config
-├── zed/              # Zed editor config
-├── zsh/              # zsh config (primary shell)
-├── wiki/             # Obsidian knowledge base
-├── bootstrap.sh   # Install packages and terminal tools
-├── stow-all.sh       # Symlink all configs via stow
-└── fix-ssh-perms.sh # Fix SSH key file permissions
+├── bash/                 # bash configuration
+├── btop/                 # btop resource monitor config
+├── editorconfig/         # .editorconfig
+├── fastfetch/            # fastfetch system info config
+├── ghostty/              # Ghostty terminal config
+├── git/                  # git global config & aliases
+├── mc/                   # Midnight Commander config
+├── nvim/                 # Neovim (LazyVim) config
+├── starship/             # Starship prompt config
+├── tmux/                 # tmux config + TPM
+├── vim/                  # Vim config
+├── yazi/                 # Yazi file manager config
+├── zed/                  # Zed editor config
+├── zsh/                  # zsh config (primary shell)
+├── wiki/                 # Obsidian knowledge base
+├── .githooks/            # Git hooks (pre-commit checks)
+├── .github/              # CI workflows
+├── bootstrap.sh          # Install packages and terminal tools
+├── fix-ssh-perms.sh      # Fix SSH key file permissions
+├── Makefile              # Convenience targets (make bootstrap, make stow, etc.)
+├── stow-all.sh           # Symlink all configs via stow
+└── sync-shell-configs.sh # Detect drift between bash/zsh configs
 ```
 
 ## Quick Start
@@ -166,7 +169,7 @@ Options:
 ./stow-all.sh --dry-run
 
 # Exclude multiple dirs
-./stow-all.sh --exclude=logs,brew
+./stow-all.sh --exclude=logs,git
 
 # Verbose dry run
 ./stow-all.sh --dry-run --verbose
@@ -304,17 +307,6 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 
 ---
 
-## Homebrew
-
-```bash
-# Save current packages before leaving a machine
-brew leaves > brew/leaves.txt
-
-# Restore on a new machine
-xargs brew install < brew/leaves.txt
-```
-
----
 
 ## Shell Setup
 
@@ -335,7 +327,7 @@ ZSH config lives in `~/.config/zsh/` (XDG-compliant). Entry point is `~/.zshenv`
 
 ### Bash
 
-`.bashrc` is a fallback / secondary shell config. Activated on machines where zsh is not the default.
+Bash is maintained alongside ZSH as a fallback / secondary shell config. While ZSH is the primary daily driver with richer features (autosuggestions, syntax highlighting, advanced completion), Bash ensures compatibility everywhere: it's the default shell on most Linux distros (`/bin/sh`), the Docker container base, and minimal or headless environments where installing ZSH isn't practical. Both configs share the same aliases, prompt (Starship), and tool integrations so the experience is consistent regardless of which shell is active.
 
 ### Environment variable guards
 
@@ -376,7 +368,7 @@ Host <alias>
 
 ## Wiki
 
-A full Obsidian knowledge base lives in [`wiki/`](./wiki/Home.md).  
+A full Obsidian knowledge base lives in [`wiki/`](./wiki/Home.md).
 Open the `wiki/` folder as an Obsidian vault to browse with graph view and wikilinks.
 
 ---

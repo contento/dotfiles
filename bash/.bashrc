@@ -20,35 +20,28 @@ function configure_terminal() {
   [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 }
 
-# Set up the prompt
-function setup_prompt() {
-  if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+function setup_starship() {
+  if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init bash)"
   fi
+}
 
-  case "$TERM" in
-  xterm-color | *-256color) color_prompt=yes ;;
-  esac
-
-  force_color_prompt=yes
-  if [ -n "$force_color_prompt" ] && [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    color_prompt=yes
-  else
-    color_prompt=
+function setup_zoxide() {
+  if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init bash)"
   fi
+}
 
-  if [ "$color_prompt" = yes ]; then
-    PS1='\[\e]0;\w\a\]\n\[\e[38;5;39m\]\u@\h: \[\e[38;5;103m\]\w\[\e[0m\]\n\$ '
-  else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+function setup_atuin() {
+  if command -v atuin >/dev/null 2>&1; then
+    eval "$(atuin init bash)"
   fi
-  unset color_prompt force_color_prompt
+}
 
-  case "$TERM" in
-  xterm* | rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-  esac
+function setup_direnv() {
+  if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook bash)"
+  fi
 }
 
 function load_custom_aliases() {
@@ -97,10 +90,12 @@ function source_fzf() {
 
 function setup_osc7() {
   _emit_osc7() {
+    local host
+    host="$(hostname 2>/dev/null || echo "${HOSTNAME:-localhost}")"
     if [ -n "$TMUX" ]; then
-      printf '\ePtmux;\e\e]7;file://%s%s\e\\\a' "${HOSTNAME}" "$PWD"
+      printf '\ePtmux;\e\e]7;file://%s%s\e\\\a' "${host}" "$PWD"
     else
-      printf '\e]7;file://%s%s\a' "${HOSTNAME}" "$PWD"
+      printf '\e]7;file://%s%s\a' "${host}" "$PWD"
     fi
   }
   PROMPT_COMMAND="_emit_osc7${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
@@ -117,8 +112,30 @@ function setup_typical_aliases() {
   alias l='ls $LS_OPTIONS -lA'
 
   alias y='yazi'
-  alias v='nvim'
-  alias c='code'
+  alias v='nvim .'
+  alias c='code .'
+
+  # navigation
+  alias ..='cd ..'
+  alias ...='cd ../..'
+  mkd() { mkdir -p "$1" && cd "$1"; }
+
+  # file safety
+  alias cp='cp -i'
+  alias mv='mv -i'
+  alias rm='rm -i'
+  alias rmf='rm -rf'
+
+  # jobs & system
+  alias f='fg'
+  alias j='jobs'
+  # btop is installed, not htop
+  command -v btop >/dev/null 2>&1 && alias h='btop'
+
+  # tool aliases (guarded)
+  command -v lazygit >/dev/null 2>&1 && alias lg='lazygit'
+  command -v make    >/dev/null 2>&1 && alias m='make'
+  command -v docker  >/dev/null 2>&1 && alias d='docker'
 
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
@@ -126,17 +143,23 @@ function setup_typical_aliases() {
   alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history | tail -n1 | sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 }
 
+function setup_brew() {
+  # Activate brew shellenv on all platforms — auto-detects prefix
+  if command -v brew >/dev/null 2>&1; then
+    eval "$(brew shellenv 2>/dev/null)"
+  fi
+}
+
 function setup_path() {
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
-  # [ -d "/opt/homebrew/opt/rustup/bin" ] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
   # shellcheck disable=SC1091
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 }
 
 function show_system_info() {
-  if command -v pfetch >/dev/null 2>&1; then
-    pfetch
+  if command -v pfetch-rs >/dev/null 2>&1; then
+    pfetch-rs
   elif command -v fastfetch >/dev/null 2>&1; then
     fastfetch
   fi
@@ -146,7 +169,11 @@ function show_system_info() {
 check_interactive
 configure_history
 configure_terminal
-setup_prompt
+setup_starship
+setup_zoxide
+setup_atuin
+setup_direnv
+setup_brew
 setup_path
 setup_typical_aliases
 load_custom_aliases
@@ -155,6 +182,13 @@ setup_ssh_agent
 source_fzf
 setup_osc7
 show_system_info
+
+# nvm
+if [ -d "$HOME/.config/nvm" ]; then
+  export NVM_DIR="$HOME/.config/nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+fi
 
 # shellcheck disable=SC1091
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"

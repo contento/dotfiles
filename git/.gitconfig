@@ -6,6 +6,7 @@
     editor = vim
     excludesfile = ~/.gitignore_global  # Global ignore file
     autocrlf = input   # Useful on cross-platform systems (LF for macOS/Linux, CRLF for Windows)
+    hooksPath = .githooks
 
 [color]
     ui = true   # Enable colored output
@@ -33,8 +34,8 @@
 [credential]
     helper = cache  # Cache credentials for a while
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential

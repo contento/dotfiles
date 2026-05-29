@@ -90,9 +90,45 @@ Options:
 
 ```bash
 ./stow-all.sh --dry-run
-./stow-all.sh --exclude=logs,brew
+./stow-all.sh --exclude=logs,git
 ./stow-all.sh --dry-run --verbose
 ```
+
+---
+
+---
+
+## sync-shell-configs.sh
+
+Detects drift between the bash and zsh shell configs — reports differences in functions,
+tool initializations, and environment variables.
+
+```
+./sync-shell-configs.sh [--diff]
+
+Options:
+  --diff   Show a full diff of bashrc vs zshrc content (stripped of comments/blank lines)
+```
+
+Useful after making changes to one shell config to see if the other needs the same update.
+
+---
+
+## Makefile
+
+Convenience targets for common operations. Run `make` without arguments to see all targets.
+
+| Target | Description |
+|---|---|
+| `make bootstrap` | Install minimum packages |
+| `make bootstrap-all` | Install full package set |
+| `make bootstrap-dry-run` | Preview package installation |
+| `make stow` | Symlink all configs |
+| `make stow-dry-run` | Preview stow |
+| `make lint` | Run shellcheck on all scripts |
+| `make check-sync` | Verify CLAUDE.md ↔ copilot-instructions.md sync |
+| `make install-hooks` | Activate pre-commit hook (sets `core.hooksPath`) |
+| `make fix-ssh` | Fix SSH directory permissions |
 
 ---
 

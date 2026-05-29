@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Pre-commit hook: enforce CLAUDE.md ↔ .github/copilot-instructions.md sync
+set -euo pipefail
+
+claude_md="$(git rev-parse --show-toplevel 2>/dev/null)/CLAUDE.md"
+copilot_md="$(git rev-parse --show-toplevel 2>/dev/null)/.github/copilot-instructions.md"
+
+if [[ ! -f "$claude_md" ]] || [[ ! -f "$copilot_md" ]]; then
+    echo "⚠️  pre-commit: CLAUDE.md or .github/copilot-instructions.md not found — skipping sync check"
+    exit 0
+fi
+
+# Compare the shared body:
+#   - Skip the first 8 lines (file-specific headers with different titles and relative links)
+#   - Strip markdown link targets (text inside parentheses) before comparing, because
+#     relative link paths like (../.githooks/...) vs (.githooks/...) differ between dirs
+if ! diff -q \
+    <(tail -n +9 "$claude_md" | sed 's/([^)]*)//g') \
+    <(tail -n +9 "$copilot_md" | sed 's/([^)]*)//g') \
+    >/dev/null 2>&1; then
+    echo "❌ CLAUDE.md and .github/copilot-instructions.md have diverged!"
+    echo "   Both files must be updated in the same commit."
+    echo "   Run 'diff CLAUDE.md .github/copilot-instructions.md' to see differences."
+    exit 1
+fi
+
+exit 0

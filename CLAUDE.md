@@ -4,14 +4,14 @@ Guidelines for Claude Code when working in this repository.
 
 > **Kept in sync with [`.github/copilot-instructions.md`](.github/copilot-instructions.md).**
 > Any change to one must be mirrored in the other so both assistants follow the same rules.
-> TODO: automate this sync via a pre-commit hook so the two files cannot drift.
+> A pre-commit hook ([`.githooks/pre-commit`](.githooks/pre-commit)) enforces this — configure with `make install-hooks`.
 
 ## Project overview
 
 Personal dotfiles managed with GNU Stow.
 Each top-level directory is a Stow package that symlinks into `$HOME`.
 
-Target shells: **bash** and **zsh** — all shell code must work in both.  
+Target shells: **bash** and **zsh** — all shell code must work in both.
 Target platforms: **macOS**, **Ubuntu/Debian**, **Arch Linux** — all scripts must work on all three.
 
 ## Scripting rules
@@ -100,8 +100,9 @@ supported tools, update the relevant README section before considering the task 
 Update the relevant wiki page when a config or behaviour changes.
 
 **Keep AI-assistant instructions in sync.** `CLAUDE.md` and `.github/copilot-instructions.md`
-share the same body. Any rule change must be applied to both in the same commit. TODO: replace
-this manual rule with a pre-commit hook that fails if the two files diverge.
+share the same body. Any rule change must be applied to both in the same commit. A pre-commit
+hook ([`.githooks/pre-commit`](.githooks/pre-commit)) fails the commit if the two files diverge.
+Run `make install-hooks` to activate.
 
 ## Stow layout
 
