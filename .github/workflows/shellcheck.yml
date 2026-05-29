@@ -7,12 +7,14 @@ on:
       - "*.sh"
       - "bash/**"
       - "zsh/**"
+      - ".github/workflows/shellcheck.yml"
   pull_request:
     branches: [main]
     paths:
       - "*.sh"
       - "bash/**"
       - "zsh/**"
+      - ".github/workflows/shellcheck.yml"
 
 permissions:
   contents: read
