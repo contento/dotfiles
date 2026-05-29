@@ -30,6 +30,9 @@ jobs:
           ignore_names: >-
             .zshrc
             .zshenv
+            .zprofile
+            .zlogin
+            .zlogout
           ignore_paths: >-
             tmux/.config/tmux/plugins/
         env:
