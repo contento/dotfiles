@@ -1,0 +1,1 @@
+{"nodes": [{"id": "plugins_nui_nvim_spec", "label": "nui.nvim plugin spec", "file_type": "code", "source_file": "nvim/.config/nvim/lua/plugins/nui.nvim.lua", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

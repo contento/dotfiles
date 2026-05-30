@@ -1,0 +1,1 @@
+{"nodes": [{"id": "plugins_nvim_web_devicons_spec", "label": "nvim-web-devicons plugin spec", "file_type": "code", "source_file": "nvim/.config/nvim/lua/plugins/nvim-web-devicons.lua", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

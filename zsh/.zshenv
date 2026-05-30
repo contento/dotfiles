@@ -70,3 +70,6 @@ if command -v fd >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
     esac
   }
 fi
+
+# uv (and other user-local binaries) — added only if the directory exists
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
