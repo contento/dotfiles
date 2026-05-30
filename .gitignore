@@ -12,3 +12,7 @@ zsh/.config/zsh/zsh-autosuggestions
 zsh/.config/zsh/zsh-completions
 zsh/.config/zsh/zsh-highlighting
 zsh/.config/zsh/.zcompdump
+# graphify: ignore regenerable cache and machine-specific scratch files
+# (keep graph.json, graph.html, GRAPH_REPORT.md, cost.json, manifest.json)
+graphify-out/cache/
+graphify-out/.graphify_*
