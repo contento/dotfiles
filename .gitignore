@@ -16,3 +16,6 @@ zsh/.config/zsh/.zcompdump
 # (keep graph.json, graph.html, GRAPH_REPORT.md, cost.json, manifest.json)
 graphify-out/cache/
 graphify-out/.graphify_*
+# manifest.json is mtime-based and breaks after git clone; cost.json is local-only
+graphify-out/manifest.json
+graphify-out/cost.json
