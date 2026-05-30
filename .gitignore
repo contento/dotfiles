@@ -19,3 +19,5 @@ graphify-out/.graphify_*
 # manifest.json is mtime-based and breaks after git clone; cost.json is local-only
 graphify-out/manifest.json
 graphify-out/cost.json
+# saved query/explain result memory — local-only
+graphify-out/memory/
