@@ -50,10 +50,4 @@ fastfetch/.config/fastfetch/config.jsonc.bak
 # ==============================================================================
 # graphify knowledge graph (regenerated from source via `graphify update .`)
 # ==============================================================================
-# Keep graph.json, graph.html, GRAPH_REPORT.md (first-party source analysis)
-# Ignore cache, regenerable state, and machine-specific metadata
-graphify-out/cache/
-graphify-out/.graphify_*
-graphify-out/manifest.json
-graphify-out/cost.json
-graphify-out/memory/
+graphify-out/
