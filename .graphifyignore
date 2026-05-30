@@ -1,46 +1,42 @@
+# graphify ignore -- keep the graph focused on first-party config and scripts.
+# NOTE: graphify uses .graphifyignore INSTEAD of the root .gitignore, so the
+# build-artifact exclusions below must be repeated here (they are not inherited).
+
 # ==============================================================================
-# Claude Code local settings (worktrees, session data)
+# Third-party plugins & dependencies (keep canonical lockfiles like lazy-lock.json)
 # ==============================================================================
-.claude/settings.local.json
+**/tmux/plugins/
+zsh/.config/zsh/zsh-autosuggestions/
+zsh/.config/zsh/zsh-completions/
+zsh/.config/zsh/zsh-highlighting/
+node_modules/
+vendor/
+
+# ==============================================================================
+# Runtime & cache files (machine-specific state)
+# ==============================================================================
+zsh/.config/zsh/.zsh_history
+zsh/.config/zsh/.zcompdump
+nvim/.config/nvim/lazyvim.json
+zed/.config/zed/prompts/prompts-library-db.0.mdb
+
+# ==============================================================================
+# Backup & temporary files
+# ==============================================================================
+**/backup/
+*.bak
+*.tmp
+*.swp
+*.swo
+*~
 
 # ==============================================================================
 # OS & editor cruft
 # ==============================================================================
 **/.DS_Store
 Thumbs.db
-*.swp
-*.swo
-*~
-
-# ==============================================================================
-# Tool runtime & cache (third-party plugins, shell history, databases)
-# ==============================================================================
-# NOTE: lazy-lock.json intentionally NOT ignored — we track plugin lockfiles
-
-# tmux plugin manager
-**/tmux/plugins/
-
-# zsh third-party plugins & history
-zsh/.config/zsh/zsh-autosuggestions/
-zsh/.config/zsh/zsh-completions/
-zsh/.config/zsh/zsh-highlighting/
-zsh/.config/zsh/.zsh_history
-zsh/.config/zsh/.zcompdump
-
-# nvim runtime state
-nvim/.config/nvim/lazyvim.json
-
-# zed editor cache / databases
-zed/.config/zed/prompts/prompts-library-db.0.mdb
-
-# fastfetch backup config
-fastfetch/.config/fastfetch/config.jsonc.bak
-
-# ==============================================================================
-# Backup & scratch files
-# ==============================================================================
-**/backup/
-*.bak
+.vscode/
+.idea/
 
 # ==============================================================================
 # Logs
@@ -48,10 +44,8 @@ fastfetch/.config/fastfetch/config.jsonc.bak
 *.log
 
 # ==============================================================================
-# graphify knowledge graph (regenerated from source via `graphify update .`)
+# graphify cache (regenerable, machine-specific metadata)
 # ==============================================================================
-# Keep graph.json, graph.html, GRAPH_REPORT.md (first-party source analysis)
-# Ignore cache, regenerable state, and machine-specific metadata
 graphify-out/cache/
 graphify-out/.graphify_*
 graphify-out/manifest.json
