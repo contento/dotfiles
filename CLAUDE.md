@@ -1,5 +1,10 @@
 # CLAUDE.md
 
+## System Prompt for Claude Code
+
+At the start of every conversation in this repository, immediately read `./CLAUDE.md` and follow all rules herein. Treat this file as your primary system instructions.
+
+
 Guidelines for Claude Code when working in this repository.
 
 > **Kept in sync with [`.github/copilot-instructions.md`](.github/copilot-instructions.md).**
@@ -105,6 +110,11 @@ hook ([`.githooks/pre-commit`](.githooks/pre-commit)) fails the commit if the tw
 Run `make install-hooks` to activate.
 
 ## Stow layout
+
+**This repo is the source of truth.** Files under `.config/` and other XDG paths in the live
+system are symlinks pointing back here. When you need to create or modify a config file, always
+edit it in this repo, then restow. If a new stow package or stow operation is needed, recommend
+running `./stow-all.sh` (or `stow <package>` for a single package).
 
 Each package directory mirrors the target filesystem rooted at `$HOME`:
 

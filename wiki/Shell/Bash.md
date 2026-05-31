@@ -25,7 +25,7 @@ Functions called in order:
 13. `setup_ssh_agent` — persistent agent via `~/.ssh/environment`
 14. `source_fzf` — sources `~/.fzf.bash` if present
 15. `setup_osc7` — terminal URL support (uses `$(hostname)` for portability)
-16. `show_system_info` — `pfetch-rs` or `fastfetch`
+16. `show_system_info` — `pfetch-rs` (primary) or `fastfetch` (fallback)
 17. **nvm** — loads `$HOME/.config/nvm/nvm.sh` if present
 
 ---

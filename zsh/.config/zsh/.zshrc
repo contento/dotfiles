@@ -314,8 +314,8 @@ setup_additional_tools_mac() {
 
 # Function to show system info
 show_system_info() {
-  if type pfetch-rs >/dev/null; then
-    pfetch-rs
+  if type pfetch >/dev/null; then
+    pfetch
   elif type fastfetch >/dev/null; then
     fastfetch --config $XDG_CONFIG_HOME/fastfetch/config.jsonc
   fi

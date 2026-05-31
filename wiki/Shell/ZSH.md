@@ -92,7 +92,7 @@ have been removed in favor of this dynamic approach.
 
 ### System info
 
-On shell start, shows `pfetch-rs` if installed, else `fastfetch`.
+On shell start, shows `pfetch-rs` (primary) if installed, else `fastfetch` (fallback).
 
 ---
 

@@ -301,7 +301,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 |---|---|
 | [stow](https://www.gnu.org/software/stow) | Symlink farm manager (this repo's foundation) |
 | [portal](https://github.com/SpatiumPortae/portal) | Encrypted peer-to-peer file transfer |
-| [pfetch-rs](https://github.com/Macchina-CLI/pfetch-rs) | Minimal system info fetch (Linux) |
+| [pfetch-rs](https://github.com/Macchina-CLI/pfetch-rs) | Minimal system info fetch (primary shell fetch tool) |
 | `xsel`, `xclip` | X11 clipboard helpers (Linux) |
 | `unzip` | Archive extraction |
 

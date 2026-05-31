@@ -178,8 +178,8 @@ function setup_path() {
 }
 
 function show_system_info() {
-  if command -v pfetch-rs >/dev/null 2>&1; then
-    pfetch-rs
+  if command -v pfetch >/dev/null 2>&1; then
+    pfetch
   elif command -v fastfetch >/dev/null 2>&1; then
     fastfetch
   fi

@@ -71,7 +71,7 @@ Pass `--all` to install the full catalog:
 |---|---|
 | Shell, prompt & session | zsh plugins, Starship, TPM, tmux, atuin, fzf, zoxide, direnv, keychain |
 | File navigation & search | bat, eza, fd, ripgrep, yazi, mc |
-| System monitoring | btop, fastfetch, duf, dust, hyperfine |
+| System monitoring | btop, pfetch-rs, fastfetch (fallback), duf, dust, hyperfine |
 | Networking | httpie, mtr, wakeonlan, lynx, w3m |
 | Git & GitHub | gh, lazygit, git-delta |
 | Data & documents | jq, yq, pandoc, tldr, most |
@@ -80,7 +80,7 @@ Pass `--all` to install the full catalog:
 | Languages | Python 3, Rust (rustup), Go (golang), Node |
 | Editors | Neovim (via brew), Vim |
 | Terminals | Ghostty, iTerm2 (macOS) |
-| Utilities | stow, portal, pfetch-rs (Linux), xsel/xclip (Linux) |
+| Utilities | stow, portal, pfetch-rs, xsel/xclip (Linux) |
 
 See [[Scripts#bootstrap.sh]] for full flag reference, or the
 [Tools section in README](../README.md#tools) for per-tool descriptions and homepage links.

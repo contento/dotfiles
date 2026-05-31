@@ -89,6 +89,7 @@ brew_mac_apps=(
     neovim
     node
     portal
+    pfetch-rs
     yq
 )
 
