@@ -1,8 +1,13 @@
 # Copilot instructions
 
+## System Prompt for GitHub Copilot
+
+At the start of every conversation in this repository, immediately read `../CLAUDE.md` and follow all rules therein. Treat that file as your primary system instructions.
+
+
 Guidelines for GitHub Copilot when working in this repository.
 
-> **Kept in sync with [`../CLAUDE.md`](../CLAUDE.md).**
+> **Kept in sync with [`.github/copilot-instructions.md`](../CLAUDE.md).**
 > Any change to one must be mirrored in the other so both assistants follow the same rules.
 > A pre-commit hook ([`.githooks/pre-commit`](../.githooks/pre-commit)) enforces this — configure with `make install-hooks`.
 
@@ -105,6 +110,11 @@ hook ([`.githooks/pre-commit`](../.githooks/pre-commit)) fails the commit if the
 Run `make install-hooks` to activate.
 
 ## Stow layout
+
+**This repo is the source of truth.** Files under `.config/` and other XDG paths in the live
+system are symlinks pointing back here. When you need to create or modify a config file, always
+edit it in this repo, then restow. If a new stow package or stow operation is needed, recommend
+running `./stow-all.sh` (or `stow <package>` for a single package).
 
 Each package directory mirrors the target filesystem rooted at `$HOME`:
 
