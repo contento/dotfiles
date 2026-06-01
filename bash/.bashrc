@@ -156,6 +156,13 @@ function setup_path() {
   # shellcheck disable=SC1091
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+  # Node.js — fallback if nvm is not installed
+  if ! command -v node >/dev/null 2>&1; then
+    local latest_node
+    latest_node="$(ls -d "$HOME/.config/nvm/versions/node"/* 2>/dev/null | sort -V | tail -1)"
+    [ -d "$latest_node/bin" ] && export PATH="$PATH:$latest_node/bin"
+  fi
+
   # CUDA — auto-detect from /usr/local/cuda symlink, fall back to version scan
   if [ -L /usr/local/cuda ] || [ -d /usr/local/cuda ]; then
     local cuda_dir

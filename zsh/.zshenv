@@ -71,5 +71,22 @@ if command -v fd >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
   }
 fi
 
+# nvm — Node.js version manager
+if [ -d "$HOME/.config/nvm" ]; then
+  export NVM_DIR="$HOME/.config/nvm"
+fi
+
 # uv (and other user-local binaries) — added only if the directory exists
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+
+# Node.js — fallback if nvm is not installed, or use nvm's node directly
+if command -v node >/dev/null 2>&1; then
+  : # node is available, nothing to do
+elif command -v nvm >/dev/null 2>&1; then
+  : # nvm is available, will be fully initialized in .zshrc
+elif [ -d "$HOME/.config/nvm/versions/node" ]; then
+  # nvm is installed but not yet sourced, find the latest node version
+  local latest_node
+  latest_node="$(ls -d "$HOME/.config/nvm/versions/node"/* 2>/dev/null | sort -V | tail -1)"
+  [ -d "$latest_node/bin" ] && export PATH="$latest_node/bin:$PATH"
+fi
