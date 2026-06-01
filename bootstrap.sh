@@ -220,6 +220,34 @@ install_tmux_plugin_manager() {
     run_cmd git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
 
+install_nvm() {
+    log "**** Installing nvm (Node Version Manager) ..."
+
+    if [[ -d "$HOME/.config/nvm" ]]; then
+        log "**** nvm already installed at ~/.config/nvm"
+        return 0
+    fi
+
+    # Create the nvm directory if it doesn't exist (needed by shell configs)
+    mkdir -p "$HOME/.config/nvm"
+
+    log "**** Cloning nvm repository ..."
+    if [[ "$dry_run" == true ]]; then
+        log "[dry-run] git clone https://github.com/nvm-sh/nvm.git ~/.config/nvm"
+    else
+        git clone https://github.com/nvm-sh/nvm.git "$HOME/.config/nvm" 2>&1 | tee -a "$logfile_path"
+
+        # Source nvm and install default Node version (from .nvmrc if available)
+        # shellcheck disable=SC1090
+        [ -s "$HOME/.config/nvm/nvm.sh" ] && . "$HOME/.config/nvm/nvm.sh"
+
+        if command -v nvm &>/dev/null; then
+            log "**** Installing default Node version from .nvmrc ..."
+            nvm install 2>&1 | tee -a "$logfile_path"
+        fi
+    fi
+}
+
 install_yay() {
     if [[ ! -f /etc/arch-release ]]; then
         return
@@ -471,5 +499,8 @@ fi
 
 # TPM must run after tmux is installed
 install_tmux_plugin_manager
+
+# NVM setup
+install_nvm
 
 setup_terminal

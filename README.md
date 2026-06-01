@@ -23,6 +23,7 @@ dotfiles/
 ├── ghostty/              # Ghostty terminal config
 ├── git/                  # git global config & aliases
 ├── mc/                   # Midnight Commander config
+├── nvm/                  # nvm (Node Version Manager) config
 ├── nvim/                 # Neovim (LazyVim) config
 ├── starship/             # Starship prompt config
 ├── tmux/                 # tmux config + TPM
@@ -129,6 +130,7 @@ Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt`
    - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
    - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 5. **Tmux plugins** — [TPM](https://github.com/tmux-plugins/tpm) cloned to `~/.tmux/plugins/tpm`, plugins declared in [tmux/.config/tmux/tmux.conf](tmux/.config/tmux/tmux.conf): tmux-sensible, tmux-resurrect, tmux-continuum, tmux-fzf, tmux-sessionx, tmux-yank, rose-pine.
+6. **Node Version Manager** — [nvm](https://github.com/nvm-sh/nvm) cloned to `~/.config/nvm` (XDG-compliant location), with default Node.js version installed from `.nvmrc`.
 
 ```
 Options:
@@ -284,7 +286,8 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [python3](https://www.python.org), `python3-pip` | Python interpreter & package manager |
 | [rustup](https://rustup.rs) | Rust toolchain installer |
 | [go](https://go.dev) | Go toolchain |
-| [node](https://nodejs.org) | Node.js runtime |
+| [nvm](https://github.com/nvm-sh/nvm) | Node.js version manager (installs multiple Node versions) |
+| [node](https://nodejs.org) | Node.js runtime (managed via nvm) |
 
 ### Editors & terminals
 
@@ -328,6 +331,31 @@ ZSH config lives in `~/.config/zsh/` (XDG-compliant). Entry point is `~/.zshenv`
 ### Bash
 
 Bash is maintained alongside ZSH as a fallback / secondary shell config. While ZSH is the primary daily driver with richer features (autosuggestions, syntax highlighting, advanced completion), Bash ensures compatibility everywhere: it's the default shell on most Linux distros (`/bin/sh`), the Docker container base, and minimal or headless environments where installing ZSH isn't practical. Both configs share the same aliases, prompt (Starship), and tool integrations so the experience is consistent regardless of which shell is active.
+
+### Node.js & nvm
+
+[nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) is installed at `~/.config/nvm` (XDG-compliant) by `bootstrap.sh`. It allows managing multiple Node.js versions per-project.
+
+```bash
+# Check nvm is installed
+nvm --version
+
+# List installed Node versions
+nvm list
+
+# Install a specific version
+nvm install 20
+
+# Use a specific version in the current shell
+nvm use 18
+
+# Set a default version
+nvm alias default 20
+```
+
+The shell configs automatically source nvm on startup, making all installed Node versions available. A `.nvmrc` file at `nvm/.config/nvm/.nvmrc` specifies the default Node version (`lts/*` = latest LTS).
+
+Project-specific `.nvmrc` files in your code repos tell nvm which version to use: `nvm use` reads and switches to that version automatically in compatible shells.
 
 ### Environment variable guards
 
