@@ -341,11 +341,42 @@ setup_aliases
 
 show_system_info
 
-if [ -d "$HOME/.config/nvm" ]; then
+setup_nvm() {
   export NVM_DIR="$HOME/.config/nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+
+  # Try Homebrew first
+  if command -v brew >/dev/null 2>&1; then
+    local brew_nvm_prefix
+    brew_nvm_prefix="$(brew --prefix nvm 2>/dev/null)"
+    if [ -n "$brew_nvm_prefix" ] && [ -s "$brew_nvm_prefix/nvm.sh" ]; then
+      . "$brew_nvm_prefix/nvm.sh"
+      [ -s "$brew_nvm_prefix/etc/bash_completion.d/nvm" ] && . "$brew_nvm_prefix/etc/bash_completion.d/nvm"
+      return 0
+    fi
+  fi
+
+  # Try common Linux system paths
+  local nvm_paths=(
+    "/usr/local/nvm/nvm.sh"
+    "/opt/nvm/nvm.sh"
+    "/usr/nvm/nvm.sh"
+  )
+  for nvm_script in "${nvm_paths[@]}"; do
+    if [ -s "$nvm_script" ]; then
+      . "$nvm_script"
+      [ -s "${nvm_script%/*}/bash_completion" ] && . "${nvm_script%/*}/bash_completion"
+      return 0
+    fi
+  done
+
+  # Try git clone in home directory (fallback)
+  if [ -s "$NVM_DIR/nvm.sh" ]; then
+    . "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+    return 0
+  fi
+}
+setup_nvm
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 

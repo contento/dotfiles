@@ -223,19 +223,40 @@ install_tmux_plugin_manager() {
 install_nvm() {
     log "**** Installing nvm (Node Version Manager) ..."
 
-    if [[ -d "$HOME/.config/nvm" ]]; then
-        log "**** nvm already installed at ~/.config/nvm"
+    if command -v nvm &>/dev/null; then
+        log "**** nvm already installed"
         return 0
     fi
 
-    # Create the nvm directory if it doesn't exist (needed by shell configs)
-    mkdir -p "$HOME/.config/nvm"
+    # Create the nvm config directory if it doesn't exist (needed by shell configs for .nvmrc)
+    run_cmd mkdir -p "$HOME/.config/nvm"
 
-    log "**** Cloning nvm repository ..."
+    # Try Homebrew first
+    if command -v brew &>/dev/null; then
+        log "**** Attempting to install nvm via Homebrew ..."
+        if run_cmd brew install nvm 2>&1 | tee -a "$logfile_path"; then
+            # Source nvm and install default Node version (from .nvmrc if available)
+            if [[ "$dry_run" != true ]]; then
+                # shellcheck disable=SC1090
+                local nvm_prefix
+                nvm_prefix="$(brew --prefix nvm)"
+                [ -s "$nvm_prefix/nvm.sh" ] && . "$nvm_prefix/nvm.sh"
+
+                if command -v nvm &>/dev/null; then
+                    log "**** Installing default Node version from .nvmrc ..."
+                    nvm install 2>&1 | tee -a "$logfile_path"
+                fi
+            fi
+            return 0
+        fi
+    fi
+
+    # Fallback: clone from git
+    log "**** Homebrew unavailable or failed; cloning nvm from git ..."
     if [[ "$dry_run" == true ]]; then
         log "[dry-run] git clone https://github.com/nvm-sh/nvm.git ~/.config/nvm"
     else
-        git clone https://github.com/nvm-sh/nvm.git "$HOME/.config/nvm" 2>&1 | tee -a "$logfile_path"
+        run_cmd git clone https://github.com/nvm-sh/nvm.git "$HOME/.config/nvm" 2>&1 | tee -a "$logfile_path"
 
         # Source nvm and install default Node version (from .nvmrc if available)
         # shellcheck disable=SC1090
