@@ -14,8 +14,39 @@ while [[ $# -gt 0 ]]; do
     dry_run=true
     shift
     ;;
+  --help | -h)
+    cat <<EOF
+Usage: $0 [OPTIONS]
+
+Creates a timestamped backup of machine-specific, non-stowed configs.
+
+OPTIONS:
+  --dry-run    Show what would be backed up without creating files
+  --help, -h   Show this help message
+
+BACKUP LOCATION:
+  \$BACKUP_FOLDER (default: ~/.local/share/dotfiles/backups/)
+
+BACKED UP FILES:
+  - ~/.config/smug/*.yml (machine-specific session configs, excludes projects.yml)
+  - ~/.config/zsh/.zsh_history (zsh command history)
+  - ~/.ssh/ (SSH config and keys)
+
+EXAMPLES:
+  # Preview what will be backed up
+  $0 --dry-run
+
+  # Create a backup
+  $0
+
+  # Check backup location
+  echo \$BACKUP_FOLDER
+EOF
+    exit 0
+    ;;
   *)
-    echo "Usage: $0 [--dry-run]"
+    echo "Error: unknown option '$1'"
+    echo "Run '$0 --help' for usage information."
     exit 1
     ;;
   esac
