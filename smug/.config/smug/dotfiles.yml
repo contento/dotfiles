@@ -1,5 +1,0 @@
-session: dotfiles
-root: $PROJECTS_DIR/dotfiles
-
-windows:
-  - name: shell

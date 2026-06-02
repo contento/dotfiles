@@ -1,5 +1,0 @@
-session: smarttar
-root: $PROJECTS_DIR/smarttar
-
-windows:
-  - name: shell

@@ -1,0 +1,5 @@
+# Ignore personalized session configs (use .example files as templates)
+*.yml
+
+# Keep example files in git
+!*.yml.example

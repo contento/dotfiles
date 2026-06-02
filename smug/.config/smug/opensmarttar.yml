@@ -1,5 +1,0 @@
-session: opensmarttar
-root: $PROJECTS_DIR/opensmarttar
-
-windows:
-  - name: shell

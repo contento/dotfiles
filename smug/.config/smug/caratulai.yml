@@ -1,5 +1,0 @@
-session: caratulai
-root: $PROJECTS_DIR/caratulai
-
-windows:
-  - name: shell
