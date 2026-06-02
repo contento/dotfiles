@@ -159,6 +159,7 @@ function setup_path() {
   # Node.js — fallback if nvm is not installed
   if ! command -v node >/dev/null 2>&1; then
     local latest_node
+    # shellcheck disable=SC2012
     latest_node="$(ls -d "$HOME/.config/nvm/versions/node"/* 2>/dev/null | sort -V | tail -1)"
     [ -d "$latest_node/bin" ] && export PATH="$PATH:$latest_node/bin"
   fi
