@@ -1,0 +1,7 @@
+session: conten_to
+root: ~/projects/contento/conten.to
+
+windows:
+  - name: editor
+
+  - name: shell
