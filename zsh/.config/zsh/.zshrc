@@ -9,6 +9,8 @@
 export TERM="xterm-256color" # getting proper colors
 
 # Project directories
+# PROJECTS_DIR: root for smug session configs (contento projects)
+# PROJECT_HOME: general projects directory (may differ, used elsewhere)
 export PROJECTS_DIR="$HOME/projects/contento"
 
 # Function to set basic zsh options

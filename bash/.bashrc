@@ -9,6 +9,8 @@ function check_interactive() {
 }
 
 # Project directories
+# PROJECTS_DIR: root for smug session configs (contento projects)
+# PROJECT_HOME: general projects directory (may differ, used elsewhere)
 export PROJECTS_DIR="$HOME/projects/contento"
 
 function configure_history() {
