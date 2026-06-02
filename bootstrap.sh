@@ -244,8 +244,12 @@ install_nvm() {
                 [ -s "$nvm_prefix/nvm.sh" ] && . "$nvm_prefix/nvm.sh"
 
                 if command -v nvm &>/dev/null; then
-                    log "**** Installing default Node version from .nvmrc ..."
-                    nvm install 2>&1 | tee -a "$logfile_path"
+                    # Read version from .nvmrc or fall back to a sensible default
+                    local nvmrc_version
+                    nvmrc_version=$(cat "$HOME/.config/nvm/.nvmrc" 2>/dev/null | tr -d '[:space:]')
+                    nvmrc_version=${nvmrc_version:-20}
+                    log "**** Installing default Node version ($nvmrc_version) ..."
+                    nvm install "$nvmrc_version" 2>&1 | tee -a "$logfile_path"
                 fi
             fi
             return 0
@@ -264,8 +268,12 @@ install_nvm() {
         [ -s "$HOME/.config/nvm/nvm.sh" ] && . "$HOME/.config/nvm/nvm.sh"
 
         if command -v nvm &>/dev/null; then
-            log "**** Installing default Node version from .nvmrc ..."
-            nvm install 2>&1 | tee -a "$logfile_path"
+            # Read version from .nvmrc or fall back to a sensible default
+            local nvmrc_version
+            nvmrc_version=$(cat "$HOME/.config/nvm/.nvmrc" 2>/dev/null | tr -d '[:space:]')
+            nvmrc_version=${nvmrc_version:-20}
+            log "**** Installing default Node version ($nvmrc_version) ..."
+            nvm install "$nvmrc_version" 2>&1 | tee -a "$logfile_path"
         fi
     fi
 }
