@@ -49,6 +49,7 @@ common_apps=(
     rustup
     shellcheck         # bash linter
     shfmt              # shell formatter
+    smug               # tmux session manager
     stow
     tmux
     tldr

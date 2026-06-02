@@ -1,0 +1,11 @@
+session: opensmarttar
+root: ~/projects/contento/opensmarttar
+
+windows:
+  - name: editor
+    layout: main-vertical
+    panes:
+      - nvim
+      - git status
+
+  - name: shell
