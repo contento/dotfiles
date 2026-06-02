@@ -2,6 +2,4 @@ session: opensmarttar
 root: ~/projects/contento/opensmarttar
 
 windows:
-  - name: editor
-
   - name: shell

@@ -1,0 +1,9 @@
+session: pi
+root: ~/projects/contento/pi
+
+windows:
+  - name: agent
+    commands:
+      - tmux split-window -v -p 25 -t pi:agent
+      - tmux select-pane -t pi:agent.0
+      - tmux send-keys -t pi:agent.0 "clear; omp" C-m
