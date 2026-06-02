@@ -2,10 +2,11 @@
 
 ## Pending
 
-- [ ] Add smug for declarative tmux session management
+(none)
 
 ## All items tackled ✅
 
+- [x] Add smug for declarative tmux session management
 - [x] Fix pfetch → pfetch-rs in bashrc, zshrc
 - [x] Fix h='htop' → h='btop' in bashrc
 - [x] Add brew shellenv to bashrc

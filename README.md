@@ -25,6 +25,7 @@ dotfiles/
 ├── mc/                   # Midnight Commander config
 ├── nvm/                  # nvm (Node Version Manager) config
 ├── nvim/                 # Neovim (LazyVim) config
+├── smug/                 # Smug declarative tmux session configs
 ├── starship/             # Starship prompt config
 ├── tmux/                 # tmux config + TPM
 ├── vim/                  # Vim config
@@ -212,6 +213,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder |
 | [direnv](https://direnv.net) | Per-directory environment variables |
 | [keychain](https://www.funtoo.org/Keychain) | SSH / GPG agent manager |
+| [smug](https://github.com/ivaturi/smug) | Declarative tmux session manager |
 
 ### File navigation & search
 
