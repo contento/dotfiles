@@ -13,6 +13,10 @@ function check_interactive() {
 # PROJECT_HOME: general projects directory (may differ, used elsewhere)
 export PROJECTS_DIR="$HOME/projects/contento"
 
+# Backup folder for machine-specific configs
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export BACKUP_FOLDER="${XDG_DATA_HOME}/dotfiles/backups"
+
 function configure_history() {
   HISTCONTROL=ignoreboth
   shopt -s histappend

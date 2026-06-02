@@ -196,6 +196,49 @@ Options:
 ./fix-ssh-perms.sh
 ```
 
+### `backup-local.sh`
+
+Creates timestamped snapshots of machine-specific, non-stowed configs in `$BACKUP_FOLDER`.
+Backs up local session configs, SSH keys, shell history, and other personal files that
+are intentionally gitignored.
+
+**Options:**
+
+- `--dry-run` — Show what would be backed up without creating files
+
+**Backed up files:**
+
+- `~/.config/smug/*.yml` (machine-specific session configs; excludes the `projects.yml` template)
+- `~/.config/zsh/.zsh_history` (zsh command history)
+- `~/.ssh/` (SSH config and keys)
+
+**Backup location:**
+
+Backups are stored in timestamped folders under `$BACKUP_FOLDER` (default: `~/.local/share/dotfiles/backups`):
+
+```bash
+~/.local/share/dotfiles/backups/
+├── 2026-06-02_14-30-15/
+│   ├── smug/
+│   ├── zsh/
+│   └── ssh/
+└── 2026-06-02_15-45-22/
+    └── ...
+```
+
+**Usage:**
+
+```bash
+# Preview what will be backed up
+./backup-local.sh --dry-run
+
+# Create a backup
+./backup-local.sh
+
+# Backup location
+echo $BACKUP_FOLDER
+```
+
 ---
 
 ## Tools

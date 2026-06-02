@@ -8,6 +8,10 @@
 
 # Set XDG_CONFIG_HOME to default if not set (See: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+# Backup folder for machine-specific configs
+export BACKUP_FOLDER="${XDG_DATA_HOME}/dotfiles/backups"
 
 # ZSH and Vim configurations
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
