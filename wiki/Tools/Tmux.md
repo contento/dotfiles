@@ -94,6 +94,27 @@ Inside the **sessionx picker** (fzf):
 - **tmux-continuum** auto-saves every 15 minutes and restores on tmux server start (`@continuum-restore on`).
 - **tmux-sessionx** integrates with zoxide so recently visited project directories appear in the picker.
 
+## Session management (smug)
+
+[smug](https://github.com/ivaturi/smug) defines tmux sessions declaratively in YAML.
+Config files live at `smug/.config/smug/` → `~/.config/smug/`.
+
+| Session | Root | Layout |
+| --- | --- | --- |
+| `caratulai` | `~/projects/contento/caratulai` | shell (100%) |
+| `pi` | `~/projects/contento/pi` | agent (75/25 split) + runs omp |
+| `dotfiles` | `~/projects/contento/dotfiles` | shell (100%) |
+| `conten_to` | `~/projects/contento/conten.to` | shell (100%) |
+| `smarttar` | `~/projects/contento/smarttar` | shell (100%) |
+| `opensmarttar` | `~/projects/contento/opensmarttar` | shell (100%) |
+
+```bash
+smug list              # list available sessions
+smug dotfiles          # start session
+smug dotfiles -a       # attach if already running
+smug stop dotfiles     # kill session
+```
+
 ---
 
 ## Aliases
