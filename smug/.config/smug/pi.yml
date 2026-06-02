@@ -1,5 +1,5 @@
 session: pi
-root: ~/projects/contento/pi
+root: $PROJECTS_DIR/pi
 
 windows:
   - name: agent

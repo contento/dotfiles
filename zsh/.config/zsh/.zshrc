@@ -8,6 +8,9 @@
 
 export TERM="xterm-256color" # getting proper colors
 
+# Project directories
+export PROJECTS_DIR="$HOME/projects/contento"
+
 # Function to set basic zsh options
 setup_zsh_options() {
   setopt histignorealldups sharehistory

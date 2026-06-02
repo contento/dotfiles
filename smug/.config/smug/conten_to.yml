@@ -1,5 +1,5 @@
 session: conten_to
-root: ~/projects/contento/conten.to
+root: $PROJECTS_DIR/conten.to
 
 windows:
   - name: shell

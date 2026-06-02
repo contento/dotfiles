@@ -8,6 +8,9 @@ function check_interactive() {
   esac
 }
 
+# Project directories
+export PROJECTS_DIR="$HOME/projects/contento"
+
 function configure_history() {
   HISTCONTROL=ignoreboth
   shopt -s histappend
