@@ -1,5 +1,9 @@
 # TODO
 
+## Pending
+
+- [ ] Add smug for declarative tmux session management
+
 ## All items tackled ✅
 
 - [x] Fix pfetch → pfetch-rs in bashrc, zshrc
