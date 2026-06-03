@@ -198,13 +198,14 @@ Options:
 
 ### `backup-local.sh`
 
-Creates timestamped snapshots of machine-specific, non-stowed configs in `$BACKUP_FOLDER`.
+Creates timestamped zip archives of machine-specific, non-stowed configs in `$BACKUP_FOLDER`.
 Backs up local session configs, SSH keys, shell history, and other personal files that
 are intentionally gitignored.
 
 **Options:**
 
 - `--dry-run` — Show what would be backed up without creating files
+- `--help, -h` — Show help message
 
 **Backed up files:**
 
@@ -212,19 +213,18 @@ are intentionally gitignored.
 - `~/.config/zsh/.zsh_history` (zsh command history)
 - `~/.ssh/` (SSH config and keys)
 
-**Backup location:**
+**Backup location & format:**
 
-Backups are stored in timestamped folders under `$BACKUP_FOLDER` (default: `~/.local/share/dotfiles/backups`):
+Backups are stored as zip files under `$BACKUP_FOLDER` (default: `~/.local/share/dotfiles/backups`):
 
 ```bash
 ~/.local/share/dotfiles/backups/
-├── 2026-06-02_14-30-15/
-│   ├── smug/
-│   ├── zsh/
-│   └── ssh/
-└── 2026-06-02_15-45-22/
-    └── ...
+├── 20260602_1430.zip
+├── 20260603_0819.zip
+└── 20260603_1045.zip
 ```
+
+Filename format: `{yyyyMMdd_HHmm}.zip` (e.g. `20260603_0819.zip` = 2026-06-03 at 08:19)
 
 **Usage:**
 
@@ -232,10 +232,13 @@ Backups are stored in timestamped folders under `$BACKUP_FOLDER` (default: `~/.l
 # Preview what will be backed up
 ./backup-local.sh --dry-run
 
-# Create a backup
+# Create a backup zip
 ./backup-local.sh
 
-# Backup location
+# List all backups
+ls -lh $BACKUP_FOLDER/*.zip
+
+# Check backup location
 echo $BACKUP_FOLDER
 ```
 

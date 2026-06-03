@@ -18,7 +18,7 @@ while [[ $# -gt 0 ]]; do
     cat <<EOF
 Usage: $0 [OPTIONS]
 
-Creates a timestamped backup of machine-specific, non-stowed configs.
+Creates a timestamped zip archive of machine-specific, non-stowed configs.
 
 OPTIONS:
   --dry-run    Show what would be backed up without creating files
@@ -26,6 +26,9 @@ OPTIONS:
 
 BACKUP LOCATION:
   \$BACKUP_FOLDER (default: ~/.local/share/dotfiles/backups/)
+
+BACKUP FORMAT:
+  {yyyyMMdd_HHmm}.zip (e.g. 20260603_1430.zip)
 
 BACKED UP FILES:
   - ~/.config/smug/*.yml (machine-specific session configs, excludes projects.yml)
@@ -36,11 +39,14 @@ EXAMPLES:
   # Preview what will be backed up
   $0 --dry-run
 
-  # Create a backup
+  # Create a backup zip
   $0
 
   # Check backup location
   echo \$BACKUP_FOLDER
+
+  # List backups
+  ls -lh \$BACKUP_FOLDER/*.zip
 EOF
     exit 0
     ;;
@@ -64,13 +70,14 @@ run_cmd() {
 # Resolve BACKUP_FOLDER with same fallback as shell configs
 BACKUP_FOLDER="${BACKUP_FOLDER:-${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/backups}"
 
-# Create timestamped backup folder
-timestamp="$(date +%Y-%m-%d_%H-%M-%S)"
+# Create timestamped backup folder and zip file
+timestamp="$(date +%Y%m%d_%H%M)"
 backup_dest="$BACKUP_FOLDER/$timestamp"
+zip_file="$BACKUP_FOLDER/${timestamp}.zip"
 
-echo "Backing up local configs to: $backup_dest"
+echo "Backing up local configs to: $zip_file"
 
-# Create backup destination
+# Create backup destination (temporary folder for staging files before zipping)
 run_cmd mkdir -p "$backup_dest"
 
 # Backup 1: Smug session files (all .yml except projects.yml template)
@@ -107,6 +114,21 @@ if [[ "$dry_run" == true ]]; then
   echo ""
   echo "Dry-run complete. No files were created."
 else
+  # Create zip archive from within the backup folder
+  (
+    cd "$BACKUP_FOLDER"
+    if [[ "$dry_run" == true ]]; then
+      echo "[dry-run] zip -r -q $zip_file $timestamp"
+    else
+      zip -r -q "$zip_file" "$timestamp" || {
+        echo "Error: failed to create zip archive"
+        exit 1
+      }
+      # Clean up temporary folder
+      rm -rf "$backup_dest"
+    fi
+  )
+
   echo ""
-  echo "Backup complete: $backup_dest"
+  echo "Backup complete: $zip_file"
 fi
