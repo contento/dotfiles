@@ -89,7 +89,7 @@ Config files live at `smug/.config/smug/` → `~/.config/smug/`.
 | `caratulai` | `~/projects/contento/caratulai` | shell (100%) |
 | `pi` | `~/projects/contento/pi` | agent (75/25 split) + runs omp |
 | `dotfiles` | `~/projects/contento/dotfiles` | shell (100%) |
-| `conten_to` | `~/projects/contento/conten.to` | shell (100%) |
+| `conten.to` | `~/projects/contento/conten.to` | shell (100%) |
 | `smarttar` | `~/projects/contento/smarttar` | shell (100%) |
 | `opensmarttar` | `~/projects/contento/opensmarttar` | shell (100%) |
 
