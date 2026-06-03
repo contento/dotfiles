@@ -1,0 +1,23 @@
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    side-by-side = true
+    syntax-theme = Rose Pine Moon
+    
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow
+    file-decoration-style = none
+    hunk-header-style = bold purple box
+    hunk-header-decoration-style = none
+
+[delta "navigate"]
+    feature = true
+    
+[delta "line-numbers"]
+    left-only = false
+    line-numbers-left-format = "{nm:^4} │"
+    line-numbers-right-format = "{np:^4} │"
+    line-numbers-left-style = green
+    line-numbers-right-style = green

@@ -1,0 +1,53 @@
+# direnv configuration
+# https://direnv.net/
+
+# Load nvm if .node-version or .nvmrc exists
+use_node() {
+  local node_version
+  if [[ -f .node-version ]]; then
+    node_version=$(cat .node-version)
+  elif [[ -f .nvmrc ]]; then
+    node_version=$(cat .nvmrc)
+  fi
+  
+  if [[ -n "$node_version" ]]; then
+    export NODE_VERSION="$node_version"
+    if [[ -d "$HOME/.config/nvm/versions/node/v$node_version" ]]; then
+      export PATH="$HOME/.config/nvm/versions/node/v$node_version/bin:$PATH"
+    fi
+  fi
+}
+
+# Load Python virtual environment
+use_python() {
+  if [[ -f requirements.txt ]] || [[ -f pyproject.toml ]]; then
+    if [[ ! -d .venv ]]; then
+      python3 -m venv .venv
+    fi
+    source .venv/bin/activate
+  fi
+}
+
+# Load Rust environment
+use_rust() {
+  if [[ -f Cargo.toml ]]; then
+    if [[ -f "$HOME/.cargo/env" ]]; then
+      source "$HOME/.cargo/env"
+    fi
+  fi
+}
+
+# Load Go environment
+use_go() {
+  if [[ -f go.mod ]]; then
+    export GOPATH="$PWD/.go"
+    export PATH="$GOPATH/bin:$PATH"
+  fi
+}
+
+# Example .envrc for a project:
+# use node
+# use python
+# use rust
+# export API_KEY="secret"
+# export DATABASE_URL="postgres://localhost/mydb"

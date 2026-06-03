@@ -1,0 +1,72 @@
+[user]
+    # name and email will be set per-repo or via environment
+    # Uncomment and fill in your details:
+    # name = Your Name
+    # email = you@example.com
+
+[core]
+    pager = delta
+    editor = nvim
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    side-by-side = true
+    syntax-theme = "Rose Pine Moon"
+
+[merge]
+    conflictstyle = diff3
+    tool = nvim
+
+[diff]
+    colorMoved = default
+    algorithm = histogram
+
+[pull]
+    rebase = true
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[rerere]
+    enabled = true
+
+[alias]
+    # Useful aliases
+    s = status
+    d = diff
+    ds = diff --staged
+    l = log --oneline --graph --decorate
+    ll = log --pretty=format:'%C(yellow)%h%C(reset) %s%C(reset) %C(blue)<%an>%C(reset) %C(green)%ad%C(reset)' --date=short
+    a = add
+    aa = add --all
+    c = commit
+    cm = commit -m
+    ca = commit --amend
+    co = checkout
+    cb = checkout -b
+    sw = switch
+    swc = switch --create
+    rb = rebase
+    rbi = rebase -i
+    st = stash
+    stp = stash push
+    stl = stash list
+    stp = stash pop
+    df = diff
+    dfs = diff --staged
+    lg = log --oneline --graph --decorate -20
+    last = log -1 HEAD
+    unstage = reset HEAD --
+    amend = commit --amend --no-edit
+
+[diff "rust"]
+    textconv = cargo xwin diff
+
+[include]
+    path = ~/.config/git/config.local

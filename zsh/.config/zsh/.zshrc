@@ -114,6 +114,27 @@ setup_tool_aliases() {
   if type docker >/dev/null 2>&1; then
     alias d='docker'
   fi
+
+  # ripgrep aliases
+  if type rg >/dev/null 2>&1; then
+    alias rg='rg --color=auto'
+    alias rga='rg --hidden --no-ignore'
+    alias rgf='rg --files'
+  fi
+
+  # GitHub CLI aliases
+  if type gh >/dev/null 2>&1; then
+    alias gh='gh'
+    alias ghp='gh pr'
+    alias ghc='gh issue create'
+    alias ghs='gh status'
+  fi
+
+  # direnv aliases
+  if type direnv >/dev/null 2>&1; then
+    alias de='direnv edit .'
+    alias dl='direnv allow'
+  fi
 }
 
 setup_cat_aliases() {
@@ -276,6 +297,10 @@ setup_additional_tools() {
     eval "$(keychain --eval "id_rsa-$_ssh_user")"
   fi
   unset _ssh_user
+  # Initialize direnv if available
+  if type direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+  fi
 
   # Initialize fzf if available
   if type fzf >/dev/null 2>&1; then

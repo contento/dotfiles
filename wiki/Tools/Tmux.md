@@ -11,8 +11,6 @@ Config: `tmux/.config/tmux/tmux.conf` → `~/.config/tmux/tmux.conf`
 | --- | --- |
 | [tpm](https://github.com/tmux-plugins/tpm) | Plugin manager |
 | [tmux-sensible](https://github.com/tmux-plugins/tmux-sensible) | Sensible defaults |
-| [tmux-resurrect](https://github.com/tmux-plugins/tmux-resurrect) | Save/restore sessions |
-| [tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | Auto-save + auto-restore on startup |
 | [tmux-fzf](https://github.com/sainnhe/tmux-fzf) | Fuzzy session/window/pane selection |
 | [tmux-yank](https://github.com/tmux-plugins/tmux-yank) | Copy to system clipboard from copy-mode |
 | [rose-pine](https://github.com/rose-pine/tmux) | Status bar theme (moon variant) |
@@ -48,10 +46,6 @@ Also active in copy-mode-vi.
 | Key | Action | Source |
 | --- | --- | --- |
 | `prefix + F` | Open tmux-fzf menu | tmux-fzf |
-| `prefix + Ctrl+s` | Save session to disk | tmux-resurrect |
-| `prefix + Ctrl+r` | Restore session from disk | tmux-resurrect |
-
-Use `smug` for pre-configured project sessions (see [[#session-management-smug]])
 
 ### Copy mode (tmux-yank)
 
@@ -74,12 +68,6 @@ Use `smug` for pre-configured project sessions (see [[#session-management-smug]]
 
 ---
 
-## Session persistence
-
-- **tmux-resurrect** saves windows, panes, working directories. nvim opens in the correct directory and auto-session restores the project session automatically.
-- **tmux-continuum** auto-saves every 15 minutes and restores on tmux server start (`@continuum-restore on`).
-
-## Session management (smug)
 
 [smug](https://github.com/ivaturi/smug) defines tmux sessions declaratively in YAML.
 Config files live at `smug/.config/smug/` → `~/.config/smug/`.
@@ -102,6 +90,37 @@ smug stop dotfiles     # kill session
 
 ---
 
-## Aliases
+## Recommended Tools
+
+### Minimal Set (Essential)
+| Tool | Purpose | Install |
+| --- | --- | --- |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep replacement | `brew install ripgrep` |
+| [delta](https://github.com/dandavison/delta) | Git diff viewer | `brew install git-delta` |
+| [fzf](https://github.com/junegunn/fzf) | Fuzzy finder | `brew install fzf` |
+| [eza](https://github.com/eza-community/eza) | Modern ls replacement | `brew install eza` |
+| [bat](https://github.com/sharkdp/bat) | Cat with syntax highlighting | `brew install bat` |
+
+### Full Set (Enhanced)
+| Tool | Purpose | Install |
+| --- | --- | --- |
+| [lazygit](https://github.com/jesseduffield/lazygit) | Terminal UI for git | `brew install lazygit` |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter cd | `brew install zoxide` |
+| [atuin](https://github.com/atuinsh/atuin) | Shell history sync | `brew install atuin` |
+| [direnv](https://direnv.net/) | Auto-load project env vars | `brew install direnv` |
+| [gh](https://cli.github.com/) | GitHub CLI | `brew install gh` |
+| [yazi](https://github.com/sxyazi/yazi) | Terminal file manager | `brew install yazi` |
+
+### Aliases
+| Alias | Command | Tool |
+| --- | --- | --- |
+| `rg` | `rg --color=auto` | ripgrep |
+| `rga` | `rg --hidden --no-ignore` | ripgrep |
+| `rgf` | `rg --files` | ripgrep |
+| `ghp` | `gh pr` | gh |
+| `ghc` | `gh issue create` | gh |
+| `ghs` | `gh status` | gh |
+| `de` | `direnv edit .` | direnv |
+| `dl` | `direnv allow` | direnv |
 
 See [[Shell/Aliases]] for shell shortcuts (`t`, `tm`, `tl`, `tk`, `tks`, `ta`).

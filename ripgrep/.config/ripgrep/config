@@ -1,0 +1,27 @@
+# Ripgrep configuration
+# https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
+
+# Always show file paths
+--column
+--line-number
+--no-heading
+
+# Smart case (case-insensitive unless uppercase used)
+--smart-case
+
+# Respect .gitignore
+--hidden
+--glob=!.git/
+
+# Max file size (10MB)
+--max-filesize=10M
+
+# Binary files
+--binary
+
+# Colors
+--colors=line:style:bold
+--colors=line:fg:magenta
+--colors=path:style:bold
+--colors=path:fg:green
+--colors=match:style:fg:red
