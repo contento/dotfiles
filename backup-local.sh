@@ -3,9 +3,10 @@ set -euo pipefail
 
 # Backup script for machine-specific, non-stowed configs
 # Creates a timestamped snapshot of local configs in $BACKUP_FOLDER
-# Usage: ./backup-local.sh [--dry-run]
+# Usage: ./backup-local.sh [--dry-run] [--format zip|7z]
 
 dry_run=false
+format="zip"  # default format
 
 # Parse flags
 while [[ $# -gt 0 ]]; do
@@ -14,21 +15,27 @@ while [[ $# -gt 0 ]]; do
     dry_run=true
     shift
     ;;
+  --format)
+    format="$2"
+    shift 2
+    ;;
   --help | -h)
     cat <<EOF
 Usage: $0 [OPTIONS]
 
-Creates a timestamped zip archive of machine-specific, non-stowed configs.
+Creates a timestamped archive of machine-specific, non-stowed configs.
 
 OPTIONS:
-  --dry-run    Show what would be backed up without creating files
-  --help, -h   Show this help message
+  --format FORMAT    Compression format: zip (default) or 7z
+  --dry-run          Show what would be backed up without creating files
+  --help, -h         Show this help message
 
 BACKUP LOCATION:
   \$BACKUP_FOLDER (default: ~/.local/share/dotfiles/backups/)
 
-BACKUP FORMAT:
-  {yyyyMMdd_HHmm}.zip (e.g. 20260603_1430.zip)
+BACKUP FORMATS:
+  zip (default)  - Universal compatibility, unzip built-in on all systems
+  7z             - Better compression, requires p7zip to be installed
 
 BACKED UP FILES:
   - ~/.config/smug/*.yml (machine-specific session configs, excludes projects.yml)
@@ -36,17 +43,20 @@ BACKED UP FILES:
   - ~/.ssh/ (SSH config and keys)
 
 EXAMPLES:
+  # Create a backup using default zip format
+  $0
+
+  # Create a backup using 7z compression
+  $0 --format 7z
+
   # Preview what will be backed up
   $0 --dry-run
-
-  # Create a backup zip
-  $0
 
   # Check backup location
   echo \$BACKUP_FOLDER
 
   # List backups
-  ls -lh \$BACKUP_FOLDER/*.zip
+  ls -lh \$BACKUP_FOLDER/*
 EOF
     exit 0
     ;;
@@ -57,6 +67,19 @@ EOF
     ;;
   esac
 done
+
+# Validate format
+if [[ "$format" != "zip" ]] && [[ "$format" != "7z" ]]; then
+  echo "Error: invalid format '$format'. Must be 'zip' or '7z'"
+  exit 1
+fi
+
+# Check if 7z is available when using 7z format
+if [[ "$format" == "7z" ]] && ! command -v 7z &>/dev/null; then
+  echo "Error: 7z format requested but 7z is not installed"
+  echo "Install with: brew install p7zip (or apt install p7zip-full on Debian)"
+  exit 1
+fi
 
 # Helper to conditionally run commands
 run_cmd() {
@@ -70,12 +93,13 @@ run_cmd() {
 # Resolve BACKUP_FOLDER with same fallback as shell configs
 BACKUP_FOLDER="${BACKUP_FOLDER:-${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/backups}"
 
-# Create timestamped backup folder and zip file
+# Create timestamped backup folder and archive file
 timestamp="$(date +%Y%m%d_%H%M)"
 backup_dest="$BACKUP_FOLDER/$timestamp"
-zip_file="$BACKUP_FOLDER/${timestamp}.zip"
+archive_ext="$format"
+archive_file="$BACKUP_FOLDER/${timestamp}.${archive_ext}"
 
-echo "Backing up local configs to: $zip_file"
+echo "Backing up local configs to: $archive_file (format: $format)"
 
 # Create backup destination (temporary folder for staging files before zipping)
 run_cmd mkdir -p "$backup_dest"
@@ -114,21 +138,24 @@ if [[ "$dry_run" == true ]]; then
   echo ""
   echo "Dry-run complete. No files were created."
 else
-  # Create zip archive from within the backup folder
+  # Create archive from within the backup folder
   (
     cd "$BACKUP_FOLDER"
-    if [[ "$dry_run" == true ]]; then
-      echo "[dry-run] zip -r -q $zip_file $timestamp"
-    else
-      zip -r -q "$zip_file" "$timestamp" || {
+    if [[ "$format" == "zip" ]]; then
+      if ! zip -r -q "$archive_file" "$timestamp"; then
         echo "Error: failed to create zip archive"
         exit 1
-      }
-      # Clean up temporary folder
-      rm -rf "$backup_dest"
+      fi
+    elif [[ "$format" == "7z" ]]; then
+      if ! 7z a -q "$archive_file" "$timestamp" >/dev/null 2>&1; then
+        echo "Error: failed to create 7z archive"
+        exit 1
+      fi
     fi
+    # Clean up temporary folder
+    rm -rf "$backup_dest"
   )
 
   echo ""
-  echo "Backup complete: $zip_file"
+  echo "Backup complete: $archive_file"
 fi

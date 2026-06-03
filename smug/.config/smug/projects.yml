@@ -7,7 +7,7 @@
 # Run the session with: smug myproject
 
 session: myproject
-root: $PROJECTS_DIR/myproject
+root: $PROJECTS_DIR
 
 windows:
   # Simple single-pane window (100% visible)

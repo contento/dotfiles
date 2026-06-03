@@ -41,6 +41,7 @@ common_apps=(
     mc
     most
     mtr                # traceroute + ping combined
+    p7zip              # 7-zip compression (apt: p7zip-full; falls back to brew)
     pandoc
     pngquant           # lossy PNG compression
     poppler            # yazi: PDF preview (provides pdftoppm)
@@ -373,15 +374,22 @@ install_with_yay() {
 
 install_with_apt() {
     local app=$1
+    local apt_name="$app"
+
+    # Handle package name mappings between apt and other managers
+    case "$app" in
+        p7zip) apt_name="p7zip-full" ;;
+    esac
+
     log "**** Checking if $app is already installed ..."
 
-    if dpkg-query -W -f='${Status}' "$app" 2>/dev/null | grep -q "install ok installed"; then
+    if dpkg-query -W -f='${Status}' "$apt_name" 2>/dev/null | grep -q "install ok installed"; then
         log "**** $app is already installed"
         return 0
     fi
 
-    log "**** Trying 'apt install $app' ..."
-    if ! run_cmd sudo apt install -y "$app" 2>&1 | tee -a "$logfile_path"; then
+    log "**** Trying 'apt install $apt_name' ..."
+    if ! run_cmd sudo apt install -y "$apt_name" 2>&1 | tee -a "$logfile_path"; then
         log "**** Failed to install $app with apt, trying with brew..."
         run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
             log "**** WARNING: Could not install $app via apt or brew, skipping"
