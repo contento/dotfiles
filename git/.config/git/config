@@ -1,8 +1,4 @@
-[user]
-    # name and email will be set per-repo or via environment
-    # Uncomment and fill in your details:
-    # name = Your Name
-    # email = you@example.com
+# Identity is in ~/.gitconfig (global). This file owns editor, delta, push/pull, and aliases.
 
 [core]
     pager = delta
@@ -57,7 +53,7 @@
     st = stash
     stp = stash push
     stl = stash list
-    stp = stash pop
+    stpop = stash pop
     df = diff
     dfs = diff --staged
     lg = log --oneline --graph --decorate -20

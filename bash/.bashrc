@@ -13,19 +13,8 @@ function check_interactive() {
 # PROJECT_HOME: general projects directory (may differ, used elsewhere)
 export PROJECTS_DIR="$HOME/projects/contento"
 
-# Backup folder — intelligently detect cloud storage, fallback to XDG_DATA_HOME
-export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-if [ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs" ]; then
-  export BACKUP_FOLDER="$HOME/Library/Mobile Documents/com~apple~CloudDocs/backups"
-elif [ -d "$HOME/OneDrive" ]; then
-  export BACKUP_FOLDER="$HOME/OneDrive/backups"
-elif [ -d "$HOME/Google Drive" ]; then
-  export BACKUP_FOLDER="$HOME/Google Drive/backups"
-else
-  export BACKUP_FOLDER="${XDG_DATA_HOME}/backups"
-fi
-# Create backup folder if it doesn't exist
-[ -d "$BACKUP_FOLDER" ] || mkdir -p "$BACKUP_FOLDER" 2>/dev/null
+# Backup folder — sourced from shared shell config
+[ -f "$HOME/.config/shell/shared-env.sh" ] && . "$HOME/.config/shell/shared-env.sh"
 
 function configure_history() {
   HISTCONTROL=ignoreboth
@@ -213,7 +202,7 @@ function show_system_info() {
 }
 
 # Main execution
-check_interactive
+check_interactive || return
 configure_history
 configure_terminal
 setup_starship

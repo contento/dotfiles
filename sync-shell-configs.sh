@@ -23,7 +23,7 @@ while IFS= read -r func; do
     if ! grep -q "function $func\|^$func()" "$zshrc" 2>/dev/null; then
         echo "  ⚠️  '$func' exists in bashrc but not in zshrc"
     fi
-done < <(grep -oP '^function \K\w+|^[a-zA-Z_][a-zA-Z0-9_]*\(\).*' "$bashrc" | sed 's/()//')
+done < <(sed -n 's/^function \([a-zA-Z_][a-zA-Z0-9_]*\).*/\1/p; s/^\([a-zA-Z_][a-zA-Z0-9_]*\)().*/\1/p' "$bashrc")
 
 echo ""
 echo "--- Functions in zsh but not in bash ---"
@@ -31,7 +31,7 @@ while IFS= read -r func; do
     if ! grep -q "function $func\|^$func()" "$bashrc" 2>/dev/null; then
         echo "  ⚠️  '$func' exists in zshrc but not in bashrc"
     fi
-done < <(grep -oP '^function \K\w+|^[a-zA-Z_][a-zA-Z0-9_]*\(\).*' "$zshrc" | sed 's/()//')
+done < <(sed -n 's/^function \([a-zA-Z_][a-zA-Z0-9_]*\).*/\1/p; s/^\([a-zA-Z_][a-zA-Z0-9_]*\)().*/\1/p' "$zshrc")
 
 echo ""
 echo "--- Tool initializations (command -v / type guards) ---"
@@ -39,7 +39,7 @@ echo "bash has:"
 while IFS= read -r tool; do
     in_zsh=$(grep -c "type $tool\|command.*-v.*$tool" "$zshrc" || true)
     echo "  $tool (zsh: $([ "$in_zsh" -gt 0 ] && echo '✅' || echo '❌'))"
-done < <(grep -oP '(?:command -v |type )(\w+)' "$bashrc" | sort -u | sed 's/.* //')
+done < <(sed -n 's/.*command -v \([a-zA-Z_][a-zA-Z0-9_]*\).*/\1/p; s/.*type \([a-zA-Z_][a-zA-Z0-9_]*\).*/\1/p' "$bashrc" | sort -u)
 
 echo ""
 echo "--- Actions ---"

@@ -3,39 +3,17 @@
 	name = Gonzalo Contento
 
 [core]
-    editor = vim
-    excludesfile = ~/.gitignore_global  # Global ignore file
-    autocrlf = input   # Useful on cross-platform systems (LF for macOS/Linux, CRLF for Windows)
+    autocrlf = input   # Useful on cross-platform systems (LF for macOS/Linux, CRLF on Windows)
     hooksPath = .githooks
 
 [color]
     ui = true   # Enable colored output
 
-[alias]
-    st = status
-    co = checkout
-    br = branch
-    cm = commit
-    last = log -1 HEAD
-    lga = log --oneline --graph --all --decorate
-    lg = log --oneline --graph --decorate --all --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %C(cyan)[%an]%Creset'
-[merge]
-    tool = vimdiff  # Merge tool preference
-
-[diff]
-    tool = vimdiff  # Diff tool preference
-
-[push]
-    default = simple  # Push only the current branch
-
-[pull]
-    rebase = false  # Set to "true" if you prefer rebasing when pulling changes
-
 [credential]
     helper = cache  # Cache credentials for a while
 [credential "https://github.com"]
 	helper =
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
 	helper =
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !gh auth git-credential
