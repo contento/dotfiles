@@ -8,12 +8,7 @@ function check_interactive() {
   esac
 }
 
-# Project directories
-# PROJECTS_DIR: root for smug session configs (contento projects)
-# PROJECT_HOME: general projects directory (may differ, used elsewhere)
-export PROJECTS_DIR="$HOME/projects/contento"
-
-# Backup folder — sourced from shared shell config
+# Backup folder and project directories — sourced from shared shell config
 [ -f "$HOME/.config/shell/shared-env.sh" ] && . "$HOME/.config/shell/shared-env.sh"
 
 function configure_history() {

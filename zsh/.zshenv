@@ -10,7 +10,7 @@
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 
-# Backup folder — sourced from shared shell config
+# Backup folder and project directories — sourced from shared shell config
 [ -f "$HOME/.config/shell/shared-env.sh" ] && . "$HOME/.config/shell/shared-env.sh"
 
 # ZSH and Vim configurations
@@ -33,9 +33,6 @@ else
   export EDITOR="vi"
 fi
 export VISUAL="$EDITOR"
-
-# Project directories — mirrors .bashrc (PROJECTS_DIR used by smug session configs)
-export PROJECTS_DIR="$HOME/projects/contento"
 
 # -- Use fd instead of find for fzf (guarded: only set if both fd and fzf exist) --
 

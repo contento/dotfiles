@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Shared shell environment — sourced by both .bashrc and .zshenv
-# Sets BACKUP_FOLDER by detecting cloud storage.
+# Sets PROJECTS_DIR and BACKUP_FOLDER
 # shellcheck shell=bash
+
+# Project directories — used by smug session configs
+export PROJECTS_DIR="$HOME/projects/contento"
 
 # Backup folder — intelligently detect cloud storage, fallback to XDG_DATA_HOME
 if [ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs" ]; then
