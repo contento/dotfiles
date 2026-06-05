@@ -13,9 +13,19 @@ function check_interactive() {
 # PROJECT_HOME: general projects directory (may differ, used elsewhere)
 export PROJECTS_DIR="$HOME/projects/contento"
 
-# Backup folder for machine-specific configs
+# Backup folder — intelligently detect cloud storage, fallback to XDG_DATA_HOME
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-export BACKUP_FOLDER="${XDG_DATA_HOME}/dotfiles/backups"
+if [ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs" ]; then
+  export BACKUP_FOLDER="$HOME/Library/Mobile Documents/com~apple~CloudDocs/backup"
+elif [ -d "$HOME/OneDrive" ]; then
+  export BACKUP_FOLDER="$HOME/OneDrive/backup"
+elif [ -d "$HOME/Google Drive" ]; then
+  export BACKUP_FOLDER="$HOME/Google Drive/backup"
+else
+  export BACKUP_FOLDER="${XDG_DATA_HOME}/backup"
+fi
+# Create backup folder if it doesn't exist
+[ -d "$BACKUP_FOLDER" ] || mkdir -p "$BACKUP_FOLDER" 2>/dev/null
 
 function configure_history() {
   HISTCONTROL=ignoreboth
