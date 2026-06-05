@@ -187,7 +187,7 @@ setup_git_aliases() {
     alias gco='git checkout'
     alias gd='git diff'
     alias gl='git log'
-    alias gp='git pull'
+    alias gpl='git pull'
     alias gpu='git push'
     alias gst='git status'
   fi
