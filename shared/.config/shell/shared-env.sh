@@ -4,7 +4,7 @@
 # shellcheck shell=bash
 
 # Project directories — used by smug session configs
-export PROJECTS_DIR="$HOME/projects/contento"
+export PROJECTS_DIR="$HOME/projects"
 
 # Backup folder — intelligently detect cloud storage, fallback to XDG_DATA_HOME
 if [ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs" ]; then
