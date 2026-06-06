@@ -95,9 +95,10 @@ BACKUP_FOLDER="${BACKUP_FOLDER:-${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/ba
 
 # Create timestamped backup folder and archive file
 timestamp="$(date +%Y%m%d_%H%M)"
-backup_dest="$BACKUP_FOLDER/$timestamp"
+backup_subdir="$BACKUP_FOLDER/dotfiles_locals"
+backup_dest="$backup_subdir/$timestamp"
 archive_ext="$format"
-archive_file="$BACKUP_FOLDER/${timestamp}.${archive_ext}"
+archive_file="$backup_subdir/dotfiles_locals_${timestamp}.${archive_ext}"
 
 echo "Backing up local configs to: $archive_file (format: $format)"
 
@@ -138,22 +139,22 @@ if [[ "$dry_run" == true ]]; then
   echo ""
   echo "Dry-run complete. No files were created."
 else
-  # Create archive from within the backup folder
+  # Create archive from within the backup subdirectory
   (
-    cd "$BACKUP_FOLDER"
+    cd "$backup_subdir"
     if [[ "$format" == "zip" ]]; then
-      if ! zip -r -q "$archive_file" "$timestamp"; then
+      if ! zip -r -q "dotfiles_locals_${timestamp}.${archive_ext}" "$timestamp"; then
         echo "Error: failed to create zip archive"
         exit 1
       fi
     elif [[ "$format" == "7z" ]]; then
-      if ! 7z a -q "$archive_file" "$timestamp" >/dev/null 2>&1; then
+      if ! 7z a -q "dotfiles_locals_${timestamp}.${archive_ext}" "$timestamp" >/dev/null 2>&1; then
         echo "Error: failed to create 7z archive"
         exit 1
       fi
     fi
     # Clean up temporary folder
-    rm -rf "$backup_dest"
+    rm -rf "$timestamp"
   )
 
   echo ""
