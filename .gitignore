@@ -52,3 +52,17 @@ logs/
 # graphify knowledge graph (regenerated from source via `graphify update .`)
 # ==============================================================================
 graphify-out/
+
+# ==============================================================================
+# SSH — NEVER commit secrets to this PUBLIC repo.
+# We intentionally do NOT track ~/.ssh here (no `ssh/` stow package).
+# These rules are a safety net in case any .ssh content is ever added.
+# ==============================================================================
+**/.ssh/
+**/.ssh/id_*
+**/.ssh/*.pem
+**/.ssh/*.key
+**/.ssh/known_hosts*
+**/.ssh/authorized_keys
+**/.ssh/config*
+**/.ssh/agent/

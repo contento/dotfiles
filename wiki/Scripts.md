@@ -160,3 +160,49 @@ Works on both macOS (`stat -f`) and Linux (`stat -c`).
 # Apply
 ./fix-ssh-perms.sh
 ```
+
+---
+
+## backup-local.sh
+
+Creates a timestamped archive of machine-specific, **non-stowed** configs — the
+files that intentionally never enter this public repo. This is the supported way
+to preserve `~/.ssh` across machines (see [[SSH]]).
+
+```
+./backup-local.sh [options]
+
+Options:
+  --format FORMAT   Compression format: zip (default) or 7z
+  --dry-run         Show what would be backed up, create nothing
+  --help, -h        Show help
+```
+
+### What it backs up
+
+| Source | Notes |
+|---|---|
+| `~/.config/smug/*.yml` | Session configs; excludes the `projects.yml` template |
+| `~/.config/zsh/.zsh_history` | Zsh command history |
+| `~/.ssh/` | SSH config **and keys** — kept out of git, backed up here instead |
+
+### Where it writes
+
+Archives land under `$BACKUP_FOLDER` (default
+`~/.local/share/dotfiles/backups/dotfiles_locals/`) as
+`dotfiles_locals_<YYYYMMDD_HHMM>.<zip|7z>`.
+
+```bash
+# Preview
+./backup-local.sh --dry-run
+
+# Create a backup (zip)
+./backup-local.sh
+
+# Better compression (needs p7zip)
+./backup-local.sh --format 7z
+```
+
+> [!warning] These archives contain private keys
+> Store them somewhere private (encrypted disk, password manager, private remote).
+> Never commit a `dotfiles_locals_*` archive to this repo.

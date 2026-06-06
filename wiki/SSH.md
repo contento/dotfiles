@@ -1,5 +1,14 @@
 # SSH
 
+> [!warning] `~/.ssh` is never tracked in this repo
+> This dotfiles repository is **public**, so there is intentionally **no `ssh/`
+> Stow package**. Your keys, `~/.ssh/config`, and `~/.ssh/known_hosts` stay on
+> the machine and never get committed. `.gitignore` carries a safety net
+> (`**/.ssh/`, `id_*`, `*.pem`, `*.key`, `config*`, `known_hosts*`,
+> `authorized_keys`, `agent/`) so SSH content can't be added by accident.
+> To preserve `~/.ssh` across machines, back it up privately with
+> `./backup-local.sh` instead of stowing it.
+
 ---
 
 ## Key naming convention

@@ -440,6 +440,13 @@ Host <alias>
     AddKeysToAgent yes
 ```
 
+> **`~/.ssh` is intentionally NOT tracked in this repo.** This is a public
+> repository, so there is no `ssh/` Stow package — keys, `config`, and
+> `known_hosts` never leave your machine. `.gitignore` carries a safety net
+> (`**/.ssh/`, `id_*`, `*.pem`, `config*`, `known_hosts*`, …) so SSH content
+> can't be committed by accident. Back up `~/.ssh` privately with
+> [`backup-local.sh`](#backup-localsh) instead.
+
 ---
 
 ## Wiki

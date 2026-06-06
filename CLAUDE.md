@@ -135,6 +135,10 @@ targets. Handle them with guards in the shell configs rather than removing them:
 - `~/.local/bin/env` — sourced only if the file exists
 - `~/.opencode/bin` — added to PATH only if the directory exists
 - `~/.lmstudio/bin` — added to PATH only if the directory exists
+- `~/.ssh/` — **never stow.** This repo is public; there is intentionally no `ssh/`
+  package. Keys, `config`, and `known_hosts` stay on the machine. `.gitignore` has a
+  safety net (`**/.ssh/`, `id_*`, `*.pem`, `*.key`, `config*`, `known_hosts*`,
+  `authorized_keys`, `agent/`). Back up `~/.ssh` privately via `./backup-local.sh`.
 
 ## graphify
 
