@@ -24,7 +24,7 @@ error_symbol = "[✗](bold red)"
 # configure directory
 [directory]
 read_only = " 󰌾"
-truncation_length = 3            # keep at most the last 3 path components
+truncation_length = 2            # keep at most the last 2 path components
 truncation_symbol = "…/"         # prepend "…/" when truncation actually happened
 truncate_to_repo = false         # don't collapse to repo root; respect truncation_length instead
 style = "bold italic blue"
