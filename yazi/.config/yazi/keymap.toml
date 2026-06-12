@@ -1,0 +1,11 @@
+[manager]
+prepend_keymap = [
+	# Zoxide: fuzzy-jump to directory from history
+	{ on = "z", run = "plugin zoxide", desc = "Jump with zoxide" },
+
+	# Toggle hidden files on/off
+	{ on = ".", run = "toggle_hidden", desc = "Toggle hidden files" },
+
+	# Move to system trash instead of permanent delete
+	{ on = "p", run = "trash", desc = "Move selected files to trash" },
+]

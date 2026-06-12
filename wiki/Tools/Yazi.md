@@ -9,10 +9,20 @@ Config: `yazi/.config/yazi/yazi.toml` → `~/.config/yazi/yazi.toml`
 
 | Setting | Value |
 |---|---|
-| Hidden files | Shown by default |
-| Layout ratio | 1 : 2 : 5 (parent : current : preview) |
+| Hidden files | Shown by default (toggle with `.`) |
+| Layout ratio | 0 : 2 : 3 (no parent, cwd + preview) |
 | Theme | Rose Pine |
 | Text wrapping | Disabled |
+| Open with | Neovim |
+
+## Keymaps
+
+| Key | Action | Description |
+|---|---|---|
+| `z` | Zoxide jump | Fuzzy-jump to directory from history |
+| `.` | Toggle hidden | Show/hide dotfiles |
+| `p` | Trash | Move to system trash instead of permanent delete |
+| `e` / `enter` | Edit | Open file in Neovim |
 
 ---
 

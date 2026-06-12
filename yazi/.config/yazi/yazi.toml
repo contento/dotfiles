@@ -1,10 +1,13 @@
 [mgr]
 show_hidden = true
-ratio = [1,2,5]
+ratio = [0, 2, 3]
 
 [preview]
 wrap = "no"
 
 [flavor]
 use = "rose-pine"
+
+[opener]
+edit = [{ run = "nvim %*", block = true, desc = "Edit with Neovim" }]
 
