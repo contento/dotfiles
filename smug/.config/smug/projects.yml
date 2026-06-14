@@ -10,8 +10,11 @@ session: myproject
 root: $PROJECTS_DIR
 
 windows:
-  # Simple single-pane window (100% visible)
+  # Horizontal split: 60% left pane, 40% right pane
   - name: shell
+    commands:
+      - tmux split-window -h -p 40 -t myproject:shell
+      - tmux select-pane -t myproject:shell.0
 
   # Example: Multi-pane window with vertical 75/25 split
   # - name: editor
