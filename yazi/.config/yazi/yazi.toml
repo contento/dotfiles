@@ -1,6 +1,6 @@
 [mgr]
 show_hidden = true
-ratio = [0, 2, 3]
+ratio = [0,2,5]
 
 [preview]
 wrap = "no"
