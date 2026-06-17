@@ -8,6 +8,8 @@
 
 set -euo pipefail
 
+PYTHON_VERSION="3.12"   # LTS-class; security support until 2028
+
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 logs_folder="$script_dir/logs"
 mkdir -p "$logs_folder"
@@ -45,7 +47,6 @@ common_apps=(
     pandoc
     pngquant           # lossy PNG compression
     poppler            # yazi: PDF preview (provides pdftoppm)
-    python3
     ripgrep
     rustup
     shellcheck         # bash linter
@@ -70,7 +71,7 @@ linux_apps=(
     gh               # GitHub CLI; apt: gh, yay: github-cli (falls back to brew)
     ghostty          # yay (AUR); not in apt — will fall back to brew
     golang           # apt/yay name for Go; brew name is 'go' (in brew_mac_apps)
-    python3-pip      # apt; yay: python-pip (falls back to brew)
+    python3-pip      # apt generic; pinned version installed by install_python()
     pfetch-rs        # yay (AUR); not in apt — will fall back to brew
     xsel             # tmux-fzf clipboard (X11); macOS uses pbcopy/pbpaste natively
     xclip            # tmux copy-mode clipboard fallback (X11)
@@ -80,7 +81,6 @@ linux_apps=(
 # Linux packages that must come from Homebrew.
 brew_linux_apps=(
     neovim
-    node
     portal
 )
 
@@ -89,7 +89,6 @@ brew_mac_apps=(
     gh
     go
     neovim
-    node
     portal
     pfetch-rs
     yq
@@ -186,6 +185,13 @@ should_install() {
 # cache expire and the password gets re-prompted mid-install.
 keep_sudo_alive() {
     sudo -v
+    # Verify the cache actually works before spawning the keeper.
+    # If timestamp_timeout=0 is set in sudoers, -n will always fail and
+    # every subsequent sudo call will re-prompt — warn rather than silently loop.
+    if ! sudo -n true 2>/dev/null; then
+        log "**** WARNING: sudo cache not working (timestamp_timeout may be 0). You may be prompted for your password multiple times."
+        return
+    fi
     ( while kill -0 "$$" 2>/dev/null; do
         sudo -n true 2>/dev/null
         sleep 50
@@ -205,6 +211,36 @@ else
 fi
 
 # --- Util ------------------------
+
+install_python() {
+    local ver="$PYTHON_VERSION"
+    log "**** Installing Python $ver ..."
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        install_with_brew_formula "python@$ver"
+    elif [[ -f /etc/debian_version ]]; then
+        # deadsnakes PPA provides older/newer Python builds on Ubuntu
+        if ! dpkg-query -W -f='${Status}' "python$ver" 2>/dev/null | grep -q "install ok installed"; then
+            if ! apt-cache show "python$ver" >/dev/null 2>&1; then
+                log "**** Adding deadsnakes PPA for Python $ver ..."
+                run_cmd sudo apt-get install -y software-properties-common
+                run_cmd sudo add-apt-repository -y ppa:deadsnakes/ppa
+                run_cmd sudo apt-get update -qq
+            fi
+            run_cmd sudo apt-get install -y "python$ver" "python$ver-venv" "python$ver-dev"
+        else
+            log "**** python$ver is already installed"
+        fi
+        # Make python3 / python point to the pinned version
+        run_cmd sudo update-alternatives --install /usr/bin/python3 python3 "/usr/bin/python$ver" 1
+        run_cmd sudo update-alternatives --set python3 "/usr/bin/python$ver"
+    elif [[ -f /etc/arch-release ]]; then
+        local pkg="python${ver/./}"   # "3.12" → "python312"
+        install_with_yay "$pkg"
+    else
+        log "**** WARNING: unsupported platform for Python $ver install"
+    fi
+}
 
 install_tmux_plugin_manager() {
     log "**** Installing tmux plugin manager ..."
@@ -248,7 +284,7 @@ install_nvm() {
                     # Read version from .nvmrc or fall back to a sensible default
                     local nvmrc_version
                     nvmrc_version=$(cat "$HOME/.config/nvm/.nvmrc" 2>/dev/null | tr -d '[:space:]')
-                    nvmrc_version=${nvmrc_version:-20}
+                    nvmrc_version=${nvmrc_version:-lts/*}
                     log "**** Installing default Node version ($nvmrc_version) ..."
                     nvm install "$nvmrc_version" 2>&1 | tee -a "$logfile_path"
                 fi
@@ -272,7 +308,7 @@ install_nvm() {
             # Read version from .nvmrc or fall back to a sensible default
             local nvmrc_version
             nvmrc_version=$(cat "$HOME/.config/nvm/.nvmrc" 2>/dev/null | tr -d '[:space:]')
-            nvmrc_version=${nvmrc_version:-20}
+            nvmrc_version=${nvmrc_version:-lts/*}
             log "**** Installing default Node version ($nvmrc_version) ..."
             nvm install "$nvmrc_version" 2>&1 | tee -a "$logfile_path"
         fi
@@ -534,6 +570,8 @@ else
     log "**** Unsupported $OSTYPE"
     exit 1
 fi
+
+install_python
 
 # TPM must run after tmux is installed
 install_tmux_plugin_manager
