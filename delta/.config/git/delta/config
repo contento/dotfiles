@@ -3,7 +3,7 @@
     light = false
     line-numbers = true
     side-by-side = true
-    syntax-theme = Rose Pine Moon
+    syntax-theme = Dracula
     
 [delta "decorations"]
     commit-decoration-style = bold yellow box ul

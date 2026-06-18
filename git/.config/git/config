@@ -12,7 +12,7 @@
     light = false
     line-numbers = true
     side-by-side = true
-    syntax-theme = "Rose Pine Moon"
+    syntax-theme = "Dracula"
 
 [merge]
     conflictstyle = diff3
