@@ -1,0 +1,3 @@
+# Force LF line endings for all text files — this repo targets Linux/macOS.
+# Overrides core.autocrlf=true from Windows git config.
+* text=auto eol=lf
