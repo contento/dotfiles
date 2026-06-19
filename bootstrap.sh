@@ -98,6 +98,7 @@ brew_mac_apps=(
 mac_cask_brew_apps=(
     ghostty
     iterm2
+    supacode           # native terminal coding-agents command center (macOS >= 26)
     font-delugia-complete
     font-fira-code
     font-fira-code-nerd-font

@@ -345,6 +345,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [vim](https://www.vim.org) | Classic Vim (fallback editor) |
 | [ghostty](https://ghostty.org) | GPU-accelerated terminal |
 | [iterm2](https://iterm2.com) | macOS terminal (cask) |
+| [supacode](https://supacode.sh) | Terminal coding-agents command center (macOS cask) |
 
 ### Misc
 
