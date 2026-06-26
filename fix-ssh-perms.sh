@@ -48,17 +48,13 @@ echo "Updating permissions for the SSH directory..."
 run_cmd chmod 700 "$SSH_DIR"
 
 echo "Changing permissions for SSH private keys..."
-if [[ "$dry_run" == true ]]; then
-    echo "[dry-run] find $SSH_DIR -maxdepth 1 -type f ! -name '*.pub' ! -name 'known_hosts*' ! -name 'config' ! -name 'authorized_keys' ! -name 'environment' -exec chmod 600 {} \\;"
-else
-    find "$SSH_DIR" -maxdepth 1 -type f \
-        ! -name "*.pub" \
-        ! -name "known_hosts*" \
-        ! -name "config" \
-        ! -name "authorized_keys" \
-        ! -name "environment" \
-        -exec chmod 600 {} \;
-fi
+run_cmd find "$SSH_DIR" -maxdepth 1 -type f \
+    ! -name "*.pub" \
+    ! -name "known_hosts*" \
+    ! -name "config" \
+    ! -name "authorized_keys" \
+    ! -name "environment" \
+    -exec chmod 600 {} \;
 
 echo "Current permissions for SSH directory and keys:"
 echo "$SSH_DIR:"

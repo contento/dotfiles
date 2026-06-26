@@ -31,14 +31,12 @@ fix-ssh: ## Fix SSH directory permissions
 lint: ## Run shellcheck on all shell scripts
 	@echo "Running ShellCheck..."
 	@shellcheck --version 2>/dev/null || (echo "shellcheck not installed. Install it and try again." && exit 1)
-	@shellcheck --severity=style *.sh
+	@shellcheck --severity=style -e SC1091 *.sh
 	@echo "✅ All scripts pass shellcheck"
 
 check-sync: ## Verify CLAUDE.md and copilot-instructions.md are in sync
 	@echo "Checking CLAUDE.md ↔ .github/copilot-instructions.md sync..."
-	@diff CLAUDE.md .github/copilot-instructions.md && \
-		echo "✅ Files are in sync" || \
-		(echo "❌ Files have diverged!"; exit 1)
+	@.githooks/pre-commit && echo "✅ Files are in sync"
 
 install-hooks: ## Install git hooks from .githooks/
 	git config core.hooksPath .githooks

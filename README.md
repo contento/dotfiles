@@ -155,13 +155,13 @@ Logs are written to `logs/bootstrap-YYYY-MM-DD.log`.
 ### `stow-all.sh`
 
 Unstows and re-stows all config packages into `$HOME` using GNU Stow.
-Skips the `logs/` directory by default.
+Skips the `logs/` and `wiki/` directories by default.
 
 ```
 Options:
   --dry-run           Simulate without making changes (uses stow --simulate)
   --verbose           Enable verbose output
-  --exclude=DIR,...   Comma-separated list of dirs to skip (default: logs)
+  --exclude=DIR,...   Comma-separated list of dirs to skip (default: logs,wiki)
   --help              Show help
 ```
 
@@ -198,12 +198,13 @@ Options:
 
 ### `backup-local.sh`
 
-Creates timestamped zip archives of machine-specific, non-stowed configs in `$BACKUP_FOLDER`.
+Creates timestamped archives of machine-specific, non-stowed configs in `$BACKUP_FOLDER`.
 Backs up local session configs, SSH keys, shell history, and other personal files that
 are intentionally gitignored.
 
 **Options:**
 
+- `--format zip|7z` — Compression format (`zip` by default)
 - `--dry-run` — Show what would be backed up without creating files
 - `--help, -h` — Show help message
 
@@ -215,16 +216,16 @@ are intentionally gitignored.
 
 **Backup location & format:**
 
-Backups are stored as zip files under `$BACKUP_FOLDER` (default: `~/.local/share/dotfiles/backups`):
+Backups are stored under `$BACKUP_FOLDER/dotfiles_locals` (default base: `~/.local/share/dotfiles/backups`):
 
 ```bash
-~/.local/share/dotfiles/backups/
-├── 20260602_1430.zip
-├── 20260603_0819.zip
-└── 20260603_1045.zip
+~/.local/share/dotfiles/backups/dotfiles_locals/
+├── dotfiles_locals_20260602_1430.zip
+├── dotfiles_locals_20260603_0819.zip
+└── dotfiles_locals_20260603_1045.7z
 ```
 
-Filename format: `{yyyyMMdd_HHmm}.zip` (e.g. `20260603_0819.zip` = 2026-06-03 at 08:19)
+Filename format: `dotfiles_locals_{yyyyMMdd_HHmm}.{zip|7z}` (e.g. `dotfiles_locals_20260603_0819.zip` = 2026-06-03 at 08:19)
 
 **Usage:**
 
@@ -235,8 +236,11 @@ Filename format: `{yyyyMMdd_HHmm}.zip` (e.g. `20260603_0819.zip` = 2026-06-03 at
 # Create a backup zip
 ./backup-local.sh
 
+# Create a backup with 7z compression
+./backup-local.sh --format 7z
+
 # List all backups
-ls -lh $BACKUP_FOLDER/*.zip
+ls -lh $BACKUP_FOLDER/dotfiles_locals/*
 
 # Check backup location
 echo $BACKUP_FOLDER

@@ -76,13 +76,13 @@ GNU Stow wrapper — symlinks all config packages into `$HOME`.
 Options:
   --dry-run           Simulate (passes --simulate to stow)
   --verbose           Verbose output
-  --exclude=DIR,...   Comma-separated dirs to skip (default: logs)
+  --exclude=DIR,...   Comma-separated dirs to skip (default: logs,wiki)
   --help              Show help
 ```
 
 ### What it does
 
-1. Discovers all subdirectories in the repo (excluding `logs/` by default)
+1. Discovers all subdirectories in the repo (excluding `logs/` and `wiki/` by default)
 2. Runs `stow -D` (unstow) on all packages
 3. Runs `stow -R` (restow) on all packages, target `$HOME`
 
