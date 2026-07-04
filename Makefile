@@ -4,7 +4,7 @@
 SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 
-.PHONY: help bootstrap stow dry-run lint check-sync fix-ssh
+.PHONY: help bootstrap bootstrap-all bootstrap-dry-run stow stow-dry-run lint check-sync fix-ssh install-hooks
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | sort | \
@@ -31,12 +31,12 @@ fix-ssh: ## Fix SSH directory permissions
 lint: ## Run shellcheck on all shell scripts
 	@echo "Running ShellCheck..."
 	@shellcheck --version 2>/dev/null || (echo "shellcheck not installed. Install it and try again." && exit 1)
-	@shellcheck --severity=style -e SC1091 *.sh
+	@shellcheck --severity=style --exclude=SC1091 *.sh bash/.bashrc shared/.config/shell/*.sh .githooks/pre-commit
 	@echo "✅ All scripts pass shellcheck"
 
 check-sync: ## Verify CLAUDE.md and copilot-instructions.md are in sync
 	@echo "Checking CLAUDE.md ↔ .github/copilot-instructions.md sync..."
-	@.githooks/pre-commit && echo "✅ Files are in sync"
+	@./.githooks/pre-commit && echo "✅ Files are in sync"
 
 install-hooks: ## Install git hooks from .githooks/
 	git config core.hooksPath .githooks

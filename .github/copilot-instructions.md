@@ -124,8 +124,8 @@ git/.gitconfig               →  ~/.gitconfig
 zsh/.zshenv                  →  ~/.zshenv
 ```
 
-Running `./stow-all.sh` unstows then restows all packages. The `logs/` directory is excluded by
-default. Always test changes with `--dry-run` first.
+Running `./stow-all.sh` unstows then restows all packages. The `logs/` and `wiki/` directories
+are excluded by default. Always test changes with `--dry-run` first.
 
 ## Known machine-specific files (do not stow blindly)
 

@@ -46,22 +46,13 @@ chmod 600 ~/.ssh/id_rsa-*
 
 ## Agent setup
 
-### macOS / zsh — keychain
+### keychain (bash and zsh)
 
-The `.zshrc` auto-starts the agent via `keychain` if the key file exists:
+Both `.zshrc` and `.bashrc` auto-start the agent via `keychain` if the key file exists:
 
-```zsh
+```sh
 # Runs automatically on shell init if keychain is installed
 eval "$(keychain --eval "id_rsa-$USER")"
-```
-
-### Linux / bash — persistent agent
-
-The `.bashrc` manages a persistent agent via `~/.ssh/environment`:
-
-```bash
-# Runs automatically on shell init
-setup_ssh_agent
 ```
 
 ### Manual start

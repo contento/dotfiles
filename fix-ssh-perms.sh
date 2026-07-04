@@ -44,6 +44,11 @@ run_cmd() {
 # Define the SSH directory
 SSH_DIR="$HOME/.ssh"
 
+if [[ ! -d "$SSH_DIR" ]]; then
+    echo "$SSH_DIR does not exist — nothing to do."
+    exit 0
+fi
+
 echo "Updating permissions for the SSH directory..."
 run_cmd chmod 700 "$SSH_DIR"
 

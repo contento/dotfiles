@@ -81,6 +81,13 @@ if [[ "$format" == "7z" ]] && ! command -v 7z &>/dev/null; then
   exit 1
 fi
 
+# Check if zip is available when using zip format (not preinstalled on minimal Ubuntu)
+if [[ "$format" == "zip" ]] && ! command -v zip &>/dev/null; then
+  echo "Error: zip format requested but zip is not installed"
+  echo "Install with: brew install zip (or apt install zip on Debian)"
+  exit 1
+fi
+
 # Helper to conditionally run commands
 run_cmd() {
   if [[ "$dry_run" == true ]]; then
@@ -109,6 +116,8 @@ run_cmd mkdir -p "$backup_dest"
 if [[ -d "$HOME/.config/smug" ]]; then
   smug_count=0
   for yml in "$HOME"/.config/smug/*.yml; do
+    # Unexpanded glob (no .yml files at all) — skip the literal pattern
+    [[ -e "$yml" ]] || continue
     # Skip the template file
     if [[ "$(basename "$yml")" != "projects.yml" ]]; then
       run_cmd mkdir -p "$backup_dest/smug"
@@ -131,7 +140,9 @@ fi
 # Backup 3: SSH config and keys (if exists)
 if [[ -d "$HOME/.ssh" ]]; then
   run_cmd mkdir -p "$backup_dest/ssh"
-  run_cmd cp -rp "$HOME/.ssh" "$backup_dest/"
+  # Copy the contents (including dotfiles) into ssh/, not the .ssh dir itself,
+  # so the archive gets a visible ssh/ folder instead of a hidden .ssh/
+  run_cmd cp -rp "$HOME/.ssh/." "$backup_dest/ssh"
   echo "  ✓ Backed up ~/.ssh/"
 fi
 

@@ -6,12 +6,9 @@
 #      |    https://conten.to
 # --------
 
-export TERM="xterm-256color" # getting proper colors
-
-# Project directories
-# PROJECTS_DIR: root for smug session configs (contento projects)
-# PROJECT_HOME: general projects directory (may differ, used elsewhere)
-export PROJECTS_DIR="$HOME/projects/contento"
+# NOTE: TERM is intentionally NOT set here — the terminal emulator (Ghostty,
+# tmux, iTerm2) advertises its own terminfo; overriding it breaks colors/italics.
+# PROJECTS_DIR comes from shared-env.sh (sourced in .zshenv).
 
 # Function to set basic zsh options
 setup_zsh_options() {
@@ -28,206 +25,18 @@ setup_history() {
   setopt EXTENDED_HISTORY
   setopt SHARE_HISTORY
 
-  export HISTSIZE=1000
-  export SAVEHIST=1000
+  export HISTSIZE=10000
+  export SAVEHIST=10000
   export HISTFILE=$ZSH_PATH/.zsh_history
   export HIST_STAMPS="yyyy-mm-dd"
-  export HISTIGNORE='&:*:(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)'
+  # zsh's equivalent of bash HISTIGNORE: single pattern of commands not written to the history file
+  HISTORY_IGNORE='(ls|cd|cd ..|pwd|exit|history|sudo reboot)'
 }
 
 setup_aliases() {
-  setup_git_aliases
-
-  setup_eza_aliases
-
-  setup_python_aliases
-
-  setup_tmux_aliases
-
-  setup_k8s_aliases
-
-  setup_podman_aliases
-
-  setup_nav_aliases
-
-  setup_file_aliases
-
-  setup_job_aliases
-
-  setup_tool_aliases
-
-  if type zoxide >/dev/null 2>&1; then
-    alias cd="z"
-  fi
-
-  setup_cat_aliases
-
-  # yazi aliases
-  if type yazi >/dev/null 2>&1; then
-    alias y="yazi"
-  fi
-
-  # adding flags
-  alias df='df -h'               # human-readable sizes
-  alias free='free -m'           # show sizes in MB
-  alias grep='grep --color=auto' # colorize output (good for log files)
-
-  # vim/nvim aliases
-  alias v="nvim ."
-
-  # vscode aliases
-  alias c='code .'
-}
-
-setup_nav_aliases() {
-  alias ..='cd ..'
-  alias ...='cd ../..'
-
-  # create a directory and cd into it
-  mkd() {
-    mkdir -p "$1" && cd "$1"
-  }
-}
-
-setup_file_aliases() {
-  alias cp='cp -i'
-  alias mv='mv -i'
-  alias rm='rm -i'
-  alias rmf='rm -rf'
-}
-
-setup_job_aliases() {
-  alias f='fg'
-  alias j='jobs'
-  alias h='htop'
-}
-
-setup_tool_aliases() {
-  if type lazygit >/dev/null 2>&1; then
-    alias lg='lazygit'
-  fi
-
-  if type make >/dev/null 2>&1; then
-    alias m='make'
-  fi
-
-  if type docker >/dev/null 2>&1; then
-    alias d='docker'
-  fi
-
-  # ripgrep aliases
-  if type rg >/dev/null 2>&1; then
-    alias rg='rg --color=auto'
-    alias rga='rg --hidden --no-ignore'
-    alias rgf='rg --files'
-  fi
-
-  # GitHub CLI aliases
-  if type gh >/dev/null 2>&1; then
-    alias gh='gh'
-    alias ghp='gh pr'
-    alias ghc='gh issue create'
-    alias ghs='gh status'
-  fi
-
-  # direnv aliases
-  if type direnv >/dev/null 2>&1; then
-    alias de='direnv edit .'
-    alias dl='direnv allow'
-  fi
-}
-
-setup_cat_aliases() {
-  local alternatives=("batcat" "bat")
-  for alt in "${alternatives[@]}"; do
-    if type "$alt" >/dev/null; then
-      alias cat="$alt --style=plain --pager=never"
-      alias catp="$alt"
-      break
-    fi
-  done
-}
-
-setup_eza_aliases() {
-  if type eza >/dev/null 2>&1; then
-    alias ls='eza --color=always --git --icons=always'
-  fi
-
-  alias l='ls -lA'
-  alias ll='ls -l'
-  alias lt='ls --tree'
-
-}
-setup_python_aliases() {
-  if type python3 >/dev/null 2>&1; then
-    alias python='python3'
-  fi
-  if type pip3 >/dev/null 2>&1; then
-    alias pip='pip3'
-  fi
-}
-
-setup_tmux_aliases() {
-  if type tmux >/dev/null 2>&1; then
-    alias t="tmux"
-    alias tm="tmux new-session -s"
-    alias tl="tmux list-sessions"
-    alias tk="tmux kill-session -t"
-    alias tks="tmux kill-server"
-    alias ta="tmux attach -t"
-  fi
-}
-
-setup_git_aliases() {
-  if type git >/dev/null 2>&1; then
-    alias g='git'
-    alias ga='git add'
-    alias gc='git commit'
-    alias gca='git commit --amend'
-    alias gco='git checkout'
-    alias gd='git diff'
-    alias gl='git log'
-    alias gpl='git pull'
-    alias gpu='git push'
-    alias gst='git status'
-  fi
-}
-
-setup_k8s_aliases() {
-  if type kubectl >/dev/null 2>&1; then
-    alias k='kubectl'
-    alias kgp='kubectl get pods'
-    alias kgs='kubectl get svc'
-    alias kgn='kubectl get nodes'
-    alias kga='kubectl get all'
-    alias kdp='kubectl describe pod'
-    alias kds='kubectl describe svc'
-    alias kdel='kubectl delete'
-    alias kaf='kubectl apply -f'
-    alias kctx='kubectl config use-context'
-    alias kns='kubectl config set-context --current --namespace'
-    alias kl='kubectl logs'
-    alias kexec='kubectl exec -it'
-  fi
-}
-
-setup_podman_aliases() {
-  if type podman >/dev/null 2>&1; then
-    alias p='podman'
-    alias plogs='podman logs'
-    alias pps='podman ps'
-    alias ppa='podman ps -a'
-    alias pi='podman images'
-    alias prun='podman run'
-    alias pexec='podman exec -it'
-    alias pstop='podman stop'
-    alias prm='podman rm'
-    alias primi='podman rmi'
-    alias pbld='podman build'
-    alias ppull='podman pull'
-    alias ppush='podman push'
-    alias pinspect='podman inspect'
-  fi
+  # Shared bash/zsh aliases — single source of truth for both shells
+  # (cd is replaced by zoxide via `zoxide init --cmd cd` in setup_additional_tools)
+  [ -f "$HOME/.config/shell/shared-aliases.sh" ] && . "$HOME/.config/shell/shared-aliases.sh"
 }
 
 setup_brew() {
@@ -240,7 +49,7 @@ setup_brew() {
 setup_path() {
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
-  [ -d $HOME/.local/bin ] && export PATH=$HOME/.local/bin:$PATH
+  [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 
   # Rust
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
@@ -253,9 +62,11 @@ setup_path() {
     [ -d "$cuda_dir/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_dir/lib64"
   else
     # Fall back: check the highest installed CUDA version
-    local cuda_ver
-    cuda_ver="$(ls -d /usr/local/cuda-*(N) 2>/dev/null | sort -V | tail -1)"
-    if [ -n "$cuda_ver" ]; then
+    # (N) nullglob qualifier: empty array instead of an error when nothing matches
+    local cuda_vers cuda_ver
+    cuda_vers=(/usr/local/cuda-*(N))
+    if [ ${#cuda_vers[@]} -gt 0 ]; then
+      cuda_ver="$(printf '%s\n' "${cuda_vers[@]}" | sort -V | tail -1)"
       [ -d "$cuda_ver/bin" ] && export PATH="$PATH:$cuda_ver/bin"
       [ -d "$cuda_ver/lib64" ] && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$cuda_ver/lib64"
     fi
@@ -307,9 +118,9 @@ setup_additional_tools() {
     source <(fzf --zsh)
   fi
 
-  # Initialize zoxide if available
+  # Initialize zoxide if available — --cmd cd replaces cd (with completions)
   if type zoxide >/dev/null 2>&1; then
-    eval "$(zoxide init zsh)"
+    eval "$(zoxide init zsh --cmd cd)"
   fi
 
   # Initialize atuin if available
@@ -332,16 +143,6 @@ setup_osc7() {
   add-zsh-hook precmd _emit_osc7
 }
 
-setup_additional_tools_linux() {
-  # No-op: brew shellenv is handled by setup_brew() above
-  :
-}
-
-setup_additional_tools_mac() {
-  # No-op: brew shellenv is handled by setup_brew() above
-  :
-}
-
 # Function to show system info
 show_system_info() {
   if type pfetch >/dev/null; then
@@ -357,15 +158,6 @@ setup_brew
 setup_path
 setup_additional_tools
 setup_osc7
-
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  setup_additional_tools_linux
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  setup_additional_tools_mac
-else
-  echo "Unsupported $OSTYPE"
-  exit 1
-fi
 
 setup_aliases
 

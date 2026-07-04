@@ -8,25 +8,28 @@ File: `bash/.bashrc` → `~/.bashrc`
 
 ## Startup sequence
 
+The file first sources `~/.config/shell/shared-env.sh`, then bails out early
+(inline `case $- in` check at file level — a function can't `return` from the
+file) when the session is not interactive, so scp/sftp/rsync never see output.
+
 Functions called in order:
 
-1. `check_interactive` — exits early if not an interactive session
-2. `configure_history` — `HISTCONTROL=ignoreboth`, 1000 entries
-3. `configure_terminal` — `checkwinsize`, `lesspipe`
-4. `setup_starship` — cross-shell prompt
-5. `setup_zoxide` — smarter `cd` via `zoxide init bash`
-6. `setup_atuin` — shell history search via `atuin init bash`
-7. `setup_direnv` — per-directory env vars via `direnv hook bash`
-8. `setup_brew` — activates `brew shellenv` (detects prefix automatically)
-9. `setup_path` — adds `/usr/local/bin`, `~/bin`, Rust cargo env
-10. `setup_typical_aliases` — ls, grep, yazi, nvim, code
-11. `load_custom_aliases` — sources `~/.bash_aliases` if present
-12. `enable_completion` — bash-completion
-13. `setup_ssh_agent` — persistent agent via `~/.ssh/environment`
-14. `source_fzf` — sources `~/.fzf.bash` if present
-15. `setup_osc7` — terminal URL support (uses `$(hostname)` for portability)
-16. `show_system_info` — `pfetch-rs` (primary) or `fastfetch` (fallback)
-17. **nvm** — loads `$HOME/.config/nvm/nvm.sh` if present
+1. `configure_history` — `HISTCONTROL=ignoreboth`, 10000 entries
+2. `configure_terminal` — `checkwinsize`, `lesspipe`
+3. `setup_starship` — cross-shell prompt
+4. `setup_zoxide` — replaces `cd` via `zoxide init bash --cmd cd`
+5. `setup_atuin` — shell history search via `atuin init bash`
+6. `setup_direnv` — per-directory env vars via `direnv hook bash`
+7. `setup_brew` — activates `brew shellenv` (detects prefix automatically)
+8. `setup_path` — adds `/usr/local/bin`, `~/bin`, Rust cargo env
+9. `setup_typical_aliases` — ls/grep fallbacks, then sources `~/.config/shell/shared-aliases.sh` (shared with zsh)
+10. `load_custom_aliases` — sources `~/.bash_aliases` if present
+11. `enable_completion` — bash-completion
+12. `setup_ssh_agent` — `keychain --eval` (same mechanism as zsh)
+13. `source_fzf` — sources `~/.fzf.bash` if present
+14. `setup_osc7` — terminal URL support (uses `$(hostname)` for portability)
+15. `show_system_info` — `pfetch-rs` (primary) or `fastfetch` (fallback)
+16. **nvm** — loads `$HOME/.config/nvm/nvm.sh` if present
 
 ---
 
@@ -51,10 +54,12 @@ Colour: user+host in bright blue (`\e[38;5;39m`), path in slate (`\e[38;5;103m`)
 
 ## SSH agent (bash)
 
-Bash manages a persistent agent through `~/.ssh/environment`:
+Bash uses `keychain` — the same mechanism as zsh — when both `keychain` and
+the key file `~/.ssh/id_rsa-$USER` exist:
 
-- If the file exists and the agent PID is alive → re-uses the running agent
-- Otherwise → starts a new agent and writes PID/socket to the file
+```bash
+eval "$(keychain --eval "id_rsa-$USER")"
+```
 
 ---
 

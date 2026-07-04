@@ -1,7 +1,7 @@
 # Smug session configuration example
 #
 # Copy this file to create your own session:
-#   cp default.yml.example myproject.yml
+#   cp projects.yml myproject.yml
 #
 # Then customize the session name and root directory.
 # Run the session with: smug myproject
@@ -55,4 +55,4 @@ windows:
 #   smug myproject -a      Attach if already running
 #   smug stop myproject    Kill session
 #
-# For more: https://github.com/ivaturi/smug
+# For more: https://github.com/ivaaan/smug

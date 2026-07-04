@@ -18,6 +18,8 @@ Supports **macOS**, **Ubuntu/Debian**, and **Arch Linux**. Works with **bash** a
 dotfiles/
 ├── bash/                 # bash configuration
 ├── btop/                 # btop resource monitor config
+├── delta/                # delta (git diff pager) config
+├── direnv/               # direnv config
 ├── editorconfig/         # .editorconfig
 ├── fastfetch/            # fastfetch system info config
 ├── ghostty/              # Ghostty terminal config
@@ -25,6 +27,8 @@ dotfiles/
 ├── mc/                   # Midnight Commander config
 ├── nvm/                  # nvm (Node Version Manager) config
 ├── nvim/                 # Neovim (LazyVim) config
+├── ripgrep/              # ripgrep config
+├── shared/               # shared env + aliases sourced by BOTH bash and zsh
 ├── smug/                 # Smug declarative tmux session configs
 ├── starship/             # Starship prompt config
 ├── tmux/                 # tmux config + TPM
@@ -263,7 +267,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder |
 | [direnv](https://direnv.net) | Per-directory environment variables |
 | [keychain](https://www.funtoo.org/Keychain) | SSH / GPG agent manager |
-| [smug](https://github.com/ivaturi/smug) | Declarative tmux session manager |
+| [smug](https://github.com/ivaaan/smug) | Declarative tmux session manager |
 
 ### File navigation & search
 
@@ -358,7 +362,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [stow](https://www.gnu.org/software/stow) | Symlink farm manager (this repo's foundation) |
 | [portal](https://github.com/SpatiumPortae/portal) | Encrypted peer-to-peer file transfer |
 | [pfetch-rs](https://github.com/Macchina-CLI/pfetch-rs) | Minimal system info fetch (primary shell fetch tool) |
-| `xsel`, `xclip` | X11 clipboard helpers (Linux) |
+| `xsel`, `xclip`, `wl-clipboard` | Clipboard helpers (Linux: X11 / Wayland) |
 | `unzip` | Archive extraction |
 
 ---
@@ -384,6 +388,13 @@ ZSH config lives in `~/.config/zsh/` (XDG-compliant). Entry point is `~/.zshenv`
 ### Bash
 
 Bash is maintained alongside ZSH as a fallback / secondary shell config. While ZSH is the primary daily driver with richer features (autosuggestions, syntax highlighting, advanced completion), Bash ensures compatibility everywhere: it's the default shell on most Linux distros (`/bin/sh`), the Docker container base, and minimal or headless environments where installing ZSH isn't practical. Both configs share the same aliases, prompt (Starship), and tool integrations so the experience is consistent regardless of which shell is active.
+
+Shared pieces live in the `shared/` Stow package and are sourced by **both** shells:
+
+- `~/.config/shell/shared-env.sh` — `PROJECTS_DIR`, `BACKUP_FOLDER`
+- `~/.config/shell/shared-aliases.sh` — all common aliases (git, eza, tmux, kubectl, podman, navigation, file safety, tools)
+
+Run `./sync-shell-configs.sh` to detect any remaining drift between `.bashrc` and `.zshrc`.
 
 ### Node.js & nvm
 

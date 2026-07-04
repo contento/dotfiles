@@ -75,6 +75,7 @@ linux_apps=(
     pfetch-rs        # yay (AUR); not in apt — will fall back to brew
     xsel             # tmux-fzf clipboard (X11); macOS uses pbcopy/pbpaste natively
     xclip            # tmux copy-mode clipboard fallback (X11)
+    wl-clipboard     # clipboard on Wayland sessions (provides wl-copy/wl-paste)
     yq               # YAML processor; apt: yq, yay: go-yq (falls back to brew)
 )
 
@@ -294,12 +295,18 @@ install_nvm() {
         fi
     fi
 
-    # Fallback: clone from git
+    # Fallback: clone from git. Clone into a temp dir and copy the contents in,
+    # because ~/.config/nvm may already exist and be non-empty (the nvm stow
+    # package puts .nvmrc there) and git refuses to clone into a non-empty dir.
     log "**** Homebrew unavailable or failed; cloning nvm from git ..."
     if [[ "$dry_run" == true ]]; then
-        log "[dry-run] git clone https://github.com/nvm-sh/nvm.git ~/.config/nvm"
+        log "[dry-run] git clone https://github.com/nvm-sh/nvm.git <tmpdir> && cp -R <tmpdir>/. ~/.config/nvm"
     else
-        run_cmd git clone https://github.com/nvm-sh/nvm.git "$HOME/.config/nvm" 2>&1 | tee -a "$logfile_path"
+        local nvm_tmp
+        nvm_tmp=$(mktemp -d)
+        run_cmd git clone https://github.com/nvm-sh/nvm.git "$nvm_tmp" 2>&1 | tee -a "$logfile_path"
+        run_cmd cp -R "$nvm_tmp/." "$HOME/.config/nvm/"
+        rm -rf "$nvm_tmp"
 
         # Source nvm and install default Node version (from .nvmrc if available)
         # shellcheck disable=SC1090
@@ -396,7 +403,9 @@ install_with_yay() {
     local app=$1
     log "**** Checking if $app is already installed ..."
 
-    if pacman -Qs "$app" > /dev/null 2>&1; then
+    # -Qi is an exact package lookup; -Qs regex-matches names AND descriptions
+    # (e.g. "vim" would falsely match neovim)
+    if pacman -Qi "$app" > /dev/null 2>&1; then
         log "**** $app is already installed"
         return 0
     fi

@@ -1,6 +1,6 @@
 # Aliases
 
-All aliases are defined in `.zshrc` and guarded behind `type <tool>` checks — they are only set when the tool is installed.
+All aliases are defined in `shared/.config/shell/shared-aliases.sh` and sourced by **both** `.bashrc` and `.zshrc`, so the two shells stay in sync. Tool-specific aliases are guarded behind `command -v <tool>` checks — they are only set when the tool is installed.
 
 ---
 
@@ -15,7 +15,7 @@ All aliases are defined in `.zshrc` and guarded behind `type <tool>` checks — 
 | `gco` | `git checkout` |
 | `gd` | `git diff` |
 | `gl` | `git log` |
-| `gp` | `git pull` |
+| `gpl` | `git pull` |
 | `gpu` | `git push` |
 | `gst` | `git status` |
 
@@ -94,12 +94,32 @@ Also see [[Tools/Git]] for git config aliases (`lg`, `lga`, `last`, etc.).
 |---|---|---|
 | `cat` | `bat --style=plain --pager=never` | `bat` or `batcat` installed |
 | `catp` | `bat` (with pager) | same |
-| `cd` | `z` (zoxide) | `zoxide` installed |
+| `cd` | zoxide (via `zoxide init --cmd cd`, in each shell's rc) | `zoxide` installed |
 | `y` | `yazi` | `yazi` installed |
-| `v` | `nvim` | always set |
-| `c` | `code` | always set |
+| `v` | `nvim .` | always set |
+| `c` | `code .` | always set |
 | `python` | `python3` | `python3` installed |
 | `pip` | `pip3` | `pip3` installed |
+| `lg` | `lazygit` | `lazygit` installed |
+| `m` | `make` | `make` installed |
+| `d` | `docker` | `docker` installed |
+| `h` | `btop` | `btop` installed |
+| `rga` | `rg --hidden --no-ignore` | `rg` installed |
+| `rgf` | `rg --files` | `rg` installed |
+| `ghp` / `ghc` / `ghs` | `gh pr` / `gh issue create` / `gh status` | `gh` installed |
+| `de` / `dl` | `direnv edit .` / `direnv allow` | `direnv` installed |
+
+---
+
+## Navigation & file safety
+
+| Alias | Command |
+|---|---|
+| `..` / `...` | `cd ..` / `cd ../..` |
+| `mkd <dir>` | `mkdir -p <dir> && cd <dir>` |
+| `cp` / `mv` / `rm` | interactive (`-i`) |
+| `rmf` | `rm -rf` |
+| `f` / `j` | `fg` / `jobs` |
 
 ---
 

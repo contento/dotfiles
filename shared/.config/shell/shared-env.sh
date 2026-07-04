@@ -3,8 +3,9 @@
 # Sets PROJECTS_DIR and BACKUP_FOLDER
 # shellcheck shell=bash
 
-# Project directories — used by smug session configs
-export PROJECTS_DIR="$HOME/projects"
+# Project directories — used by smug session configs.
+# Single source of truth for both shells; do not override in .bashrc/.zshrc.
+export PROJECTS_DIR="$HOME/projects/contento"
 
 # Backup folder — intelligently detect cloud storage, fallback to XDG_DATA_HOME
 if [ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs" ]; then

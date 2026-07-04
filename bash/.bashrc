@@ -1,21 +1,22 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # shellcheck shell=bash
 
-function check_interactive() {
-  case $- in
-  *i*) ;;
-  *) return ;;
-  esac
-}
-
 # Backup folder and project directories — sourced from shared shell config
 [ -f "$HOME/.config/shell/shared-env.sh" ] && . "$HOME/.config/shell/shared-env.sh"
+
+# Bail out when not running interactively. This must stay inline at file level:
+# a `return` inside a function only exits the function, not this file, and any
+# output from the rest of this file breaks scp/sftp/rsync.
+case $- in
+*i*) ;;
+*) return ;;
+esac
 
 function configure_history() {
   HISTCONTROL=ignoreboth
   shopt -s histappend
-  HISTSIZE=1000
-  HISTFILESIZE=2000
+  HISTSIZE=10000
+  HISTFILESIZE=20000
 }
 
 function configure_terminal() {
@@ -30,8 +31,9 @@ function setup_starship() {
 }
 
 function setup_zoxide() {
+  # --cmd cd replaces cd (with completions), same as zsh
   if command -v zoxide >/dev/null 2>&1; then
-    eval "$(zoxide init bash)"
+    eval "$(zoxide init bash --cmd cd)"
   fi
 }
 
@@ -65,24 +67,11 @@ function enable_completion() {
 }
 
 function setup_ssh_agent() {
-  SSH_ENV="$HOME/.ssh/environment"
-
-  function start_agent() {
-    echo "Initializing new SSH agent..."
-    touch "$SSH_ENV"
-    chmod 600 "$SSH_ENV"
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' >>"$SSH_ENV"
-    # shellcheck source=/dev/null
-    . "$SSH_ENV" >/dev/null
-    /usr/bin/ssh-add
-  }
-
-  if [ -f "$SSH_ENV" ]; then
-    # shellcheck source=/dev/null
-    . "$SSH_ENV" >/dev/null
-    kill -0 "$SSH_AGENT_PID" 2>/dev/null || start_agent
-  else
-    start_agent
+  # Use keychain to manage ssh-agent, same as zsh.
+  # $USER is POSIX-portable; $USERNAME is bash/Linux-only and unset on macOS by default
+  local _ssh_user="${USER:-$USERNAME}"
+  if command -v keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
+    eval "$(keychain --eval "id_rsa-$_ssh_user")"
   fi
 }
 
@@ -110,40 +99,17 @@ function setup_typical_aliases() {
   if command -v dircolors >/dev/null 2>&1; then
     eval "$(dircolors)"
   fi
+  # plain-ls fallback; shared-aliases.sh overrides ls with eza when available
   alias ls='ls $LS_OPTIONS'
-  alias ll='ls $LS_OPTIONS -l'
-  alias l='ls $LS_OPTIONS -lA'
 
-  alias y='yazi'
-  alias v='nvim .'
-  alias c='code .'
-
-  # navigation
-  alias ..='cd ..'
-  alias ...='cd ../..'
-  mkd() { mkdir -p "$1" && cd "$1" || return; }
-
-  # file safety
-  alias cp='cp -i'
-  alias mv='mv -i'
-  alias rm='rm -i'
-  alias rmf='rm -rf'
-
-  # jobs & system
-  alias f='fg'
-  alias j='jobs'
-  # btop is installed, not htop
-  command -v btop >/dev/null 2>&1 && alias h='btop'
-
-  # tool aliases (guarded)
-  command -v lazygit >/dev/null 2>&1 && alias lg='lazygit'
-  command -v make    >/dev/null 2>&1 && alias m='make'
-  command -v docker  >/dev/null 2>&1 && alias d='docker'
-
-  alias grep='grep --color=auto'
+  # bash-only extras
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
   alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history | tail -n1 | sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+  # Shared bash/zsh aliases — single source of truth for both shells
+  # shellcheck disable=SC1091
+  [ -f "$HOME/.config/shell/shared-aliases.sh" ] && . "$HOME/.config/shell/shared-aliases.sh"
 }
 
 function setup_brew() {
@@ -197,7 +163,6 @@ function show_system_info() {
 }
 
 # Main execution
-check_interactive || return
 configure_history
 configure_terminal
 setup_starship

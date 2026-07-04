@@ -31,7 +31,7 @@ Sourced on every zsh invocation (login, interactive, scripts).
 | `PAGER` | `most` → `less` | Guarded: falls back if `most` missing |
 | `EDITOR` | `nvim` → `vim` → `vi` | Guarded: cascading fallback |
 | `FZF_DEFAULT_COMMAND` | `fd --hidden …` | Only set when both `fd` and `fzf` exist |
-| `PROJECT_HOME` | `~/Projects` | Convenience variable |
+| `PROJECTS_DIR` | `~/projects/contento` | Root for smug session configs — set in `shared-env.sh`, shared with bash |
 
 ---
 
@@ -57,7 +57,8 @@ setopt APPEND_HISTORY HIST_REDUCE_BLANKS HIST_VERIFY
 setopt INC_APPEND_HISTORY EXTENDED_HISTORY SHARE_HISTORY
 ```
 
-History is stored at `$ZDOTDIR/.zsh_history` (1000 entries, timestamped).
+History is stored at `$ZDOTDIR/.zsh_history` (10000 entries, timestamped).
+`HISTORY_IGNORE` skips trivial commands (`ls`, `cd`, `pwd`, `exit`, …).
 
 ### PATH additions (all guarded)
 

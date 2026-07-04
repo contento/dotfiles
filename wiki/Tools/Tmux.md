@@ -69,7 +69,7 @@ Also active in copy-mode-vi.
 ---
 
 
-[smug](https://github.com/ivaturi/smug) defines tmux sessions declaratively in YAML.
+[smug](https://github.com/ivaaan/smug) defines tmux sessions declaratively in YAML.
 Config files live at `smug/.config/smug/` → `~/.config/smug/`.
 
 | Session | Root | Layout |
