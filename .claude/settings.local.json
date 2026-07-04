@@ -11,7 +11,11 @@
       "Read(//Users/contento/projects/**)",
       "Bash(rm ~/.config/tmux ~/.config/vim ~/.config/yazi ~/.config/zed ~/.config/zsh/.zprofile ~/.config/zsh/.zshrc ~/.zshenv && echo \"Removed conflicting symlinks\")",
       "Bash(./stow-all.sh)",
-      "Bash(curl -s \"https://api.github.com/repos/aristocratos/btop/commits?per_page=1\")"
+      "Bash(curl -s \"https://api.github.com/repos/aristocratos/btop/commits?per_page=1\")",
+      "Bash(brew info *)",
+      "Bash(git -C ~/.claude rev-parse --show-toplevel)",
+      "Bash(git -C ~ rev-parse --show-toplevel)",
+      "Bash(git -C /Users/contento/Projects/contento/dotfiles diff --stat .claude/settings.local.json)"
     ],
     "additionalDirectories": [
       "/Users/contento/projects/contento/dotfiles/zsh/.config/zsh"
