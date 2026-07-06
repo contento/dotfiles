@@ -1,19 +1,37 @@
 [user]
-	email = 3741250+contento@users.noreply.github.com
-	name = Gonzalo Contento
+    email = 3741250+contento@users.noreply.github.com
+    name = Gonzalo Contento
 
 [core]
     autocrlf = input   # Useful on cross-platform systems (LF for macOS/Linux, CRLF on Windows)
-    hooksPath = .githooks
+
+[init]
+    defaultBranch = main
 
 [color]
     ui = true   # Enable colored output
 
+[push]
+    autoSetupRemote = true   # First push creates the upstream branch automatically
+
+[fetch]
+    prune = true   # Drop remote-tracking branches deleted on the remote
+
+[merge]
+    conflictstyle = zdiff3   # Include the merge base in conflict markers
+
+[rebase]
+    autostash = true   # Stash/unstash uncommitted changes around a rebase
+
 [credential]
     helper = cache  # Cache credentials for a while
 [credential "https://github.com"]
-	helper =
-	helper = !gh auth git-credential
+    helper =
+    helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-	helper =
-	helper = !gh auth git-credential
+    helper =
+    helper = !gh auth git-credential
+
+# Machine-specific overrides (not tracked in dotfiles) — must stay last so it wins
+[include]
+    path = ~/.gitconfig.local

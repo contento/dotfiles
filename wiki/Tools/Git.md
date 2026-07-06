@@ -6,7 +6,7 @@ Config: `git/.gitconfig` → `~/.gitconfig`
 
 ## Identity
 
-```
+```ini
 user.name  = Gonzalo Contento
 user.email = 3741250+contento@users.noreply.github.com  (GitHub noreply)
 ```
@@ -16,26 +16,33 @@ user.email = 3741250+contento@users.noreply.github.com  (GitHub noreply)
 ## Core settings
 
 | Setting | Value |
-|---|---|
-| `core.editor` | `vim` |
+| --- | --- |
 | `core.autocrlf` | `input` (LF on checkout, unchanged on commit) |
-| `credential.helper` | `gh auth git-credential` (GitHub CLI) |
-| `merge.tool` | `vimdiff` |
-| `diff.tool` | `vimdiff` |
+| `init.defaultBranch` | `main` |
+| `push.autoSetupRemote` | `true` — first push creates the upstream branch |
+| `fetch.prune` | `true` — remote-tracking branches deleted on the remote are pruned |
+| `merge.conflictstyle` | `zdiff3` — conflict markers include the merge base |
+| `rebase.autostash` | `true` — uncommitted changes are stashed around a rebase |
+| `credential.helper` | `gh auth git-credential` (GitHub CLI) for github.com/gist |
+
+Repo hooks for the dotfiles repo itself are configured per-repo via
+`make install-hooks` (`git config core.hooksPath .githooks`), **not** globally —
+a global `core.hooksPath` would silently disable `.git/hooks` in every other repo.
 
 ---
 
-## Aliases
+## Machine-specific overrides
 
-| Alias | Expands to |
-|---|---|
-| `git st` | `status` |
-| `git co` | `checkout` |
-| `git br` | `branch` |
-| `git cm` | `commit` |
-| `git last` | `log -1 HEAD` |
-| `git lg` | One-line graph log with colours |
-| `git lga` | Same as `lg` but all branches |
+The last line of `.gitconfig` includes `~/.gitconfig.local`:
+
+```ini
+[include]
+    path = ~/.gitconfig.local
+```
+
+That file is not tracked. Use it for per-machine settings (e.g. tool-managed
+credential helpers). If an app rewrites the tracked `~/.gitconfig` (it is a
+symlink into the repo), restore it and move the setting into `~/.gitconfig.local`.
 
 ---
 
