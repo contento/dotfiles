@@ -53,12 +53,11 @@ dotfiles/
 ├── yazi/                 → ~/.config/yazi/
 ├── zed/                  → ~/.config/zed/
 ├── zsh/                  → ~/.zshenv + ~/.config/zsh/
-├── .githooks/            → Git hooks (pre-commit sync check)
 ├── .github/              → CI workflows
+├── AGENTS.md             → AI-assistant instructions (Claude Code, Copilot, etc.)
 ├── Makefile              → Convenience targets
 ├── sync-shell-configs.sh → Bash/ZSH config drift detector
 └── wiki/                 ← you are here
 ```
 
 Each directory is a Stow package. Running `stow-all.sh` symlinks everything into `$HOME`.
-Run `make install-hooks` to activate the pre-commit hook that keeps [[CLAUDE.md]] and [[.github/copilot-instructions.md]] in sync.

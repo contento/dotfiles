@@ -25,10 +25,6 @@ user.email = 3741250+contento@users.noreply.github.com  (GitHub noreply)
 | `rebase.autostash` | `true` — uncommitted changes are stashed around a rebase |
 | `credential.helper` | `gh auth git-credential` (GitHub CLI) for github.com/gist |
 
-Repo hooks for the dotfiles repo itself are configured per-repo via
-`make install-hooks` (`git config core.hooksPath .githooks`), **not** globally —
-a global `core.hooksPath` would silently disable `.git/hooks` in every other repo.
-
 ---
 
 ## Machine-specific overrides

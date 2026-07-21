@@ -126,8 +126,6 @@ Convenience targets for common operations. Run `make` without arguments to see a
 | `make stow` | Symlink all configs |
 | `make stow-dry-run` | Preview stow |
 | `make lint` | Run shellcheck on all scripts |
-| `make check-sync` | Verify CLAUDE.md ↔ copilot-instructions.md sync |
-| `make install-hooks` | Activate pre-commit hook (sets `core.hooksPath`) |
 | `make fix-ssh` | Fix SSH directory permissions |
 
 ---

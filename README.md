@@ -37,8 +37,8 @@ dotfiles/
 ├── zed/                  # Zed editor config
 ├── zsh/                  # zsh config (primary shell)
 ├── wiki/                 # Obsidian knowledge base
-├── .githooks/            # Git hooks (pre-commit checks)
 ├── .github/              # CI workflows
+├── AGENTS.md             # AI-assistant instructions (Claude Code, Copilot, etc.)
 ├── bootstrap.sh          # Install packages and terminal tools
 ├── fix-ssh-perms.sh      # Fix SSH key file permissions
 ├── Makefile              # Convenience targets (make bootstrap, make stow, etc.)

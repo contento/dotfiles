@@ -29,3 +29,4 @@
 - [x] Add `sync-shell-configs.sh` drift detector
 - [x] Update CLAUDE.md and .github/copilot-instructions.md TODO references to point to the pre-commit hook
 - [x] Update README structure diagram and Homebrew section
+- [x] Consolidate CLAUDE.md + .github/copilot-instructions.md into a single AGENTS.md; remove the sync pre-commit hook and its Makefile targets

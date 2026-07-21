@@ -1,15 +1,12 @@
-# CLAUDE.md
+# AGENTS.md
 
-## System Prompt for Claude Code
+## System Prompt for AI Coding Assistants
 
-At the start of every conversation in this repository, immediately read `./CLAUDE.md` and follow all rules herein. Treat this file as your primary system instructions.
+At the start of every conversation in this repository, immediately read `./AGENTS.md` and follow
+all rules herein. Treat this file as your primary system instructions.
 
-
-Guidelines for Claude Code when working in this repository.
-
-> **Kept in sync with [`.github/copilot-instructions.md`](.github/copilot-instructions.md).**
-> Any change to one must be mirrored in the other so both assistants follow the same rules.
-> A pre-commit hook ([`.githooks/pre-commit`](.githooks/pre-commit)) enforces this — configure with `make install-hooks`.
+Guidelines for AI coding assistants (Claude Code, GitHub Copilot, etc.) when working in this
+repository.
 
 ## Project overview
 
@@ -103,11 +100,6 @@ supported tools, update the relevant README section before considering the task 
 
 **Keep `wiki/` accurate.** The `wiki/` directory is an Obsidian vault (open `wiki/` as a vault).
 Update the relevant wiki page when a config or behaviour changes.
-
-**Keep AI-assistant instructions in sync.** `CLAUDE.md` and `.github/copilot-instructions.md`
-share the same body. Any rule change must be applied to both in the same commit. A pre-commit
-hook ([`.githooks/pre-commit`](.githooks/pre-commit)) fails the commit if the two files diverge.
-Run `make install-hooks` to activate.
 
 ## Stow layout
 
