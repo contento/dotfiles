@@ -54,7 +54,7 @@ common_apps=(
     smug               # tmux session manager
     stow
     tmux
-    tldr
+    tealdeer
     unzip
     vim
     wakeonlan

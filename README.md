@@ -314,7 +314,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [jq](https://jqlang.org) | JSON processor |
 | [yq](https://github.com/mikefarah/yq) | YAML / TOML / XML processor |
 | [pandoc](https://pandoc.org) | Universal document converter |
-| [tldr](https://tldr.sh) | Simplified, example-based man pages |
+| [tealdeer](https://github.com/tealdeer-rs/tealdeer) | Simplified, example-based man pages (Rust `tldr` client) |
 | [most](https://www.jedsoft.org/most) | Pager with multi-window support |
 
 ### Images & media

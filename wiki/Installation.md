@@ -74,7 +74,7 @@ Pass `--all` to install the full catalog:
 | System monitoring | btop, pfetch-rs, fastfetch (fallback), duf, dust, hyperfine |
 | Networking | httpie, mtr, wakeonlan, lynx, w3m |
 | Git & GitHub | gh, lazygit, git-delta |
-| Data & documents | jq, yq, pandoc, tldr, most |
+| Data & documents | jq, yq, pandoc, tealdeer, most |
 | Images & media | imagemagick, pngquant, jpegoptim, ffmpegthumbnailer, poppler |
 | Shell scripting | shellcheck, shfmt, make, gcc |
 | Languages | Python 3, Rust (rustup), Go (golang), Node |
