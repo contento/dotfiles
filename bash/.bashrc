@@ -122,6 +122,7 @@ function setup_brew() {
 function setup_path() {
   [ -d "/usr/local/bin" ] && export PATH=$PATH:/usr/local/bin
   [ -d "$HOME/bin" ] && export PATH=$PATH:$HOME/bin
+  [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
   # shellcheck disable=SC1091
   [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
