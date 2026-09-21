@@ -14,6 +14,13 @@ Config: `ghostty/.config/ghostty/config` → `~/.config/ghostty/config`
 
 Ghostty is the primary terminal. GPU-accelerated, native macOS feel, fast startup.
 
+### Keybinds
+
+| Key | Action |
+|---|---|
+| `alt+backspace` | Sends `\x1b\x7f` (delete previous word in most shells/editors) |
+| `shift+enter` | Sends a literal newline without submitting |
+
 ---
 
 ## Font

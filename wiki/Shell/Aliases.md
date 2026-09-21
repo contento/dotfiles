@@ -104,6 +104,7 @@ Also see [[Tools/Git]] for git config aliases (`lg`, `lga`, `last`, etc.).
 | `m` | `make` | `make` installed |
 | `d` | `docker` | `docker` installed |
 | `h` | `btop` | `btop` installed |
+| `rg` | `rg --color=auto` | `rg` installed |
 | `rga` | `rg --hidden --no-ignore` | `rg` installed |
 | `rgf` | `rg --files` | `rg` installed |
 | `ghp` / `ghc` / `ghs` | `gh pr` / `gh issue create` / `gh status` | `gh` installed |

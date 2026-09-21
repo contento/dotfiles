@@ -47,7 +47,9 @@ logout   # re-login to activate zsh
 `bootstrap.sh` uses `apt install` for packages in `common_apps`.  
 If a package fails with apt, it falls back to `brew install`.
 
-Packages that require Homebrew on Linux (`brew_linux_apps`): `fzf`, `neovim`, `node`.
+Packages that require Homebrew on Linux (`brew_linux_apps`): `neovim`, `portal` — newer
+versions than apt/yay carry. `fzf` installs directly via apt; Node.js comes from `nvm`,
+not a package manager.
 
 ---
 

@@ -42,6 +42,30 @@ symlink into the repo), restore it and move the setting into `~/.gitconfig.local
 
 ---
 
+## Diff viewer (delta)
+
+Config: `delta/.config/git/delta/config` — a separate stow package from `git/`. The
+tracked `.gitconfig` does **not** set `core.pager`, so delta isn't wired in
+automatically; enable it per-machine via `~/.gitconfig.local` (see
+[Machine-specific overrides](#machine-specific-overrides) above):
+
+```ini
+[core]
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
+```
+
+| Setting | Value |
+| --- | --- |
+| `syntax-theme` | Dracula |
+| `side-by-side` | `true` |
+| `line-numbers` | `true`, green, boxed |
+| `navigate` | `true` — jump between file diffs with `n` / `N` |
+| `decorations` | bold yellow commit/file headers, bold purple hunk headers |
+
+---
+
 ## Shell aliases
 
 See [[Shell/Aliases#Git]] for short shell-level aliases (`g`, `ga`, `gc`, `gco`, etc.).

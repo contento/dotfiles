@@ -21,7 +21,9 @@ Functions called in order:
 5. `setup_atuin` — shell history search via `atuin init bash`
 6. `setup_direnv` — per-directory env vars via `direnv hook bash`
 7. `setup_brew` — activates `brew shellenv` (detects prefix automatically)
-8. `setup_path` — adds `/usr/local/bin`, `~/bin`, Rust cargo env
+8. `setup_path` — adds `/usr/local/bin`, `~/bin`, `~/.local/bin`, Rust cargo env, a
+   Node.js fallback (latest version under `~/.config/nvm/versions/node` if `nvm` itself
+   isn't installed), and CUDA (auto-detected via the `/usr/local/cuda` symlink)
 9. `setup_typical_aliases` — ls/grep fallbacks, then sources `~/.config/shell/shared-aliases.sh` (shared with zsh)
 10. `load_custom_aliases` — sources `~/.bash_aliases` if present
 11. `enable_completion` — bash-completion
