@@ -46,6 +46,34 @@ dotfiles/
 └── sync-shell-configs.sh # Detect drift between bash/zsh configs
 ```
 
+## Architecture
+
+```mermaid
+flowchart TD
+    subgraph Install["Install tools"]
+        BS["bootstrap.sh"] -->|brew / apt / yay| PKG["system packages"]
+    end
+
+    subgraph Symlink["Symlink configs"]
+        ST["stow-all.sh"] -->|stow| PK["20 packages<br/>(repo = source of truth)"]
+        PK -->|symlink| HOME["$HOME<br/>macOS · Ubuntu · Arch"]
+        SH["shared/"] -.->|sourced by| BASH["bash/.bashrc"]
+        SH -.->|sourced by| ZSH["zsh/.zshrc"]
+    end
+
+    subgraph Maintain["Maintain what stow skips"]
+        SYNC["sync-shell-configs.sh"] -.->|diffs| BASH
+        SYNC -.->|diffs| ZSH
+        BACKUP["backup-local.sh"] -->|archives| SSHCFG["~/.ssh + local config"]
+        SSHCFG --> ZIP[".zip / .7z<br/>(gitignored)"]
+        PERMS["fix-ssh-perms.sh"] -->|chmod 700/600| SSHCFG
+    end
+```
+
+Solid arrows write or create; dashed arrows only read. `shared/` is one of the 20 stow
+packages, but instead of being symlinked to a single target it's sourced directly by both
+`bash/.bashrc` and `zsh/.config/zsh/.zshrc` — see [Shell Setup](#shell-setup).
+
 ## Quick Start
 
 ### 1. Prerequisites
