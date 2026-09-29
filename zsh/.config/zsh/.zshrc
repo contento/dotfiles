@@ -101,11 +101,16 @@ setup_additional_tools() {
   # Initialize zsh-syntax-highlighting if available
   [ -f ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.config/zsh/zsh-highlighting/zsh-syntax-highlighting.zsh
 
-  # Initialize ssh-agent and use keychain to manage keys, if keychain is available
+  # Initialize ssh-agent via keychain whenever keychain is available;
+  # load the default key only if it exists (other keys can be added with ssh-add)
   # $USER is POSIX-portable; $USERNAME is bash/Linux-only and unset on macOS by default
   _ssh_user="${USER:-$USERNAME}"
-  if type keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
-    eval "$(keychain --eval "id_rsa-$_ssh_user")"
+  if type keychain >/dev/null 2>&1; then
+    if [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
+      eval "$(keychain --eval --quiet "id_rsa-$_ssh_user")"
+    else
+      eval "$(keychain --eval --quiet)"
+    fi
   fi
   unset _ssh_user
   # Initialize direnv if available

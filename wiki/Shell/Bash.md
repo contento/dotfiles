@@ -56,11 +56,12 @@ Colour: user+host in bright blue (`\e[38;5;39m`), path in slate (`\e[38;5;103m`)
 
 ## SSH agent (bash)
 
-Bash uses `keychain` — the same mechanism as zsh — when both `keychain` and
-the key file `~/.ssh/id_rsa-$USER` exist:
+Bash uses `keychain` — the same mechanism as zsh — whenever `keychain` is
+installed. The key `~/.ssh/id_rsa-$USER` is loaded only if it exists; otherwise
+the agent starts with no keys:
 
 ```bash
-eval "$(keychain --eval "id_rsa-$USER")"
+eval "$(keychain --eval --quiet "id_rsa-$USER")"   # or without the key name
 ```
 
 ---

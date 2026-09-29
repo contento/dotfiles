@@ -85,7 +85,7 @@ have been removed in favor of this dynamic approach.
 | Starship | `starship init zsh` | `type starship` |
 | zsh-autosuggestions | source plugin file | `[ -f file ]` |
 | zsh-syntax-highlighting | source plugin file | `[ -f file ]` |
-| keychain / SSH agent | `keychain --eval` | tool + key file present |
+| keychain / SSH agent | `keychain --eval --quiet` | `type keychain`; key loaded only if file present |
 | fzf | `fzf --zsh` | `type fzf` |
 | zoxide | `zoxide init zsh` | `type zoxide` |
 | atuin | `atuin init zsh` | `type atuin` |

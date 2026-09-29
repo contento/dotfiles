@@ -48,11 +48,14 @@ chmod 600 ~/.ssh/id_rsa-*
 
 ### keychain (bash and zsh)
 
-Both `.zshrc` and `.bashrc` auto-start the agent via `keychain` if the key file exists:
+Both `.zshrc` and `.bashrc` auto-start the agent via `keychain` whenever `keychain` is
+installed. The default key `~/.ssh/id_rsa-$USER` is loaded only if it exists; add any
+other key manually with `ssh-add`:
 
 ```sh
 # Runs automatically on shell init if keychain is installed
-eval "$(keychain --eval "id_rsa-$USER")"
+eval "$(keychain --eval --quiet "id_rsa-$USER")"   # key present
+eval "$(keychain --eval --quiet)"                  # no default key — agent only
 ```
 
 ### Manual start

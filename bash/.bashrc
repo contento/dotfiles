@@ -67,11 +67,16 @@ function enable_completion() {
 }
 
 function setup_ssh_agent() {
-  # Use keychain to manage ssh-agent, same as zsh.
+  # Use keychain to manage ssh-agent, same as zsh. The agent always starts when
+  # keychain is available; the default key is loaded only if it exists.
   # $USER is POSIX-portable; $USERNAME is bash/Linux-only and unset on macOS by default
   local _ssh_user="${USER:-$USERNAME}"
-  if command -v keychain >/dev/null 2>&1 && [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
-    eval "$(keychain --eval "id_rsa-$_ssh_user")"
+  if command -v keychain >/dev/null 2>&1; then
+    if [ -f "$HOME/.ssh/id_rsa-$_ssh_user" ]; then
+      eval "$(keychain --eval --quiet "id_rsa-$_ssh_user")"
+    else
+      eval "$(keychain --eval --quiet)"
+    fi
   fi
 }
 
