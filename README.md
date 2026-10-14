@@ -386,6 +386,12 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [herdr](https://herdr.dev) | Terminal workspace manager for coding agents (via brew) |
 | [tuios](https://github.com/Gaurav-Gosain/tuios) | Terminal UI window manager (via brew) |
 
+### Security
+
+| Tool | Purpose |
+|---|---|
+| [veracrypt](https://veracrypt.io) | Disk encryption, TrueCrypt successor (macOS cask; Arch repo; Ubuntu: manual .deb) |
+
 ### Browsers
 
 | Tool | Purpose |

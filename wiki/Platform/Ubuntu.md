@@ -33,6 +33,9 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 `bootstrap.sh --all` installs Zen browser from Flathub (`app.zen_browser.zen`) when
 `flatpak` is present; otherwise it skips Zen with a warning.
 
+VeraCrypt has no apt package; `bootstrap.sh` skips it with a warning. Install the
+`.deb` from <https://veracrypt.io/en/Downloads.html>.
+
 ---
 
 ## ZSH setup

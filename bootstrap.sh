@@ -106,6 +106,7 @@ mac_cask_brew_apps=(
     ghostty
     iterm2
     supacode           # native terminal coding-agents command center (macOS >= 26)
+    veracrypt          # disk encryption (TrueCrypt successor); pulls in macfuse
     zen                # Zen browser (formerly the 'zen-browser' cask)
     font-delugia-complete
     font-fira-code
@@ -529,6 +530,22 @@ install_linux_apps() {
     done
 
     install_zen_browser_linux
+    install_veracrypt_linux
+}
+
+# VeraCrypt is in Arch's repos but not in Debian/Ubuntu's, and brew casks
+# are macOS-only. On Debian/Ubuntu point at the official .deb instead.
+install_veracrypt_linux() {
+    # GUI apps are never part of the minimum set.
+    [[ "$minimum" == true ]] && return 0
+
+    if [[ -f /etc/arch-release ]]; then
+        install_with_yay veracrypt
+    elif command -v veracrypt &>/dev/null; then
+        log "**** veracrypt is already installed"
+    else
+        log "**** WARNING: veracrypt has no apt package, skipping (get the .deb from https://veracrypt.io/en/Downloads.html)"
+    fi
 }
 
 # Zen browser has no apt package and brew casks are macOS-only, so Linux

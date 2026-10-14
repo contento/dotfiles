@@ -81,6 +81,7 @@ Pass `--all` to install the full catalog:
 | Editors | Neovim (via brew), Vim |
 | Terminals | Ghostty, iTerm2 (macOS), herdr, tuios |
 | Browsers | Zen (macOS cask, Arch AUR, Ubuntu Flathub) |
+| Security | VeraCrypt (macOS cask, Arch repo; Ubuntu: manual .deb) |
 | Utilities | stow, portal, pfetch-rs, xsel/xclip (Linux) |
 
 See [[Scripts#bootstrap.sh]] for full flag reference, or the

@@ -48,7 +48,7 @@ brew install --cask font-fira-code font-fira-code-nerd-font font-delugia-complet
 Installed via `brew_mac_apps` and `mac_cask_brew_apps` in `bootstrap.sh`:
 
 - **fzf**, **go**, **neovim**, **node**, **herdr**, **superfile**, **tuios** (brew formulas)
-- **iterm2**, **supacode**, **zen**, fonts (brew casks)
+- **iterm2**, **supacode**, **veracrypt** (needs macFUSE), **zen**, fonts (brew casks)
 
 ---
 
