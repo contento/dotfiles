@@ -1,133 +1,106 @@
 # AGENTS.md
 
-## System Prompt for AI Coding Assistants
+Instructions for AI coding assistants (Claude Code, Copilot, etc.) working in this repo.
 
-At the start of every conversation in this repository, immediately read `./AGENTS.md` and follow
-all rules herein. Treat this file as your primary system instructions.
+## Overview
 
-Guidelines for AI coding assistants (Claude Code, GitHub Copilot, etc.) when working in this
-repository.
+Personal dotfiles managed with GNU Stow. The repo is **public**.
 
-## Project overview
+- **Shells:** bash and zsh — shared shell code must work in both.
+- **Platforms:** macOS, Ubuntu/Debian, Fedora, Arch — every script must work on all four.
 
-Personal dotfiles managed with GNU Stow.
-Each top-level directory is a Stow package that symlinks into `$HOME`.
+## Layout
 
-Target shells: **bash** and **zsh** — all shell code must work in both.
-Target platforms: **macOS**, **Ubuntu/Debian**, **Arch Linux** — all scripts must work on all three.
+Each top-level directory is a Stow package mirroring `$HOME`
+(`nvim/.config/nvim/init.lua` → `~/.config/nvim/init.lua`). Non-package directories:
+`logs/`, `wiki/`, `.github/`, `.claude/`, `.vscode/`.
+
+| Path | Purpose |
+|---|---|
+| `bootstrap.sh` | Installs packages per platform (`--all`, `--dry-run`) |
+| `stow-all.sh` | Unstows then restows every package (excludes `logs`, `wiki`) |
+| `sync-shell-configs.sh` | Reports drift between bash and zsh configs |
+| `backup-local.sh` | Private backup of machine-local files (incl. `~/.ssh`) |
+| `fix-ssh-perms.sh` | Fixes `~/.ssh` permissions |
+| `bash/.bashrc` | bash config |
+| `zsh/.zshenv`, `zsh/.config/zsh/` | zsh config (`.zprofile`, `.zshrc`) |
+| `shared/.config/shell/` | `shared-env.sh`, `shared-aliases.sh` — sourced by both shells; put common env/aliases here |
+| `wiki/` | Obsidian vault documenting the repo |
+
+## Workflow
+
+- **This repo is the source of truth.** Live configs are symlinks into it — edit here, never
+  the target. For new packages or files, tell the user to run `./stow-all.sh` (or
+  `stow <package>`); run `--dry-run` first.
+- **Verify** with `make lint` (shellcheck) and `./sync-shell-configs.sh` after touching shell
+  configs. `make bootstrap-dry-run` / `make stow-dry-run` preview the scripts.
+- **Docs are part of the change.** Update `README.md` and the relevant `wiki/` page whenever
+  scripts, configs, install steps, or supported tools change.
 
 ## Scripting rules
 
-### Every script must implement `--dry-run`
+- Start every bash script with `#!/usr/bin/env bash` and `set -euo pipefail` before any logic.
+- Every script that mutates state (files, symlinks, permissions, packages) must accept
+  `--dry-run`. Route every mutating command through `run_cmd`; don't write separate inline
+  `if [[ "$dry_run" == true ]]` branches that duplicate the action.
 
-All scripts that mutate state (files, symlinks, permissions, package installs) must accept a
-`--dry-run` flag that prints actions without executing them. Use a `run_cmd()` helper:
+  ```bash
+  run_cmd() {
+      if [[ "$dry_run" == true ]]; then
+          echo "[dry-run] $*"
+      else
+          "$@"
+      fi
+  }
+  ```
 
-```bash
-run_cmd() {
-    if [[ "$dry_run" == true ]]; then
-        echo "[dry-run] $*"
-    else
-        "$@"
-    fi
-}
-```
+## Shell config rules
 
-Dry-run must be consistent — do not bypass `run_cmd` with inline `if [[ "$dry_run" == true ]]`
-blocks in individual functions.
+- Guard anything that depends on a command, file, or directory:
 
-### Guard env vars that depend on a file or command
+  ```bash
+  if command -v nvim >/dev/null 2>&1; then export EDITOR=nvim
+  elif command -v vim >/dev/null 2>&1; then export EDITOR=vim
+  else export EDITOR=vi; fi
 
-Never assign an env var from a command substitution or file path without a guard:
+  [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+  [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
+  ```
 
-```bash
-# command-dependent
-if command -v nvim >/dev/null 2>&1; then
-  export EDITOR="nvim"
-elif command -v vim >/dev/null 2>&1; then
-  export EDITOR="vim"
-else
-  export EDITOR="vi"
-fi
+- Never hardcode user paths (`/Users/contento/...`) — use `$HOME`.
+- In shared files, guard zsh-only syntax with `[ -n "$ZSH_VERSION" ]` and bash-isms with
+  `[ -n "$BASH_VERSION" ]`.
+- Use `${USER:-$USERNAME}` for the username (`$USERNAME` is unset on macOS).
+- `dircolors` is GNU-only: `command -v dircolors >/dev/null 2>&1 && eval "$(dircolors)"`.
 
-# file-dependent
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+## Cross-platform reference
 
-# directory-dependent PATH addition
-[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
-```
+| Concern | macOS | Ubuntu | Fedora | Arch |
+|---|---|---|---|---|
+| Package manager | `brew` | `apt` → `brew` | `dnf` → `brew` | `yay` → `brew` |
+| Brew prefix | `/opt/homebrew` (ARM), `/usr/local` (Intel) | `/home/linuxbrew/.linuxbrew` | same | same |
+| `stat` format | `-f "%A %N"` | `-c "%a %n"` | `-c "%a %n"` | `-c "%a %n"` |
+| `$OSTYPE` | `darwin*` | `linux-gnu*` | `linux-gnu*` | `linux-gnu*` |
+| Distro file | — | `/etc/debian_version` | `/etc/fedora-release` | `/etc/arch-release` |
 
-Never hardcode absolute user paths like `/Users/contento/...` — always use `$HOME`.
+## Package lists in `bootstrap.sh`
 
-### Shell compatibility
+Pick the right array — `common_apps` is also installed via brew on macOS, so a Linux-only
+name there (`fonts-firacode`, `python3-pip`, `golang`) breaks macOS.
 
-- Avoid zsh-only syntax (`setopt`, `[[` zsh extensions, `=(...)`) in shared files; guard with `[ -n "$ZSH_VERSION" ]`
-- Avoid bash-isms in shared files; guard with `[ -n "$BASH_VERSION" ]`
-- `$USER` is POSIX-portable. `$USERNAME` is bash/Linux-only and unset on macOS — always use `${USER:-$USERNAME}` when you need a username
-- `dircolors` is GNU coreutils only — not available on macOS; always guard: `command -v dircolors >/dev/null 2>&1 && eval "$(dircolors)"`
+| Array | Contents |
+|---|---|
+| `common_apps` | Same name in brew, apt, and yay. Map differing dnf names in the `case` block of `install_with_dnf()` |
+| `linux_apps` | Linux-only, native package manager |
+| `brew_linux_apps` | Linux packages that must come from brew |
+| `brew_mac_apps` | macOS-only brew formulas |
+| `mac_cask_brew_apps` | macOS casks (GUI apps, fonts) |
 
-### Cross-platform differences
+## Machine-specific files
 
-| Concern | macOS | Ubuntu | Arch |
-|---|---|---|---|
-| Package manager | `brew` (required) | `apt`, fallback `brew` | `yay`, fallback `brew` |
-| Brew prefix | `/opt/homebrew` (ARM) or `/usr/local` (Intel) | `/home/linuxbrew/.linuxbrew` | `/home/linuxbrew/.linuxbrew` |
-| `stat` format | `-f "%A %N"` | `-c "%a %n"` | `-c "%a %n"` |
-| `$OSTYPE` | `darwin*` | `linux-gnu*` | `linux-gnu*` |
-| Distro detection | — | `/etc/debian_version` | `/etc/arch-release` |
+Handle with existence guards in shell configs; don't remove or stow them:
+`~/.local/bin/env`, `~/.opencode/bin`, `~/.lmstudio/bin`.
 
-### Package name mapping
-
-Package names differ between brew, apt, and yay. Do not put Linux-specific package names
-(e.g. `fonts-firacode`, `python3-pip`, `golang`) in `common_apps` — that array is iterated over
-by `install_mac_apps` via brew and will fail.
-
-Use the correct list for each platform:
-- `common_apps` — only packages whose name is identical across brew, apt, and yay
-- `linux_apps` — Linux-only packages installed via the native package manager
-- `brew_linux_apps` — Linux packages that must come from brew
-- `brew_mac_apps` — macOS-only brew formulas
-- `mac_cask_brew_apps` — macOS brew casks (GUI apps, fonts)
-
-### `set -euo pipefail`
-
-Every bash script must start with `set -euo pipefail` immediately after the shebang.
-
-## Documentation rules
-
-**Keep `README.md` up to date.** After any change to scripts, configs, install steps, or
-supported tools, update the relevant README section before considering the task done.
-
-**Keep `wiki/` accurate.** The `wiki/` directory is an Obsidian vault (open `wiki/` as a vault).
-Update the relevant wiki page when a config or behaviour changes.
-
-## Stow layout
-
-**This repo is the source of truth.** Files under `.config/` and other XDG paths in the live
-system are symlinks pointing back here. When you need to create or modify a config file, always
-edit it in this repo, then restow. If a new stow package or stow operation is needed, recommend
-running `./stow-all.sh` (or `stow <package>` for a single package).
-
-Each package directory mirrors the target filesystem rooted at `$HOME`:
-
-```
-nvim/.config/nvim/init.lua  →  ~/.config/nvim/init.lua
-git/.gitconfig               →  ~/.gitconfig
-zsh/.zshenv                  →  ~/.zshenv
-```
-
-Running `./stow-all.sh` unstows then restows all packages. The `logs/` and `wiki/` directories
-are excluded by default. Always test changes with `--dry-run` first.
-
-## Known machine-specific files (do not stow blindly)
-
-These files exist on the current machine but are machine-specific and not suitable for all
-targets. Handle them with guards in the shell configs rather than removing them:
-
-- `~/.local/bin/env` — sourced only if the file exists
-- `~/.opencode/bin` — added to PATH only if the directory exists
-- `~/.lmstudio/bin` — added to PATH only if the directory exists
-- `~/.ssh/` — **never stow.** This repo is public; there is intentionally no `ssh/`
-  package. Keys, `config`, and `known_hosts` stay on the machine. `.gitignore` has a
-  safety net (`**/.ssh/`, `id_*`, `*.pem`, `*.key`, `config*`, `known_hosts*`,
-  `authorized_keys`, `agent/`). Back up `~/.ssh` privately via `./backup-local.sh`.
+**Never stow or commit `~/.ssh/`** — there is intentionally no `ssh/` package. `.gitignore`
+blocks keys, `config*`, `known_hosts*`, etc. as a safety net; `backup-local.sh` handles
+private backups.
