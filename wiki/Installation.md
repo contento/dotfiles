@@ -21,6 +21,12 @@ Homebrew is installed automatically by `bootstrap.sh`.
 sudo apt update && sudo apt install -y curl git stow
 ```
 
+### Fedora
+
+```bash
+sudo dnf install -y curl git stow
+```
+
 ### Arch Linux
 
 ```bash
@@ -62,7 +68,7 @@ The default is **minimum** — just enough for this dotfiles config to be usable
 plus Starship + zsh/tmux plugins.
 
 On **Linux**, minimum mode also skips installing Homebrew — every minimum
-tool is in apt/yay, so the brew bootstrap isn't needed. Use `--all` (or
+tool is in apt/dnf/yay, so the brew bootstrap isn't needed. Use `--all` (or
 install brew manually) if you want it. macOS always installs brew.
 
 Pass `--all` to install the full catalog:
@@ -80,8 +86,8 @@ Pass `--all` to install the full catalog:
 | Languages | Python 3, Rust (rustup), Go (golang), Node |
 | Editors | Neovim (via brew), Vim |
 | Terminals | Ghostty, iTerm2 (macOS), herdr, tuios |
-| Browsers | Zen (macOS cask, Arch AUR, Ubuntu Flathub) |
-| Security | VeraCrypt (macOS cask, Arch repo; Ubuntu: manual .deb) |
+| Browsers | Zen (macOS cask, Arch AUR, Ubuntu/Fedora Flathub) |
+| Security | VeraCrypt (macOS cask, Arch repo; Ubuntu/Fedora: manual .deb/.rpm) |
 | Utilities | stow, portal, pfetch-rs, xsel/xclip (Linux) |
 
 See [[Scripts#bootstrap.sh]] for full flag reference, or the
@@ -105,7 +111,7 @@ This runs `stow -R` on every package directory, creating symlinks in `$HOME`.
 
 ## 5. Post-install checklist
 
-- [ ] Set zsh as default shell → see [[Platform/Ubuntu]] or [[Platform/Arch]]
+- [ ] Set zsh as default shell → see [[Platform/Ubuntu]], [[Platform/Fedora]], or [[Platform/Arch]]
 - [ ] Set up SSH keys → see [[SSH]]
 - [ ] Install tmux plugins: open tmux, press `prefix + I`
 - [ ] Install Neovim plugins: open `nvim`, let lazy.nvim auto-install

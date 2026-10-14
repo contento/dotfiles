@@ -17,6 +17,7 @@ mkdir -p "$logs_folder"
 logfile_path="$logs_folder/$(basename "${BASH_SOURCE[0]}" .sh)-$(date +%Y-%m-%d).log"
 
 # Packages whose name is identical across brew, apt, and yay.
+# dnf names that differ are mapped in install_with_dnf().
 common_apps=(
     atuin
     bat
@@ -64,8 +65,9 @@ common_apps=(
     zsh                # primary shell of this dotfiles config
 )
 
-# Linux-only packages installed via the native package manager (apt or yay).
-# Names match Debian/Ubuntu apt conventions; yay falls back to brew on mismatch.
+# Linux-only packages installed via the native package manager (apt, dnf, or yay).
+# Names match Debian/Ubuntu apt conventions; dnf maps known differences in
+# install_with_dnf(); yay and dnf fall back to brew on mismatch.
 linux_apps=(
     fonts-firacode   # apt; yay: ttf-firacode-nerd (falls back to brew)
     gh               # GitHub CLI; apt: gh, yay: github-cli (falls back to brew)
@@ -247,6 +249,12 @@ install_python() {
     elif [[ -f /etc/arch-release ]]; then
         local pkg="python${ver/./}"   # "3.12" → "python312"
         install_with_yay "$pkg"
+    elif [[ -f /etc/fedora-release ]]; then
+        # Fedora ships alternate Python versions as python3.X packages (venv
+        # is built in). Leave /usr/bin/python3 alone: dnf and other system
+        # tools depend on the distro's default interpreter.
+        install_with_dnf "python$ver"
+        install_with_dnf "python$ver-devel"
     else
         log "**** WARNING: unsupported platform for Python $ver install"
     fi
@@ -367,10 +375,10 @@ install_brew() {
     fi
 
     # On Linux, minimum mode skips brew entirely: all minimum tools are
-    # available via apt/yay, so the ~500MB brew install is unnecessary.
+    # available via apt/dnf/yay, so the ~500MB brew install is unnecessary.
     # Mac still needs brew (it's the only package manager).
     if [[ "$minimum" == true ]] && [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        log "**** Skipping brew installation (minimum mode on Linux uses apt/yay)"
+        log "**** Skipping brew installation (minimum mode on Linux uses apt/dnf/yay)"
         return
     fi
 
@@ -450,6 +458,37 @@ install_with_apt() {
     fi
 }
 
+install_with_dnf() {
+    local app=$1
+    local dnf_name="$app"
+
+    # Handle package name mappings between dnf and apt/brew
+    case "$app" in
+        dust)           dnf_name="du-dust" ;;
+        fd)             dnf_name="fd-find" ;;
+        fonts-firacode) dnf_name="fira-code-fonts" ;;
+        imagemagick)    dnf_name="ImageMagick" ;;
+        poppler)        dnf_name="poppler-utils" ;;
+        shellcheck)     dnf_name="ShellCheck" ;;
+        vim)            dnf_name="vim-enhanced" ;;
+    esac
+
+    log "**** Checking if $app is already installed ..."
+
+    # --whatprovides also matches virtual provides (e.g. golang, python3-pip)
+    if rpm -q --whatprovides "$dnf_name" > /dev/null 2>&1; then
+        log "**** $app is already installed"
+        return 0
+    fi
+
+    log "**** Trying 'dnf install $dnf_name' ..."
+    if ! run_cmd sudo dnf install -y "$dnf_name" 2>&1 | tee -a "$logfile_path"; then
+        log "**** Failed to install $app with dnf, trying with brew..."
+        run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
+            log "**** WARNING: Could not install $app via dnf or brew, skipping"
+    fi
+}
+
 install_with_brew_formula() {
     local app=$1
     if [[ "$dry_run" != true ]] && brew list "$app" &>/dev/null; then
@@ -502,6 +541,8 @@ install_linux_app() {
         install_with_yay "$app"
     elif [[ -f /etc/debian_version ]]; then
         install_with_apt "$app"
+    elif [[ -f /etc/fedora-release ]]; then
+        install_with_dnf "$app"
     else
         log "**** WARNING: unsupported Linux distro, skipping $app"
     fi
@@ -533,8 +574,8 @@ install_linux_apps() {
     install_veracrypt_linux
 }
 
-# VeraCrypt is in Arch's repos but not in Debian/Ubuntu's, and brew casks
-# are macOS-only. On Debian/Ubuntu point at the official .deb instead.
+# VeraCrypt is in Arch's repos but not in Debian/Ubuntu's or Fedora's, and
+# brew casks are macOS-only. Elsewhere point at the official .deb/.rpm instead.
 install_veracrypt_linux() {
     # GUI apps are never part of the minimum set.
     [[ "$minimum" == true ]] && return 0
@@ -544,12 +585,12 @@ install_veracrypt_linux() {
     elif command -v veracrypt &>/dev/null; then
         log "**** veracrypt is already installed"
     else
-        log "**** WARNING: veracrypt has no apt package, skipping (get the .deb from https://veracrypt.io/en/Downloads.html)"
+        log "**** WARNING: veracrypt has no apt/dnf package, skipping (get the .deb/.rpm from https://veracrypt.io/en/Downloads.html)"
     fi
 }
 
-# Zen browser has no apt package and brew casks are macOS-only, so Linux
-# needs its own path: AUR on Arch, Flathub on Debian/Ubuntu.
+# Zen browser has no apt/dnf package and brew casks are macOS-only, so Linux
+# needs its own path: AUR on Arch, Flathub on Debian/Ubuntu and Fedora.
 install_zen_browser_linux() {
     # GUI apps are never part of the minimum set.
     [[ "$minimum" == true ]] && return 0
@@ -607,8 +648,8 @@ setup_terminal() {
 
 # ---- Main logic --------------------------------------------
 
-# Linux uses sudo across many steps (apt-get update, each apt install, the
-# brew installer, pacman/yay). Prime it once up front so the user types
+# Linux uses sudo across many steps (apt-get update, each apt/dnf install,
+# the brew installer, pacman/yay). Prime it once up front so the user types
 # their password a single time per run.
 if [[ "$OSTYPE" == "linux-gnu"* ]] && [[ "$dry_run" != true ]]; then
     keep_sudo_alive

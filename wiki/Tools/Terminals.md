@@ -39,6 +39,9 @@ brew install --cask font-fira-code-nerd-font
 # Ubuntu/Debian
 sudo apt install fonts-firacode
 
+# Fedora
+sudo dnf install fira-code-fonts
+
 # Or download from nerdfonts.com and place in ~/.local/share/fonts/
 fc-cache -fv
 ```

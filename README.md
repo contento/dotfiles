@@ -10,7 +10,7 @@
 
 
 Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
-Supports **macOS**, **Ubuntu/Debian**, and **Arch Linux**. Works with **bash** and **zsh**.
+Supports **macOS**, **Ubuntu/Debian**, **Fedora**, and **Arch Linux**. Works with **bash** and **zsh**.
 
 ## Repository Structure
 
@@ -51,12 +51,12 @@ dotfiles/
 ```mermaid
 flowchart TD
     subgraph Install["Install tools"]
-        BS["bootstrap.sh"] -->|brew / apt / yay| PKG["system packages"]
+        BS["bootstrap.sh"] -->|brew / apt / dnf / yay| PKG["system packages"]
     end
 
     subgraph Symlink["Symlink configs"]
         ST["stow-all.sh"] -->|stow| PK["20 packages<br/>(repo = source of truth)"]
-        PK -->|symlink| HOME["$HOME<br/>macOS · Ubuntu · Arch"]
+        PK -->|symlink| HOME["$HOME<br/>macOS · Ubuntu · Fedora · Arch"]
         SH["shared/"] -.->|sourced by| BASH["bash/.bashrc"]
         SH -.->|sourced by| ZSH["zsh/.zshrc"]
     end
@@ -88,6 +88,12 @@ xcode-select --install
 
 ```bash
 sudo apt update && sudo apt install -y curl git stow
+```
+
+**Fedora:**
+
+```bash
+sudo dnf install -y curl git stow
 ```
 
 **Arch:**
@@ -145,14 +151,14 @@ chmod +x stow-all.sh
 
 ### `bootstrap.sh`
 
-Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt` (with Homebrew fallback for some tools); on Arch uses `yay` (with Homebrew fallback).
+Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt` (with Homebrew fallback for some tools); on Fedora uses `dnf` (with Homebrew fallback); on Arch uses `yay` (with Homebrew fallback).
 
 **What it installs:**
 
 1. **Package managers** (if missing) — Homebrew on all platforms; `yay` on Arch.
 2. **CLI tools** — ~50 utilities defined in five arrays at the top of the script:
-   - `common_apps` — same package name across brew, apt, and yay
-   - `linux_apps` — apt-native names (yay falls back to brew on mismatch)
+   - `common_apps` — same package name across brew, apt, and yay (dnf differences are mapped in `install_with_dnf`)
+   - `linux_apps` — apt-native names (dnf maps known differences; yay and dnf fall back to brew on mismatch)
    - `brew_linux_apps` — Linux packages that must come from brew (newer versions)
    - `brew_mac_apps` — macOS-only brew formulas
    - `mac_cask_brew_apps` — macOS brew casks (GUI apps, fonts)
@@ -180,7 +186,7 @@ Options:
 - **Minimum (default)** — `stow`, `zsh`, `tmux`, `vim`, `unzip`, `make`, `gcc`, `fzf`, `ripgrep`, `jq`. Plus `starship` and the zsh/tmux plugins (unless `--no-terminal`). This is enough for the shell config in this repo to be fully usable. `git` and `curl` are repo prerequisites and assumed present.
 - **Full (`--all`)** — everything above plus the rest of the [Tools](#tools) catalog and macOS GUI casks.
 
-**Linux + minimum skips Homebrew entirely** — every minimum tool is available via `apt`/`yay`, so the ~500MB brew install is unnecessary. Run with `--all` (or install brew manually) if you want it. macOS always installs brew since it's the only package manager.
+**Linux + minimum skips Homebrew entirely** — every minimum tool is available via `apt`/`dnf`/`yay`, so the ~500MB brew install is unnecessary. Run with `--all` (or install brew manually) if you want it. macOS always installs brew since it's the only package manager.
 
 Logs are written to `logs/bootstrap-YYYY-MM-DD.log`.
 
@@ -282,7 +288,7 @@ echo $BACKUP_FOLDER
 
 ## Tools
 
-Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/Debian, and Arch.
+Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/Debian, Fedora, and Arch.
 
 ### Shell, prompt & session
 
@@ -390,13 +396,13 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 
 | Tool | Purpose |
 |---|---|
-| [veracrypt](https://veracrypt.io) | Disk encryption, TrueCrypt successor (macOS cask; Arch repo; Ubuntu: manual .deb) |
+| [veracrypt](https://veracrypt.io) | Disk encryption, TrueCrypt successor (macOS cask; Arch repo; Ubuntu/Fedora: manual .deb/.rpm) |
 
 ### Browsers
 
 | Tool | Purpose |
 |---|---|
-| [zen](https://zen-browser.app) | Firefox-based browser (macOS cask; Arch `zen-browser-bin`; Ubuntu Flathub) |
+| [zen](https://zen-browser.app) | Firefox-based browser (macOS cask; Arch `zen-browser-bin`; Ubuntu/Fedora Flathub) |
 
 ### Misc
 
@@ -420,6 +426,10 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 sudo apt install -y zsh
 chsh -s "$(which zsh)"
 logout
+
+# Fedora (chsh comes from util-linux-user)
+sudo dnf install -y zsh util-linux-user
+chsh -s "$(which zsh)"
 
 # Arch
 sudo pacman -S zsh
@@ -545,4 +555,4 @@ cd linux-dev
 
 ## Notes
 
-See the [[wiki/Platform/Ubuntu]] page for Linux-specific setup notes.
+See the [[wiki/Platform/Ubuntu]], [[wiki/Platform/Fedora]], and [[wiki/Platform/Arch]] pages for Linux-specific setup notes.

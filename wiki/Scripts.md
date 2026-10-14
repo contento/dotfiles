@@ -35,7 +35,7 @@ The minimum set is defined by the `is_minimum()` function in
 [bootstrap.sh](../bootstrap.sh) — edit that function to change the cutoff.
 
 **Linux + minimum skips Homebrew installation.** Every minimum tool is
-available via apt/yay, so the ~500MB brew bootstrap is wasted in this mode.
+available via apt/dnf/yay, so the ~500MB brew bootstrap is wasted in this mode.
 Use `--all` (or install brew manually) on Linux if you want it. macOS always
 installs brew — it's the only package manager.
 
@@ -46,6 +46,7 @@ installs brew — it's the only package manager.
 3. Installs packages (filtered by tier):
    - **Arch** → `yay -S`, falls back to `brew install`
    - **Ubuntu** → `apt install`, falls back to `brew install`
+   - **Fedora** → `dnf install` (names mapped in `install_with_dnf`), falls back to `brew install`
    - **macOS** → `brew install` + `brew install --cask` (casks only with `--all`)
 4. Installs Starship, zsh-autosuggestions, zsh-syntax-highlighting, TPM
 
@@ -53,9 +54,9 @@ installs brew — it's the only package manager.
 
 | List | Used on | Naming rule |
 |---|---|---|
-| `common_apps` | All platforms | Package name identical across brew, apt, and yay |
-| `linux_apps` | Linux only (apt/yay) | apt-name; yay falls back to brew on mismatch |
-| `brew_linux_apps` | Linux via brew | Pulled from brew on Linux (newer versions than apt/yay) |
+| `common_apps` | All platforms | Package name identical across brew, apt, and yay; dnf differences mapped in `install_with_dnf` |
+| `linux_apps` | Linux only (apt/dnf/yay) | apt-name; dnf maps known differences; yay/dnf fall back to brew on mismatch |
+| `brew_linux_apps` | Linux via brew | Pulled from brew on Linux (newer versions than apt/dnf/yay) |
 | `brew_mac_apps` | macOS via brew | macOS-only formulas |
 | `mac_cask_brew_apps` | macOS casks | GUI apps and fonts |
 

@@ -3,7 +3,7 @@
 Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 **Shells:** bash · zsh
-**Platforms:** macOS · Ubuntu/Debian · Arch Linux
+**Platforms:** macOS · Ubuntu/Debian · Fedora · Arch Linux
 
 ---
 
@@ -33,6 +33,7 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 ### Platform notes
 - [[Platform/macOS]] — Homebrew, Apple Silicon vs Intel, fonts
 - [[Platform/Ubuntu]] — apt, nala, flatpak, zsh setup
+- [[Platform/Fedora]] — dnf, name mappings, Flathub, Python
 - [[Platform/Arch]] — pacman, yay, AUR
 
 ---
