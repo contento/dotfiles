@@ -81,17 +81,23 @@ linux_apps=(
 
 # Linux packages that must come from Homebrew.
 brew_linux_apps=(
+    herdr            # terminal workspace manager for coding agents
     neovim
     portal
+    superfile        # TUI file manager; not in apt, AUR package is stale
+    tuios            # terminal window manager; AUR: tuios-bin
 )
 
 # macOS-only brew formulas.
 brew_mac_apps=(
     gh
     go
+    herdr
     neovim
     portal
     pfetch-rs
+    superfile
+    tuios
     yq
 )
 
@@ -100,6 +106,7 @@ mac_cask_brew_apps=(
     ghostty
     iterm2
     supacode           # native terminal coding-agents command center (macOS >= 26)
+    zen                # Zen browser (formerly the 'zen-browser' cask)
     font-delugia-complete
     font-fira-code
     font-fira-code-nerd-font
@@ -520,6 +527,28 @@ install_linux_apps() {
         should_install "$app" || continue
         install_with_brew_formula "$app"
     done
+
+    install_zen_browser_linux
+}
+
+# Zen browser has no apt package and brew casks are macOS-only, so Linux
+# needs its own path: AUR on Arch, Flathub on Debian/Ubuntu.
+install_zen_browser_linux() {
+    # GUI apps are never part of the minimum set.
+    [[ "$minimum" == true ]] && return 0
+
+    if [[ -f /etc/arch-release ]]; then
+        install_with_yay zen-browser-bin
+    elif command -v flatpak &>/dev/null; then
+        if [[ "$dry_run" != true ]] && flatpak info app.zen_browser.zen &>/dev/null; then
+            log "**** zen browser is already installed"
+            return 0
+        fi
+        log "**** Trying 'flatpak install flathub app.zen_browser.zen' ..."
+        run_cmd flatpak install -y flathub app.zen_browser.zen 2>&1 | tee -a "$logfile_path" ||             log "**** WARNING: Could not install zen browser via flatpak, skipping"
+    else
+        log "**** WARNING: flatpak not found, skipping zen browser (see https://zen-browser.app/download)"
+    fi
 }
 
 # ---- Environment setup --------------------------------------------

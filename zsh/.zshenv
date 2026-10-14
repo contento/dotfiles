@@ -90,3 +90,6 @@ elif [ -d "$HOME/.config/nvm/versions/node" ]; then
   latest_node="$(ls -d "$HOME/.config/nvm/versions/node"/* 2>/dev/null | sort -V | tail -1)"
   [ -d "$latest_node/bin" ] && export PATH="$latest_node/bin:$PATH"
 fi
+
+# Rust (rustup)
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"

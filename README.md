@@ -307,6 +307,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | `grep` | Fast recursive code search |
 | [yazi](https://yazi-rs.github.io) | — | Terminal file manager (with previews) |
 | [mc](https://midnight-commander.org) | — | Midnight Commander (classic dual-pane) |
+| [superfile](https://superfile.dev) | — | Modern TUI file manager (via brew) |
 
 ### System monitoring & info
 
@@ -382,6 +383,14 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 | [ghostty](https://ghostty.org) | GPU-accelerated terminal |
 | [iterm2](https://iterm2.com) | macOS terminal (cask) |
 | [supacode](https://supacode.sh) | Terminal coding-agents command center (macOS cask) |
+| [herdr](https://herdr.dev) | Terminal workspace manager for coding agents (via brew) |
+| [tuios](https://github.com/Gaurav-Gosain/tuios) | Terminal UI window manager (via brew) |
+
+### Browsers
+
+| Tool | Purpose |
+|---|---|
+| [zen](https://zen-browser.app) | Firefox-based browser (macOS cask; Arch `zen-browser-bin`; Ubuntu Flathub) |
 
 ### Misc
 

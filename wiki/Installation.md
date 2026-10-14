@@ -70,7 +70,7 @@ Pass `--all` to install the full catalog:
 | Category | Tools |
 |---|---|
 | Shell, prompt & session | zsh plugins, Starship, TPM, tmux, atuin, fzf, zoxide, direnv, keychain |
-| File navigation & search | bat, eza, fd, ripgrep, yazi, mc |
+| File navigation & search | bat, eza, fd, ripgrep, yazi, mc, superfile |
 | System monitoring | btop, pfetch-rs, fastfetch (fallback), duf, dust, hyperfine |
 | Networking | httpie, mtr, wakeonlan, lynx, w3m |
 | Git & GitHub | gh, lazygit, git-delta |
@@ -79,7 +79,8 @@ Pass `--all` to install the full catalog:
 | Shell scripting | shellcheck, shfmt, make, gcc |
 | Languages | Python 3, Rust (rustup), Go (golang), Node |
 | Editors | Neovim (via brew), Vim |
-| Terminals | Ghostty, iTerm2 (macOS) |
+| Terminals | Ghostty, iTerm2 (macOS), herdr, tuios |
+| Browsers | Zen (macOS cask, Arch AUR, Ubuntu Flathub) |
 | Utilities | stow, portal, pfetch-rs, xsel/xclip (Linux) |
 
 See [[Scripts#bootstrap.sh]] for full flag reference, or the

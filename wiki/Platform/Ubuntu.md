@@ -30,6 +30,9 @@ sudo nala install flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
+`bootstrap.sh --all` installs Zen browser from Flathub (`app.zen_browser.zen`) when
+`flatpak` is present; otherwise it skips Zen with a warning.
+
 ---
 
 ## ZSH setup

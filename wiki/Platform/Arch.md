@@ -35,7 +35,9 @@ cd yay && makepkg -si
 `bootstrap.sh` tries `yay -S <pkg>` first.  
 If that fails, it falls back to `brew install <pkg>`.
 
-`brew_linux_apps` (`fzf`, `neovim`, `node`) are always installed via Homebrew.
+`brew_linux_apps` (`herdr`, `neovim`, `portal`, `superfile`, `tuios`) are always installed via Homebrew.
+
+Zen browser is installed from the AUR as `zen-browser-bin` (`--all` only).
 
 ---
 
