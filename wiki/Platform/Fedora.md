@@ -23,9 +23,10 @@ sudo dnf install -y curl git stow
 `bootstrap.sh` detects Fedora via `/etc/fedora-release` and uses `sudo dnf install -y`.
 If a package fails with dnf, it falls back to `brew install`.
 
-Package lists use apt-style names, so `install_with_dnf()` maps the names that differ:
+The `dnf` column of `packages.txt` holds the Fedora name. These differ from the
+other platforms:
 
-| bootstrap name | dnf package |
+| name | dnf package |
 |---|---|
 | `dust` | `du-dust` |
 | `fd` | `fd-find` (binary is still `fd`) |
@@ -37,7 +38,7 @@ Package lists use apt-style names, so `install_with_dnf()` maps the names that d
 
 Tools not in the Fedora repos (e.g. `lazygit`, `yazi`, `smug`, `ghostty`, `pfetch-rs`)
 fall back to Homebrew, so install brew (`--all` does this) if you want them.
-`brew_linux_apps` (`herdr`, `neovim`, `portal`, `superfile`, `tuios`) always come from Homebrew.
+Packages whose `dnf` column is `brew` (`herdr`, `neovim`, `portal`, `superfile`, `tuios`) always come from Homebrew.
 
 ---
 

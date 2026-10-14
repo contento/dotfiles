@@ -28,8 +28,13 @@ stow-dry-run: ## Preview stow symlinks
 fix-ssh: ## Fix SSH directory permissions
 	./fix-ssh-perms.sh
 
-lint: ## Run shellcheck on all shell scripts
+lint: ## Run shellcheck on all shell scripts and check packages.txt
 	@echo "Running ShellCheck..."
 	@shellcheck --version 2>/dev/null || (echo "shellcheck not installed. Install it and try again." && exit 1)
 	@shellcheck --severity=style --exclude=SC1091 *.sh bash/.bashrc shared/.config/shell/*.sh
 	@echo "✅ All scripts pass shellcheck"
+	@# Every row: 6 columns (an optional trailing # comment is ignored), tier min|full
+	@awk '!/^[[:space:]]*(#|$$)/ { n = 0; for (i = 1; i <= NF && $$i !~ /^#/; i++) n++; \
+		if (n != 6 || ($$2 != "min" && $$2 != "full")) { print FILENAME ":" NR ": " $$0; bad = 1 } } \
+		END { exit bad }' packages.txt
+	@echo "✅ packages.txt is well-formed"

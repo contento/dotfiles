@@ -45,7 +45,7 @@ brew install --cask font-fira-code font-fira-code-nerd-font font-delugia-complet
 
 ## macOS-specific packages
 
-Installed via `brew_mac_apps` and `mac_cask_brew_apps` in `bootstrap.sh`:
+Installed from the `brew` column of `packages.txt` (rows with `-` on the Linux columns, or a `cask:` entry):
 
 - **fzf**, **go**, **neovim**, **node**, **herdr**, **superfile**, **tuios** (brew formulas)
 - **iterm2**, **supacode**, **veracrypt** (needs macFUSE), **zen**, fonts (brew casks)

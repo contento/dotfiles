@@ -35,7 +35,7 @@ cd yay && makepkg -si
 `bootstrap.sh` tries `yay -S <pkg>` first.  
 If that fails, it falls back to `brew install <pkg>`.
 
-`brew_linux_apps` (`herdr`, `neovim`, `portal`, `superfile`, `tuios`) are always installed via Homebrew.
+Packages whose `yay` column in `packages.txt` is `brew` (`herdr`, `neovim`, `portal`, `superfile`, `tuios`) are always installed via Homebrew.
 
 Zen browser (AUR `zen-browser-bin`) and VeraCrypt (`veracrypt`) are installed via yay (`--all` only).
 

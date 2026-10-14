@@ -16,104 +16,9 @@ mkdir -p "$logs_folder"
 
 logfile_path="$logs_folder/$(basename "${BASH_SOURCE[0]}" .sh)-$(date +%Y-%m-%d).log"
 
-# Packages whose name is identical across brew, apt, and yay.
-# dnf names that differ are mapped in install_with_dnf().
-common_apps=(
-    atuin
-    bat
-    btop
-    direnv
-    duf                # df replacement
-    dust               # du replacement
-    eza
-    fastfetch
-    fd
-    ffmpegthumbnailer  # yazi: video thumbnails
-    fzf
-    gcc
-    git-delta          # package name across brew/apt/yay; the installed binary is 'delta'
-    httpie             # friendlier curl
-    hyperfine          # command-line benchmarking
-    imagemagick        # yazi: image preview
-    jpegoptim          # JPEG compression
-    jq
-    keychain
-    lazygit
-    lynx
-    make
-    mc
-    most
-    mtr                # traceroute + ping combined
-    p7zip              # 7-zip compression (apt: p7zip-full; falls back to brew)
-    pandoc
-    pngquant           # lossy PNG compression
-    poppler            # yazi: PDF preview (provides pdftoppm)
-    ripgrep
-    rustup
-    shellcheck         # bash linter
-    shfmt              # shell formatter
-    smug               # tmux session manager
-    stow
-    tmux
-    tealdeer
-    unzip
-    vim
-    wakeonlan
-    w3m
-    yazi
-    zoxide
-    zsh                # primary shell of this dotfiles config
-)
-
-# Linux-only packages installed via the native package manager (apt, dnf, or yay).
-# Names match Debian/Ubuntu apt conventions; dnf maps known differences in
-# install_with_dnf(); yay and dnf fall back to brew on mismatch.
-linux_apps=(
-    fonts-firacode   # apt; yay: ttf-firacode-nerd (falls back to brew)
-    gh               # GitHub CLI; apt: gh, yay: github-cli (falls back to brew)
-    ghostty          # yay (AUR); not in apt — will fall back to brew
-    golang           # apt/yay name for Go; brew name is 'go' (in brew_mac_apps)
-    python3-pip      # apt generic; pinned version installed by install_python()
-    pfetch-rs        # yay (AUR); not in apt — will fall back to brew
-    xsel             # tmux-fzf clipboard (X11); macOS uses pbcopy/pbpaste natively
-    xclip            # tmux copy-mode clipboard fallback (X11)
-    wl-clipboard     # clipboard on Wayland sessions (provides wl-copy/wl-paste)
-    yq               # YAML processor; apt: yq, yay: go-yq (falls back to brew)
-)
-
-# Linux packages that must come from Homebrew.
-brew_linux_apps=(
-    herdr            # terminal workspace manager for coding agents
-    neovim
-    portal
-    superfile        # TUI file manager; not in apt, AUR package is stale
-    tuios            # terminal window manager; AUR: tuios-bin
-)
-
-# macOS-only brew formulas.
-brew_mac_apps=(
-    gh
-    go
-    herdr
-    neovim
-    portal
-    pfetch-rs
-    superfile
-    tuios
-    yq
-)
-
-# macOS brew casks (GUI apps and fonts).
-mac_cask_brew_apps=(
-    ghostty
-    iterm2
-    supacode           # native terminal coding-agents command center (macOS >= 26)
-    veracrypt          # disk encryption (TrueCrypt successor); pulls in macfuse
-    zen                # Zen browser (formerly the 'zen-browser' cask)
-    font-delugia-complete
-    font-fira-code
-    font-fira-code-nerd-font
-)
+# Every package, its tier, and its name per package manager. See the header
+# of that file for the column format.
+packages_file="$script_dir/packages.txt"
 
 # --- Parse command-line arguments ----------------
 
@@ -169,27 +74,6 @@ run_cmd() {
     else
         "$@"
     fi
-}
-
-# Tools considered part of the "minimum" install. Anything outside this list
-# is skipped when $minimum is true. Starship, git, and curl are handled
-# outside the package arrays (prereqs / setup_terminal) and not listed here.
-is_minimum() {
-    case "$1" in
-        # Required infrastructure
-        stow|zsh|tmux|vim|unzip|make|gcc) return 0 ;;
-        # Daily-driver minimum
-        fzf|ripgrep|jq) return 0 ;;
-        *) return 1 ;;
-    esac
-}
-
-# Returns 0 if $1 should be installed under the current mode.
-should_install() {
-    if [[ "$minimum" == true ]] && ! is_minimum "$1"; then
-        return 1
-    fi
-    return 0
 }
 
 # Prompt for sudo once, then keep the credential cache warm for the rest
@@ -416,42 +300,41 @@ install_brew() {
 }
 
 install_with_yay() {
-    local app=$1
+    local pkg=$1
+    local app=${2:-$1}
     log "**** Checking if $app is already installed ..."
 
     # -Qi is an exact package lookup; -Qs regex-matches names AND descriptions
     # (e.g. "vim" would falsely match neovim)
-    if pacman -Qi "$app" > /dev/null 2>&1; then
+    if pacman -Qi "$pkg" > /dev/null 2>&1; then
         log "**** $app is already installed"
         return 0
     fi
 
-    log "**** Trying 'yay -S $app' ..."
-    if ! run_cmd yay -S --noconfirm "$app" 2>&1 | tee -a "$logfile_path"; then
+    log "**** Trying 'yay -S $pkg' ..."
+    if ! run_cmd yay -S --noconfirm "$pkg" 2>&1 | tee -a "$logfile_path"; then
         log "**** Failed to install $app with yay, trying with brew..."
         run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
             log "**** WARNING: Could not install $app via yay or brew, skipping"
     fi
 }
 
+# Native installers take the package name for that manager ($1) and the
+# manifest name ($2, defaults to $1), which is used in logs and as the brew
+# formula to fall back to.
 install_with_apt() {
-    local app=$1
-    local apt_name="$app"
-
-    # Handle package name mappings between apt and other managers
-    case "$app" in
-        p7zip) apt_name="p7zip-full" ;;
-    esac
+    local pkg=$1
+    local app=${2:-$1}
 
     log "**** Checking if $app is already installed ..."
 
-    if dpkg-query -W -f='${Status}' "$apt_name" 2>/dev/null | grep -q "install ok installed"; then
+    if dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "install ok installed"; then
         log "**** $app is already installed"
         return 0
     fi
 
-    log "**** Trying 'apt install $apt_name' ..."
-    if ! run_cmd sudo apt install -y "$apt_name" 2>&1 | tee -a "$logfile_path"; then
+    log "**** Trying 'apt install $pkg' ..."
+    if ! run_cmd sudo apt install -y "$pkg" 2>&1 | tee -a "$logfile_path"; then
         log "**** Failed to install $app with apt, trying with brew..."
         run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
             log "**** WARNING: Could not install $app via apt or brew, skipping"
@@ -459,30 +342,19 @@ install_with_apt() {
 }
 
 install_with_dnf() {
-    local app=$1
-    local dnf_name="$app"
-
-    # Handle package name mappings between dnf and apt/brew
-    case "$app" in
-        dust)           dnf_name="du-dust" ;;
-        fd)             dnf_name="fd-find" ;;
-        fonts-firacode) dnf_name="fira-code-fonts" ;;
-        imagemagick)    dnf_name="ImageMagick" ;;
-        poppler)        dnf_name="poppler-utils" ;;
-        shellcheck)     dnf_name="ShellCheck" ;;
-        vim)            dnf_name="vim-enhanced" ;;
-    esac
+    local pkg=$1
+    local app=${2:-$1}
 
     log "**** Checking if $app is already installed ..."
 
     # --whatprovides also matches virtual provides (e.g. golang, python3-pip)
-    if rpm -q --whatprovides "$dnf_name" > /dev/null 2>&1; then
+    if rpm -q --whatprovides "$pkg" > /dev/null 2>&1; then
         log "**** $app is already installed"
         return 0
     fi
 
-    log "**** Trying 'dnf install $dnf_name' ..."
-    if ! run_cmd sudo dnf install -y "$dnf_name" 2>&1 | tee -a "$logfile_path"; then
+    log "**** Trying 'dnf install $pkg' ..."
+    if ! run_cmd sudo dnf install -y "$pkg" 2>&1 | tee -a "$logfile_path"; then
         log "**** Failed to install $app with dnf, trying with brew..."
         run_cmd brew install "$app" 2>&1 | tee -a "$logfile_path" || \
             log "**** WARNING: Could not install $app via dnf or brew, skipping"
@@ -511,102 +383,99 @@ install_with_brew_cask() {
         log "**** WARNING: Could not install $app via brew cask, skipping"
 }
 
-# -- Mac ----------------------------------------------
+# -- Package manifest ---------------------------------
 
-install_mac_apps() {
-    for app in "${common_apps[@]}"; do
-        should_install "$app" || continue
-        install_with_brew_formula "$app"
-    done
+# Install every package in $packages_file for the current tier, using the
+# column for package manager $1 (brew, apt, dnf, or yay).
+install_packages() {
+    local pm=$1
+    local name tier brew apt dnf yay extra pkg line_no=0
 
-    for app in "${brew_mac_apps[@]}"; do
-        should_install "$app" || continue
-        install_with_brew_formula "$app"
-    done
+    # Plain `read` (no mapfile/associative arrays) so this runs on macOS's
+    # stock bash 3.2 before Homebrew exists. The manifest is read on fd 3 so
+    # installers that read stdin (sudo, yay, brew) can't consume its lines.
+    while read -r name tier brew apt dnf yay extra <&3; do
+        line_no=$((line_no + 1))
+        [[ -z "$name" || "$name" == \#* ]] && continue
 
-    # Casks (GUI apps, fonts) are never part of the minimum set.
-    if [[ "$minimum" != true ]]; then
-        for app in "${mac_cask_brew_apps[@]}"; do
-            install_with_brew_cask "$app"
-        done
-    fi
+        if [[ -z "$yay" || "$yay" == \#* || ( -n "$extra" && "$extra" != \#* ) ]]; then
+            log "**** ERROR: $packages_file:$line_no: expected 6 columns: $name $tier $brew $apt $dnf $yay $extra"
+            exit 1
+        fi
+        case "$tier" in
+            min) ;;
+            full) [[ "$minimum" == true ]] && continue ;;
+            *) log "**** ERROR: $packages_file:$line_no: unknown tier '$tier'"; exit 1 ;;
+        esac
+
+        case "$pm" in
+            brew) pkg=$brew ;;
+            apt)  pkg=$apt ;;
+            dnf)  pkg=$dnf ;;
+            yay)  pkg=$yay ;;
+        esac
+
+        case "$pkg" in
+            -)      ;;
+            cask:*) install_with_brew_cask "${pkg#cask:}" ;;
+            fn:*)   "install_${pkg#fn:}" ;;
+            brew)   install_with_brew_formula "$name" ;;
+            *)
+                if [[ "$pm" == brew ]]; then
+                    install_with_brew_formula "$pkg"
+                else
+                    "install_with_$pm" "$pkg" "$name"
+                fi
+                ;;
+        esac
+    done 3< "$packages_file"
 }
 
-# -- Linux --------------------------------------------
-
-install_linux_app() {
-    local app=$1
-
-    if [[ -f /etc/arch-release ]]; then
-        install_with_yay "$app"
-    elif [[ -f /etc/debian_version ]]; then
-        install_with_apt "$app"
-    elif [[ -f /etc/fedora-release ]]; then
-        install_with_dnf "$app"
-    else
-        log "**** WARNING: unsupported Linux distro, skipping $app"
-    fi
+install_mac_apps() {
+    install_packages brew
 }
 
 install_linux_apps() {
-    # Refresh package index before installing on Debian/Ubuntu
-    if [[ -f /etc/debian_version ]]; then
+    if [[ -f /etc/arch-release ]]; then
+        install_packages yay
+    elif [[ -f /etc/debian_version ]]; then
+        # Refresh package index before installing on Debian/Ubuntu
         log "**** Updating apt package index ..."
         run_cmd sudo apt-get update -qq
+        install_packages apt
+    elif [[ -f /etc/fedora-release ]]; then
+        install_packages dnf
+    else
+        log "**** WARNING: unsupported Linux distro, skipping packages"
     fi
-
-    for app in "${common_apps[@]}"; do
-        should_install "$app" || continue
-        install_linux_app "$app"
-    done
-
-    for app in "${linux_apps[@]}"; do
-        should_install "$app" || continue
-        install_linux_app "$app"
-    done
-
-    for app in "${brew_linux_apps[@]}"; do
-        should_install "$app" || continue
-        install_with_brew_formula "$app"
-    done
-
-    install_zen_browser_linux
-    install_veracrypt_linux
 }
 
-# VeraCrypt is in Arch's repos but not in Debian/Ubuntu's or Fedora's, and
-# brew casks are macOS-only. Elsewhere point at the official .deb/.rpm instead.
-install_veracrypt_linux() {
-    # GUI apps are never part of the minimum set.
-    [[ "$minimum" == true ]] && return 0
+# -- Custom installers (fn: entries in the manifest) ----
 
-    if [[ -f /etc/arch-release ]]; then
-        install_with_yay veracrypt
-    elif command -v veracrypt &>/dev/null; then
+# VeraCrypt has no apt/dnf package (Arch installs it from the repos), so point
+# at the official .deb/.rpm instead.
+install_veracrypt_manual() {
+    if command -v veracrypt &>/dev/null; then
         log "**** veracrypt is already installed"
     else
         log "**** WARNING: veracrypt has no apt/dnf package, skipping (get the .deb/.rpm from https://veracrypt.io/en/Downloads.html)"
     fi
 }
 
-# Zen browser has no apt/dnf package and brew casks are macOS-only, so Linux
-# needs its own path: AUR on Arch, Flathub on Debian/Ubuntu and Fedora.
-install_zen_browser_linux() {
-    # GUI apps are never part of the minimum set.
-    [[ "$minimum" == true ]] && return 0
-
-    if [[ -f /etc/arch-release ]]; then
-        install_with_yay zen-browser-bin
-    elif command -v flatpak &>/dev/null; then
-        if [[ "$dry_run" != true ]] && flatpak info app.zen_browser.zen &>/dev/null; then
-            log "**** zen browser is already installed"
-            return 0
-        fi
-        log "**** Trying 'flatpak install flathub app.zen_browser.zen' ..."
-        run_cmd flatpak install -y flathub app.zen_browser.zen 2>&1 | tee -a "$logfile_path" ||             log "**** WARNING: Could not install zen browser via flatpak, skipping"
-    else
+# Zen browser has no apt/dnf package (Arch installs it from the AUR), so
+# Debian/Ubuntu and Fedora get it from Flathub.
+install_zen_flatpak() {
+    if ! command -v flatpak &>/dev/null; then
         log "**** WARNING: flatpak not found, skipping zen browser (see https://zen-browser.app/download)"
+        return 0
     fi
+    if [[ "$dry_run" != true ]] && flatpak info app.zen_browser.zen &>/dev/null; then
+        log "**** zen browser is already installed"
+        return 0
+    fi
+    log "**** Trying 'flatpak install flathub app.zen_browser.zen' ..."
+    run_cmd flatpak install -y flathub app.zen_browser.zen 2>&1 | tee -a "$logfile_path" || \
+        log "**** WARNING: Could not install zen browser via flatpak, skipping"
 }
 
 # ---- Environment setup --------------------------------------------

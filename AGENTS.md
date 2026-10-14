@@ -18,6 +18,7 @@ Each top-level directory is a Stow package mirroring `$HOME`
 | Path | Purpose |
 |---|---|
 | `bootstrap.sh` | Installs packages per platform (`--all`, `--dry-run`) |
+| `packages.txt` | Package manifest read by `bootstrap.sh` |
 | `stow-all.sh` | Unstows then restows every package (excludes `logs`, `wiki`) |
 | `sync-shell-configs.sh` | Reports drift between bash and zsh configs |
 | `backup-local.sh` | Private backup of machine-local files (incl. `~/.ssh`) |
@@ -83,18 +84,20 @@ Each top-level directory is a Stow package mirroring `$HOME`
 | `$OSTYPE` | `darwin*` | `linux-gnu*` | `linux-gnu*` | `linux-gnu*` |
 | Distro file | — | `/etc/debian_version` | `/etc/fedora-release` | `/etc/arch-release` |
 
-## Package lists in `bootstrap.sh`
+## Packages: `packages.txt`
 
-Pick the right array — `common_apps` is also installed via brew on macOS, so a Linux-only
-name there (`fonts-firacode`, `python3-pip`, `golang`) breaks macOS.
+`bootstrap.sh` installs every row of `packages.txt` — add or change packages there, not in
+the script. Columns: `name tier brew apt dnf yay`, whitespace-separated; trailing
+`# comment` allowed. The file header documents the format.
 
-| Array | Contents |
-|---|---|
-| `common_apps` | Same name in brew, apt, and yay. Map differing dnf names in the `case` block of `install_with_dnf()` |
-| `linux_apps` | Linux-only, native package manager |
-| `brew_linux_apps` | Linux packages that must come from brew |
-| `brew_mac_apps` | macOS-only brew formulas |
-| `mac_cask_brew_apps` | macOS casks (GUI apps, fonts) |
+- `tier`: `min` (default install) or `full` (`--all`).
+- Platform columns: the package name for that manager, `brew` (Linux: install `name` from
+  Homebrew), `cask:<pkg>` (macOS only), `fn:<name>` (calls `install_<name>` in
+  `bootstrap.sh`), or `-` (skip).
+- `name` doubles as the Linux brew formula (for `brew` entries and native-install fallback).
+- Fill in the real name for each manager (e.g. dnf `fd-find`, brew `go` vs apt `golang`);
+  a wrong name only fails at install time.
+- Run `make lint` — it checks every row has 6 columns and a valid tier.
 
 ## Machine-specific files
 

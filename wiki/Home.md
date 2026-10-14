@@ -66,6 +66,7 @@ dotfiles/
 ├── AGENTS.md             → AI-assistant instructions (Claude Code, Copilot, etc.)
 ├── Makefile              → Convenience targets
 ├── bootstrap.sh          → Cross-platform package installer
+├── packages.txt          → Package manifest read by bootstrap.sh
 ├── stow-all.sh           → Symlinks every package into $HOME
 ├── fix-ssh-perms.sh      → Fixes ~/.ssh permissions
 ├── backup-local.sh       → Archives machine-specific, non-stowed config

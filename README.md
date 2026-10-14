@@ -42,6 +42,7 @@ dotfiles/
 ├── bootstrap.sh          # Install packages and terminal tools
 ├── fix-ssh-perms.sh      # Fix SSH key file permissions
 ├── Makefile              # Convenience targets (make bootstrap, make stow, etc.)
+├── packages.txt          # Package manifest read by bootstrap.sh
 ├── stow-all.sh           # Symlink all configs via stow
 └── sync-shell-configs.sh # Detect drift between bash/zsh configs
 ```
@@ -156,12 +157,17 @@ Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt`
 **What it installs:**
 
 1. **Package managers** (if missing) — Homebrew on all platforms; `yay` on Arch.
-2. **CLI tools** — ~50 utilities defined in five arrays at the top of the script:
-   - `common_apps` — same package name across brew, apt, and yay (dnf differences are mapped in `install_with_dnf`)
-   - `linux_apps` — apt-native names (dnf maps known differences; yay and dnf fall back to brew on mismatch)
-   - `brew_linux_apps` — Linux packages that must come from brew (newer versions)
-   - `brew_mac_apps` — macOS-only brew formulas
-   - `mac_cask_brew_apps` — macOS brew casks (GUI apps, fonts)
+2. **CLI tools, fonts, and GUI apps** — ~60 packages listed in [packages.txt](packages.txt), one row per tool:
+
+   ```
+   # name   tier  brew          apt         dnf      yay
+   fd       full  fd            fd          fd-find  fd
+   neovim   full  neovim        brew        brew     brew
+   ghostty  full  cask:ghostty  ghostty     ghostty  ghostty
+   xclip    full  -             xclip       xclip    xclip
+   ```
+
+   `tier` is `min` or `full`. Each platform column holds the package name for that manager, `brew` (install from Homebrew on Linux), `cask:<name>` (macOS cask), `fn:<name>` (custom installer in `bootstrap.sh`), or `-` (skip). To add a tool, add a row; `make lint` checks the format.
 
    See the [Tools](#tools) section below for the full categorized reference.
 3. **Shell prompt** — [Starship](https://starship.rs/) via its official installer.
@@ -183,7 +189,7 @@ Options:
 
 **Tiers:**
 
-- **Minimum (default)** — `stow`, `zsh`, `tmux`, `vim`, `unzip`, `make`, `gcc`, `fzf`, `ripgrep`, `jq`. Plus `starship` and the zsh/tmux plugins (unless `--no-terminal`). This is enough for the shell config in this repo to be fully usable. `git` and `curl` are repo prerequisites and assumed present.
+- **Minimum (default)** — rows with tier `min` in `packages.txt`: `stow`, `zsh`, `tmux`, `vim`, `unzip`, `make`, `gcc`, `fzf`, `ripgrep`, `jq`. Plus `starship` and the zsh/tmux plugins (unless `--no-terminal`). This is enough for the shell config in this repo to be fully usable. `git` and `curl` are repo prerequisites and assumed present.
 - **Full (`--all`)** — everything above plus the rest of the [Tools](#tools) catalog and macOS GUI casks.
 
 **Linux + minimum skips Homebrew entirely** — every minimum tool is available via `apt`/`dnf`/`yay`, so the ~500MB brew install is unnecessary. Run with `--all` (or install brew manually) if you want it. macOS always installs brew since it's the only package manager.

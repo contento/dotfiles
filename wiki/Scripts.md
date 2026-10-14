@@ -31,8 +31,8 @@ plus Starship and the zsh/tmux plugins. `git` and `curl` are repo prerequisites.
 Pass `--all` to install the full ~50-tool catalog (extras for media, system
 monitoring, networking, GitHub CLI, language toolchains, macOS casks, etc.).
 
-The minimum set is defined by the `is_minimum()` function in
-[bootstrap.sh](../bootstrap.sh) — edit that function to change the cutoff.
+The minimum set is every row with tier `min` in
+[packages.txt](../packages.txt). Change a row's tier to move the cutoff.
 
 **Linux + minimum skips Homebrew installation.** Every minimum tool is
 available via apt/dnf/yay, so the ~500MB brew bootstrap is wasted in this mode.
@@ -46,19 +46,40 @@ installs brew — it's the only package manager.
 3. Installs packages (filtered by tier):
    - **Arch** → `yay -S`, falls back to `brew install`
    - **Ubuntu** → `apt install`, falls back to `brew install`
-   - **Fedora** → `dnf install` (names mapped in `install_with_dnf`), falls back to `brew install`
-   - **macOS** → `brew install` + `brew install --cask` (casks only with `--all`)
+   - **Fedora** → `dnf install`, falls back to `brew install`
+   - **macOS** → `brew install` + `brew install --cask`
 4. Installs Starship, zsh-autosuggestions, zsh-syntax-highlighting, TPM
 
-### Package lists
+### Package manifest
 
-| List | Used on | Naming rule |
-|---|---|---|
-| `common_apps` | All platforms | Package name identical across brew, apt, and yay; dnf differences mapped in `install_with_dnf` |
-| `linux_apps` | Linux only (apt/dnf/yay) | apt-name; dnf maps known differences; yay/dnf fall back to brew on mismatch |
-| `brew_linux_apps` | Linux via brew | Pulled from brew on Linux (newer versions than apt/dnf/yay) |
-| `brew_mac_apps` | macOS via brew | macOS-only formulas |
-| `mac_cask_brew_apps` | macOS casks | GUI apps and fonts |
+Packages live in [packages.txt](../packages.txt), one row per tool,
+whitespace-separated. A trailing `# comment` is allowed.
+
+```
+# name          tier  brew                 apt             dnf              yay
+vim             min   vim                  vim             vim-enhanced     vim
+neovim          full  neovim               brew            brew             brew
+fonts-firacode  full  cask:font-fira-code  fonts-firacode  fira-code-fonts  fonts-firacode
+zen             full  cask:zen             fn:zen_flatpak  fn:zen_flatpak   zen-browser-bin
+```
+
+| Column | Meaning |
+|---|---|
+| `name` | Canonical name: shown in logs, and the brew formula used on Linux |
+| `tier` | `min` (default install) or `full` (`--all` only) |
+| `brew` | macOS (Homebrew) |
+| `apt` / `dnf` / `yay` | Ubuntu-Debian / Fedora / Arch |
+
+| Platform value | Effect |
+|---|---|
+| `<pkg>` | Install with that platform's manager; on Linux, a failure falls back to `brew install <name>` |
+| `brew` | Linux: install `<name>` from Homebrew instead (newer versions than the distro) |
+| `cask:<pkg>` | macOS: `brew install --cask <pkg>` |
+| `fn:<name>` | Call `install_<name>` in `bootstrap.sh` (e.g. Flathub for Zen) |
+| `-` | Skip on that platform |
+
+`bootstrap.sh` aborts with the line number on a malformed row, and `make lint`
+checks the format without running anything.
 
 For the full per-tool catalog (with homepage links and purpose), see the
 [Tools section in README](../README.md#tools).

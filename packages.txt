@@ -1,0 +1,96 @@
+# Package manifest for bootstrap.sh — one row per tool, whitespace-separated.
+#
+#   name   Canonical name. Used in logs, and as the Homebrew formula name on Linux
+#          (for `brew` entries and when a native install fails and falls back to brew).
+#   tier   min  = installed by default
+#          full = installed only with --all
+#   brew   macOS (Homebrew). apt / dnf / yay: Ubuntu-Debian / Fedora / Arch.
+#
+# Values in the platform columns:
+#   <pkg>      Install <pkg> with that platform's package manager. On Linux, a
+#              failed native install falls back to `brew install <name>`.
+#   cask:<pkg> brew cask (macOS column only)
+#   brew       Install <name> from Homebrew instead of the native manager (Linux only)
+#   fn:<name>  Call install_<name> from bootstrap.sh
+#   -          Not installed on that platform
+#
+# Starship, git, curl, Python, nvm and TPM are handled in bootstrap.sh, not here.
+
+# name             tier  brew                    apt                dnf                yay
+
+# --- Required infrastructure ---
+gcc                min   gcc                     gcc                gcc                gcc
+make               min   make                    make               make               make
+stow               min   stow                    stow               stow               stow
+tmux               min   tmux                    tmux               tmux               tmux
+unzip              min   unzip                   unzip              unzip              unzip
+vim                min   vim                     vim                vim-enhanced       vim
+zsh                min   zsh                     zsh                zsh                zsh
+
+# --- Daily-driver minimum ---
+fzf                min   fzf                     fzf                fzf                fzf
+jq                 min   jq                      jq                 jq                 jq
+ripgrep            min   ripgrep                 ripgrep            ripgrep            ripgrep
+
+# --- CLI tools ---
+atuin              full  atuin                   atuin              atuin              atuin
+bat                full  bat                     bat                bat                bat
+btop               full  btop                    btop               btop               btop
+direnv             full  direnv                  direnv             direnv             direnv
+duf                full  duf                     duf                duf                duf        # df replacement
+dust               full  dust                    dust               du-dust            dust       # du replacement
+eza                full  eza                     eza                eza                eza
+fastfetch          full  fastfetch               fastfetch          fastfetch          fastfetch
+fd                 full  fd                      fd                 fd-find            fd
+ffmpegthumbnailer  full  ffmpegthumbnailer       ffmpegthumbnailer  ffmpegthumbnailer  ffmpegthumbnailer  # yazi: video thumbnails
+gh                 full  gh                      gh                 gh                 gh         # GitHub CLI
+git-delta          full  git-delta               git-delta          git-delta          git-delta  # installed binary is 'delta'
+golang             full  go                      golang             golang             golang
+herdr              full  herdr                   brew               brew               brew       # terminal workspace manager for coding agents
+httpie             full  httpie                  httpie             httpie             httpie     # friendlier curl
+hyperfine          full  hyperfine               hyperfine          hyperfine          hyperfine  # command-line benchmarking
+imagemagick        full  imagemagick             imagemagick        ImageMagick        imagemagick  # yazi: image preview
+jpegoptim          full  jpegoptim               jpegoptim          jpegoptim          jpegoptim  # JPEG compression
+keychain           full  keychain                keychain           keychain           keychain
+lazygit            full  lazygit                 lazygit            lazygit            lazygit
+lynx               full  lynx                    lynx               lynx               lynx
+mc                 full  mc                      mc                 mc                 mc
+most               full  most                    most               most               most
+mtr                full  mtr                     mtr                mtr                mtr        # traceroute + ping combined
+neovim             full  neovim                  brew               brew               brew
+p7zip              full  p7zip                   p7zip-full         p7zip              p7zip      # 7-zip compression
+pandoc             full  pandoc                  pandoc             pandoc             pandoc
+pfetch-rs          full  pfetch-rs               pfetch-rs          pfetch-rs          pfetch-rs  # AUR; not in apt/dnf, falls back to brew
+pngquant           full  pngquant                pngquant           pngquant           pngquant   # lossy PNG compression
+poppler            full  poppler                 poppler            poppler-utils      poppler    # yazi: PDF preview (pdftoppm)
+portal             full  portal                  brew               brew               brew
+python3-pip        full  -                       python3-pip        python3-pip        python3-pip  # pinned Python comes from install_python()
+rustup             full  rustup                  rustup             rustup             rustup
+shellcheck         full  shellcheck              shellcheck         ShellCheck         shellcheck # bash linter
+shfmt              full  shfmt                   shfmt              shfmt              shfmt      # shell formatter
+smug               full  smug                    smug               smug               smug       # tmux session manager
+superfile          full  superfile               brew               brew               brew       # TUI file manager; AUR package is stale
+tealdeer           full  tealdeer                tealdeer           tealdeer           tealdeer
+tuios              full  tuios                   brew               brew               brew       # terminal window manager
+w3m                full  w3m                     w3m                w3m                w3m
+wakeonlan          full  wakeonlan               wakeonlan          wakeonlan          wakeonlan
+yazi               full  yazi                    yazi               yazi               yazi
+yq                 full  yq                      yq                 yq                 yq         # YAML processor
+zoxide             full  zoxide                  zoxide             zoxide             zoxide
+
+# --- Linux clipboard (macOS uses pbcopy/pbpaste) ---
+wl-clipboard       full  -                       wl-clipboard       wl-clipboard       wl-clipboard  # Wayland (wl-copy/wl-paste)
+xclip              full  -                       xclip              xclip              xclip      # tmux copy-mode fallback (X11)
+xsel               full  -                       xsel               xsel               xsel       # tmux-fzf clipboard (X11)
+
+# --- Fonts ---
+fonts-firacode     full  cask:font-fira-code     fonts-firacode     fira-code-fonts    fonts-firacode
+font-fira-code-nerd-font  full  cask:font-fira-code-nerd-font  -  -  -
+font-delugia-complete     full  cask:font-delugia-complete     -  -  -
+
+# --- GUI apps ---
+ghostty            full  cask:ghostty            ghostty            ghostty            ghostty    # AUR; not in apt, falls back to brew
+iterm2             full  cask:iterm2             -                  -                  -
+supacode           full  cask:supacode           -                  -                  -          # terminal coding-agents command center (macOS >= 26)
+veracrypt          full  cask:veracrypt          fn:veracrypt_manual  fn:veracrypt_manual  veracrypt  # no apt/dnf package
+zen                full  cask:zen                fn:zen_flatpak     fn:zen_flatpak     zen-browser-bin  # Zen browser
