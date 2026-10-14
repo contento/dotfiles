@@ -163,7 +163,7 @@ Installs packages across platforms. On macOS uses Homebrew; on Ubuntu uses `apt`
    # name   tier  brew          apt         dnf      yay
    fd       full  fd            fd          fd-find  fd
    neovim   full  neovim        brew        brew     brew
-   ghostty  full  cask:ghostty  ghostty     ghostty  ghostty
+    ghostty  full  cask:ghostty  ghostty     fn:ghostty_copr  ghostty
    xclip    full  -             xclip       xclip    xclip
    ```
 
@@ -402,7 +402,7 @@ Reference of CLI tools installed by `bootstrap.sh`. All work on macOS, Ubuntu/De
 
 | Tool | Purpose |
 |---|---|
-| [veracrypt](https://veracrypt.io) | Disk encryption, TrueCrypt successor (macOS cask; Arch repo; Ubuntu/Fedora: manual .deb/.rpm) |
+| [veracrypt](https://veracrypt.io) | Disk encryption, TrueCrypt successor (macOS cask; Arch repo; Ubuntu/Fedora: signed upstream .deb/.rpm) |
 
 ### Browsers
 

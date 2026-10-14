@@ -452,15 +452,175 @@ install_linux_apps() {
 
 # -- Custom installers (fn: entries in the manifest) ----
 
-# VeraCrypt has no apt/dnf package (Arch installs it from the repos), so point
-# at the official .deb/.rpm instead.
-install_veracrypt_manual() {
+# Fedora does not include Ghostty in its default repositories.
+install_ghostty_copr() {
+    if command -v ghostty &>/dev/null; then
+        log "**** ghostty is already installed"
+        return 0
+    fi
+
+    log "**** Enabling Fedora COPR repository scottames/ghostty ..."
+    if ! run_cmd sudo dnf copr enable -y scottames/ghostty 2>&1 | tee -a "$logfile_path"; then
+        log "**** WARNING: Could not enable the Ghostty COPR repository, skipping"
+        return 0
+    fi
+
+    log "**** Installing ghostty from Fedora COPR ..."
+    run_cmd sudo dnf install -y ghostty 2>&1 | tee -a "$logfile_path" || \
+        log "**** WARNING: Could not install ghostty from Fedora COPR, skipping"
+}
+
+# Ubuntu/Debian and Fedora use signed packages from VeraCrypt's official
+# GitHub releases; Arch installs from its repositories.
+install_veracrypt_official() (
     if command -v veracrypt &>/dev/null; then
         log "**** veracrypt is already installed"
-    else
-        log "**** WARNING: veracrypt has no apt/dnf package, skipping (get the .deb/.rpm from https://veracrypt.io/en/Downloads.html)"
+        return 0
     fi
-}
+
+    local distro_id distro_version platform manager arch version tag asset
+    local release_url signature_url key_url key_fingerprint tmpdir package_file
+    local signature_file key_file gpg_home
+
+    # Read the distro identifiers used to select VeraCrypt's matching package.
+    . /etc/os-release
+    distro_id=${ID:-}
+    distro_version=${VERSION_ID:-}
+
+    case "$distro_id" in
+        ubuntu)
+            platform="Ubuntu-$distro_version"
+            manager=apt
+            ;;
+        debian)
+            platform="Debian-${distro_version%%.*}"
+            manager=apt
+            ;;
+        fedora)
+            platform="Fedora-$distro_version"
+            manager=dnf
+            ;;
+        *)
+            log "**** WARNING: No VeraCrypt release package is configured for $distro_id, skipping"
+            return 0
+            ;;
+    esac
+
+    case "$(uname -m)" in
+        x86_64|amd64)
+            if [[ "$manager" == apt ]]; then
+                arch=amd64
+            else
+                arch=x86_64
+            fi
+            ;;
+        *)
+            log "**** WARNING: No VeraCrypt $platform package for architecture $(uname -m), skipping"
+            return 0
+            ;;
+    esac
+
+    log "**** Resolving the latest VeraCrypt release ..."
+    if ! tag=$(curl -fsSL https://api.github.com/repos/veracrypt/VeraCrypt/releases/latest |
+        sed -n 's/.*"tag_name":[[:space:]]*"\([^"]*\)".*/\1/p' | sed -n '1p'); then
+        log "**** ERROR: Could not query the VeraCrypt release API"
+        return 1
+    fi
+    if [[ ! "$tag" =~ ^VeraCrypt_([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+        log "**** ERROR: Could not determine the latest VeraCrypt version (tag: ${tag:-missing})"
+        return 1
+    fi
+    version=${BASH_REMATCH[1]}
+    asset="veracrypt-$version-$platform-$arch"
+    if [[ "$manager" == apt ]]; then
+        asset+=".deb"
+    else
+        asset+=".rpm"
+    fi
+    release_url="https://github.com/veracrypt/VeraCrypt/releases/download/$tag/$asset"
+    signature_url="$release_url.sig"
+    key_url="https://amcrypto.jp/VeraCrypt/VeraCrypt_PGP_public_key.asc"
+    key_fingerprint=5069A233D55A0EEB174A5FC3821ACD02680D16DE
+
+    if [[ "$dry_run" == true ]]; then
+        if ! command -v gpg &>/dev/null; then
+            if [[ "$manager" == apt ]]; then
+                log "[dry-run] sudo apt install -y gnupg"
+            else
+                log "[dry-run] sudo dnf install -y gnupg2"
+            fi
+        fi
+        log "[dry-run] Download $release_url and its detached signature"
+        log "[dry-run] Download and verify VeraCrypt signing key fingerprint $key_fingerprint"
+        log "[dry-run] Verify signature, then install the package with $manager"
+        return 0
+    fi
+
+    if ! command -v gpg &>/dev/null; then
+        log "**** Installing GPG for VeraCrypt package signature verification ..."
+        if [[ "$manager" == apt ]]; then
+            run_cmd sudo apt install -y gnupg
+        else
+            run_cmd sudo dnf install -y gnupg2
+        fi
+    fi
+
+    tmpdir=$(mktemp -d)
+    trap 'run_cmd rm -rf -- "$tmpdir"' EXIT
+    package_file="$tmpdir/$asset"
+    signature_file="$package_file.sig"
+    key_file="$tmpdir/VeraCrypt_PGP_public_key.asc"
+    gpg_home="$tmpdir/gnupg"
+
+    log "**** Downloading VeraCrypt $version for $platform ..."
+    if ! run_cmd curl -fsSL "$release_url" -o "$package_file" 2>&1 | tee -a "$logfile_path"; then
+        log "**** ERROR: Could not download $release_url"
+        return 1
+    fi
+    if ! run_cmd curl -fsSL "$signature_url" -o "$signature_file" 2>&1 | tee -a "$logfile_path"; then
+        log "**** ERROR: Could not download the VeraCrypt package signature"
+        return 1
+    fi
+    if ! run_cmd curl -fsSL "$key_url" -o "$key_file" 2>&1 | tee -a "$logfile_path"; then
+        log "**** ERROR: Could not download the VeraCrypt signing key"
+        return 1
+    fi
+
+    local downloaded_fingerprint
+    downloaded_fingerprint=$(gpg --batch --with-colons --show-keys "$key_file" 2>>"$logfile_path" |
+        awk -F: '$1 == "fpr" { print toupper($10); exit }')
+    if [[ "$downloaded_fingerprint" != "$key_fingerprint" ]]; then
+        log "**** ERROR: VeraCrypt signing-key fingerprint did not match; refusing to install"
+        return 1
+    fi
+
+    run_cmd mkdir -m 700 "$gpg_home"
+    if ! run_cmd gpg --homedir "$gpg_home" --batch --import "$key_file" 2>&1 |
+        tee -a "$logfile_path"; then
+        log "**** ERROR: Could not import the verified VeraCrypt signing key"
+        return 1
+    fi
+    if ! gpg --homedir "$gpg_home" --batch --verify "$signature_file" "$package_file" 2>&1 |
+        tee -a "$logfile_path"; then
+        log "**** ERROR: VeraCrypt package signature verification failed; refusing to install"
+        return 1
+    fi
+
+    if [[ "$manager" == dnf ]]; then
+        run_cmd sudo rpm --import "$key_file"
+        log "**** Installing verified VeraCrypt RPM ..."
+        run_cmd sudo dnf install -y "$package_file" 2>&1 | tee -a "$logfile_path"
+    else
+        log "**** Installing verified VeraCrypt DEB ..."
+        run_cmd sudo apt install -y "$package_file" 2>&1 | tee -a "$logfile_path"
+    fi
+
+    if ! command -v veracrypt &>/dev/null; then
+        log "**** ERROR: Package installation completed but the veracrypt command was not found"
+        return 1
+    fi
+    log "**** veracrypt installed successfully"
+)
 
 # Zen browser has no apt/dnf package (Arch installs it from the AUR), so
 # Debian/Ubuntu and Fedora get it from Flathub.

@@ -36,8 +36,10 @@ other platforms:
 | `shellcheck` | `ShellCheck` |
 | `vim` | `vim-enhanced` |
 
-Tools not in the Fedora repos (e.g. `lazygit`, `yazi`, `smug`, `ghostty`, `pfetch-rs`)
+Tools not in the Fedora repos (e.g. `lazygit`, `yazi`, `smug`, `pfetch-rs`)
 fall back to Homebrew, so install brew (`--all` does this) if you want them.
+Ghostty is installed from the `scottames/ghostty` COPR repository because its
+Homebrew cask requires macOS.
 Packages whose `dnf` column is `brew` (`herdr`, `neovim`, `portal`, `superfile`, `tuios`) always come from Homebrew.
 
 ---
@@ -61,8 +63,10 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 `bootstrap.sh --all` installs Zen browser from Flathub (`app.zen_browser.zen`).
 
-VeraCrypt has no dnf package; `bootstrap.sh` skips it with a warning. Install the
-`.rpm` from <https://veracrypt.io/en/Downloads.html>.
+`bootstrap.sh --all` downloads the matching VeraCrypt `.rpm` from the official
+GitHub release, verifies its signature against VeraCrypt's published signing-key
+fingerprint, then installs it with dnf. The release must provide a package for
+the installed Fedora version and `x86_64` architecture.
 
 ---
 

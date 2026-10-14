@@ -89,8 +89,8 @@ font-fira-code-nerd-font  full  cask:font-fira-code-nerd-font  -  -  -
 font-delugia-complete     full  cask:font-delugia-complete     -  -  -
 
 # --- GUI apps ---
-ghostty            full  cask:ghostty            ghostty            ghostty            ghostty    # AUR; not in apt, falls back to brew
+ghostty            full  cask:ghostty            ghostty            fn:ghostty_copr     ghostty    # Fedora COPR; not in default repos
 iterm2             full  cask:iterm2             -                  -                  -
 supacode           full  cask:supacode           -                  -                  -          # terminal coding-agents command center (macOS >= 26)
-veracrypt          full  cask:veracrypt          fn:veracrypt_manual  fn:veracrypt_manual  veracrypt  # no apt/dnf package
+veracrypt          full  cask:veracrypt          fn:veracrypt_official fn:veracrypt_official veracrypt  # signed upstream package on Ubuntu/Fedora
 zen                full  cask:zen                fn:zen_flatpak     fn:zen_flatpak     zen-browser-bin  # Zen browser
