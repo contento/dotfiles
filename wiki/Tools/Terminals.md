@@ -8,9 +8,11 @@ Config: `ghostty/.config/ghostty/config` → `~/.config/ghostty/config`
 
 | Setting | Value |
 |---|---|
-| Font | FiraCode Nerd Font Mono, size 14 |
+| Font | FiraCode Nerd Font Mono, size 12 |
 | Theme | Rose Pine |
 | Window decoration | `client` (custom titlebar) |
+| Background opacity | `0.90` |
+| Startup | Maximized (`fullscreen = true` left commented as an alternative) |
 
 Ghostty is the primary terminal. GPU-accelerated, native macOS feel, fast startup.
 

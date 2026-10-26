@@ -7,3 +7,12 @@ font-size = 12
 window-decoration = "client"
 keybind = alt+backspace=text:\x1b\x7f
 keybind = shift+enter=text:\n
+
+# Window opacity (0.0 = fully transparent, 1.0 = fully opaque)
+background-opacity = 0.90
+
+# Start the window in a maximized state
+maximize = true
+
+# Or start directly in native fullscreen mode
+# fullscreen = true
